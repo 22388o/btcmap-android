@@ -62,6 +62,9 @@
         <action
             android:id="@+id/action_mapFragment_to_placesSearchFragment"
             app:destination="@id/placesSearchFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_exchangeRatesFragment"
+            app:destination="@id/exchangeRatesFragment" />
     </fragment>
     <fragment
         android:id="@+id/supportProjectFragment"
@@ -95,5 +98,9 @@
         android:id="@+id/placesSearchFragment"
         android:name="com.bubelov.coins.search.PlacesSearchFragment"
         android:label="PlacesSearchFragment" ></fragment>
+    <fragment
+        android:id="@+id/exchangeRatesFragment"
+        android:name="com.bubelov.coins.rates.ExchangeRatesFragment"
+        android:label="ExchangeRatesFragment" />
 
 </navigation>

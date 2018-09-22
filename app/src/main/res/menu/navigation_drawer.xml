@@ -5,7 +5,7 @@
         android:id="@+id/primary_actions"
         android:checkableBehavior="none">
         <item
-            android:id="@+id/action_exchange_rates"
+            android:id="@+id/action_mapFragment_to_exchangeRatesFragment"
             android:icon="@drawable/ic_bitcoin"
             android:title="@string/menu_item_exchange_rates" />
         <item

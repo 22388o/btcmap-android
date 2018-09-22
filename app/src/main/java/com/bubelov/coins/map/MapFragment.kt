@@ -149,15 +149,14 @@ class MapFragment :
             }
         }
 
-        toolbar.setNavigationOnClickListener { drawer_layout.openDrawer(navigation_view) }
+        toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(navigation_view) }
         toolbar.inflateMenu(R.menu.map)
         toolbar.setOnMenuItemClickListener(this)
 
         navigation_view.setNavigationItemSelectedListener { item ->
-            drawer_layout.closeDrawers()
+            drawerLayout.closeDrawers()
 
             when (item.itemId) {
-                R.id.action_exchange_rates -> openExchangeRatesScreen()
                 R.id.action_notification_area -> openNotificationAreaScreen()
                 R.id.action_chat -> openSupportChat()
             }
@@ -168,18 +167,18 @@ class MapFragment :
         model.selectedCurrency.observe(this, Observer {
             toolbar.title = getString(R.string.s_map, it!!.currencyCodeToName())
             toolbar.menu.findItem(R.id.action_add).isVisible = it == "BTC"
-            navigation_view.menu.findItem(R.id.action_exchange_rates).isVisible = it == "BTC"
+            navigation_view.menu.findItem(R.id.action_mapFragment_to_exchangeRatesFragment).isVisible = it == "BTC"
         })
 
         drawerToggle = ActionBarDrawerToggle(
             requireActivity(),
-            drawer_layout,
+            drawerLayout,
             toolbar,
             R.string.open,
             R.string.close
         )
 
-        drawer_layout.addDrawerListener(drawerToggle)
+        drawerLayout.addDrawerListener(drawerToggle)
 
         updateDrawerHeader()
 
@@ -403,14 +402,8 @@ class MapFragment :
 
         drawerHeader.setOnClickListener {
             model.onDrawerHeaderClick()
-            drawer_layout.closeDrawers()
+            drawerLayout.closeDrawers()
         }
-    }
-
-    private fun openExchangeRatesScreen() {
-        // TODO
-        //val intent = Intent(requireContext(), ExchangeRatesActivity::class.java)
-        //startActivity(intent)
     }
 
     private fun openNotificationAreaScreen() {

@@ -72,6 +72,7 @@ class ExchangeRatesFragment : DaggerFragment() {
                             .setItems(itemTitles) { _, index ->
                                 model.pair.value = items[index]
                             }
+                            .show()
                     }
                 }
 
