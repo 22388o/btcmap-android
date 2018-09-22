@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.db.sync
+package com.bubelov.coins.sync
 
 import android.app.job.JobParameters
 import android.app.job.JobService

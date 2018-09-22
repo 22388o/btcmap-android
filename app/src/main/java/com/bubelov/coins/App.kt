@@ -27,7 +27,7 @@
 
 package com.bubelov.coins
 
-import com.bubelov.coins.db.sync.DatabaseSync
+import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.di.DaggerAppComponent
 import com.bubelov.coins.util.CrashlyticsTree
 import dagger.android.*

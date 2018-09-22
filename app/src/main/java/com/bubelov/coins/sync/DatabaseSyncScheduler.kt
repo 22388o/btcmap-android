@@ -25,53 +25,32 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.db.sync
+package com.bubelov.coins.sync
 
-import com.bubelov.coins.model.Place
-import com.bubelov.coins.model.SyncLogEntry
-import com.bubelov.coins.repository.Result
-
-import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
-import com.bubelov.coins.util.PlaceNotificationManager
-import kotlinx.coroutines.experimental.launch
-
+import android.app.job.JobScheduler
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-
-import timber.log.Timber
+import android.app.job.JobInfo
+import android.content.ComponentName
+import android.content.Context
 
 @Singleton
-class DatabaseSync @Inject
-internal constructor(
-    private val placesRepository: PlacesRepository,
-    private val placeNotificationManager: PlaceNotificationManager,
-    private val syncLogsRepository: SyncLogsRepository,
-    private val databaseSyncScheduler: SyncScheduler
+class DatabaseSyncScheduler @Inject constructor(
+    private val context: Context
 ) {
-    fun sync() = launch {
-        try {
-            val result = placesRepository.fetchNewPlaces()
+    fun scheduleNextSync() {
+        val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
-            when (result) {
-                is Result.Success -> onFetchNewPlaces(result.data)
-                is Result.Error -> throw result.e
-            }
-        } catch (e: Throwable) {
-            Timber.e(e, "Couldn't sync database")
-        }
+        val jobId = DatabaseSyncService.JOB_ID
+        val jobComponent = ComponentName(context, DatabaseSyncService::class.java)
 
-        databaseSyncScheduler.scheduleNextSync()
-    }
-
-    private fun onFetchNewPlaces(places: Collection<Place>) {
-        syncLogsRepository.insert(
-            SyncLogEntry(
-                System.currentTimeMillis(),
-                places.size
-            )
+        scheduler.schedule(
+            JobInfo.Builder(jobId, jobComponent)
+                .setPeriodic(TimeUnit.DAYS.toMillis(1))
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .build()
         )
-
-        placeNotificationManager.issueNotificationsIfNecessary(places)
     }
 }

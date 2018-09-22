@@ -22,7 +22,7 @@
         </activity>
 
         <service
-            android:name="com.bubelov.coins.db.sync.DatabaseSyncService"
+            android:name="com.bubelov.coins.sync.DatabaseSyncService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 

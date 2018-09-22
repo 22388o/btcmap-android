@@ -27,13 +27,13 @@
 
 package com.bubelov.coins.di
 
-import com.bubelov.coins.db.sync.DatabaseSyncService
-import com.bubelov.coins.db.sync.DatabaseSyncServiceModule
+import com.bubelov.coins.sync.DatabaseSyncService
+import com.bubelov.coins.sync.DatabaseSyncModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ServiceBuilder {
-    @ContributesAndroidInjector(modules = [DatabaseSyncServiceModule::class])
+    @ContributesAndroidInjector(modules = [DatabaseSyncModule::class])
     abstract fun contributeDatabaseSyncServiceInjector(): DatabaseSyncService
 }

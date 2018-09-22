@@ -27,8 +27,8 @@
 
 package com.bubelov.coins
 
-import com.bubelov.coins.db.sync.DatabaseSync
-import com.bubelov.coins.db.sync.SyncScheduler
+import com.bubelov.coins.sync.DatabaseSync
+import com.bubelov.coins.sync.DatabaseSyncScheduler
 import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
@@ -46,7 +46,7 @@ class DatabaseSyncTest {
     @Mock private lateinit var placesRepository: PlacesRepository
     @Mock private lateinit var placeNotificationManager: PlaceNotificationManager
     @Mock private lateinit var syncLogsRepository: SyncLogsRepository
-    @Mock private lateinit var databaseSyncScheduler: SyncScheduler
+    @Mock private lateinit var databaseSyncScheduler: DatabaseSyncScheduler
     private lateinit var databaseSync: DatabaseSync
 
     @Before
