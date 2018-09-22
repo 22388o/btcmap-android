@@ -31,7 +31,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 
-import com.bubelov.coins.PreferenceKeys
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreateUserArgs
 import com.bubelov.coins.model.User
@@ -50,16 +49,16 @@ class UserRepository @Inject constructor(
     private val gson: Gson
 ) {
     var user: User?
-        get() = gson.fromJson(preferences.getString(PreferenceKeys.USER, null), User::class.java)
-        set(user) = preferences.edit().putString(PreferenceKeys.USER, gson.toJson(user)).apply()
+        get() = gson.fromJson(preferences.getString(USER_KEY, null), User::class.java)
+        set(user) = preferences.edit().putString(USER_KEY, gson.toJson(user)).apply()
 
     var userAuthToken: String
-        get() = preferences.getString(PreferenceKeys.API_AUTH_TOKEN, "")
-        set(token) = preferences.edit().putString(PreferenceKeys.API_AUTH_TOKEN, token).apply()
+        get() = preferences.getString(API_AUTH_TOKEN_KEY, "")
+        set(token) = preferences.edit().putString(API_AUTH_TOKEN_KEY, token).apply()
 
     var userAuthMethod: String
-        get() = preferences.getString(PreferenceKeys.API_AUTH_METHOD, "")
-        set(method) = preferences.edit().putString(PreferenceKeys.API_AUTH_METHOD, method).apply()
+        get() = preferences.getString(API_AUTH_METHOD_KEY, "")
+        set(method) = preferences.edit().putString(API_AUTH_METHOD_KEY, method).apply()
 
     fun signIn(googleToken: String): LiveData<AsyncResult<Any>> {
         val result = MutableLiveData<AsyncResult<Any>>()
@@ -157,5 +156,11 @@ class UserRepository @Inject constructor(
         user = null
         userAuthToken = ""
         userAuthMethod = ""
+    }
+
+    companion object {
+        private const val USER_KEY = "user"
+        private const val API_AUTH_TOKEN_KEY = "api_auth_token"
+        private const val API_AUTH_METHOD_KEY = "api_auth_method"
     }
 }

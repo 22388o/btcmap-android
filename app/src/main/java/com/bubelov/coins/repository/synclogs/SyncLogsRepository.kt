@@ -28,7 +28,6 @@
 package com.bubelov.coins.repository.synclogs
 
 import android.content.SharedPreferences
-import com.bubelov.coins.PreferenceKeys
 import com.bubelov.coins.model.SyncLogEntry
 import com.google.gson.Gson
 import javax.inject.Inject
@@ -40,7 +39,7 @@ class SyncLogsRepository @Inject constructor(
         private val gson: Gson
 ) {
     fun all(): List<SyncLogEntry> {
-        val json = preferences.getString(PreferenceKeys.SYNC_LOGS, "")
+        val json = preferences.getString(SYNC_LOGS_KEY, "")
 
         return when (json) {
             "" -> emptyList()
@@ -54,10 +53,14 @@ class SyncLogsRepository @Inject constructor(
         entries += entry
 
         preferences.edit().putString(
-            PreferenceKeys.SYNC_LOGS,
+            SYNC_LOGS_KEY,
             gson.toJson(SyncLog(entries))
         ).apply()
     }
 
     data class SyncLog(val entries: List<SyncLogEntry>)
+
+    companion object {
+        private const val SYNC_LOGS_KEY = "sync_logs"
+    }
 }
