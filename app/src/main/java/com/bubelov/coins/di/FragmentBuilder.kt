@@ -27,26 +27,29 @@
 
 package com.bubelov.coins.di
 
-import com.bubelov.coins.feature.auth.AuthModule
-import com.bubelov.coins.feature.auth.AuthOptionsFragment
-import com.bubelov.coins.feature.auth.EmailSignInFragment
-import com.bubelov.coins.feature.auth.SignInFragment
-import com.bubelov.coins.feature.auth.SignUpFragment
-import com.bubelov.coins.feature.editplace.EditPlaceFragment
-import com.bubelov.coins.feature.editplace.EditPlaceModule
-import com.bubelov.coins.feature.notificationarea.NotificationAreaFragment
-import com.bubelov.coins.feature.notificationarea.NotificationAreaModule
-import com.bubelov.coins.feature.picklocation.PickLocationFragment
-import com.bubelov.coins.feature.picklocation.PickLocationModule
+import com.bubelov.coins.auth.AuthModule
+import com.bubelov.coins.auth.AuthOptionsFragment
+import com.bubelov.coins.auth.EmailSignInFragment
+import com.bubelov.coins.auth.SignInFragment
+import com.bubelov.coins.auth.SignUpFragment
+import com.bubelov.coins.editplace.EditPlaceFragment
+import com.bubelov.coins.editplace.EditPlaceModule
+import com.bubelov.coins.notificationarea.NotificationAreaFragment
+import com.bubelov.coins.notificationarea.NotificationAreaModule
+import com.bubelov.coins.picklocation.PickLocationFragment
+import com.bubelov.coins.picklocation.PickLocationModule
 import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.map.MapModule
+import com.bubelov.coins.profile.ProfileFragment
+import com.bubelov.coins.profile.ProfileModule
 import com.bubelov.coins.search.PlacesSearchFragment
 import com.bubelov.coins.search.PlacesSearchModule
 import com.bubelov.coins.rates.ExchangeRatesFragment
 import com.bubelov.coins.rates.ExchangeRatesModule
 import com.bubelov.coins.settings.SettingsFragment
 import com.bubelov.coins.settings.SettingsModule
-import com.bubelov.coins.ui.fragment.*
+import com.bubelov.coins.support.SupportProjectFragment
+import com.bubelov.coins.support.SupportProjectModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

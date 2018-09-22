@@ -25,9 +25,33 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.editplace
+package com.bubelov.coins.notificationarea
 
-import dagger.Module
+import android.arch.lifecycle.ViewModel
+import com.bubelov.coins.model.NotificationArea
+import com.bubelov.coins.repository.area.NotificationAreaRepository
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.Circle
+import javax.inject.Inject
 
-@Module
-class EditPlaceModule
+class NotificationAreaViewModel @Inject constructor(
+    private var areaRepository: NotificationAreaRepository
+) : ViewModel() {
+
+    fun getNotificationArea(defaultCameraPosition: CameraPosition): NotificationArea {
+        return areaRepository.notificationArea ?: NotificationArea(
+            defaultCameraPosition.target.latitude,
+            defaultCameraPosition.target.longitude,
+            NotificationAreaRepository.DEFAULT_RADIUS_METERS
+        )
+    }
+
+    fun getZoomLevel(circle: Circle): Int {
+        val scale = circle.radius / 500
+        return (16 - Math.log(scale) / Math.log(2.0)).toInt()
+    }
+
+    fun save(notificationArea: NotificationArea) {
+        areaRepository.notificationArea = notificationArea
+    }
+}

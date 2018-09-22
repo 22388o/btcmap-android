@@ -25,46 +25,51 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.auth
+package com.bubelov.coins.auth
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 
 import com.bubelov.coins.R
-import dagger.android.support.DaggerFragment
-import android.content.Intent
-import android.support.v7.app.AlertDialog
-import androidx.navigation.fragment.findNavController
-import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.util.AsyncResult
 import com.bubelov.coins.util.viewModelProvider
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import kotlinx.android.synthetic.main.fragment_authorization_options.*
+import dagger.android.support.DaggerFragment
+
 import javax.inject.Inject
 
-class AuthOptionsFragment : DaggerFragment() {
+import kotlinx.android.synthetic.main.fragment_sign_in.*
+
+class SignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
-    val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
+
+    private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
 
     private val authObserver = Observer<AsyncResult<Any>> {
         when (it) {
             is AsyncResult.Loading -> {
-                setLoading(true)
+                sign_in_panel.visibility = View.GONE
+                progress.visibility = View.VISIBLE
             }
 
             is AsyncResult.Success -> {
-                // TODO
-                findNavController().popBackStack()
+// TODO
+//                startActivity(
+//                    Intent(activity, MapActivity::class.java).apply {
+//                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                    })
             }
 
             is AsyncResult.Error -> {
-                setLoading(false)
+                sign_in_panel.visibility = View.VISIBLE
+                progress.visibility = View.GONE
 
                 AlertDialog.Builder(requireContext())
                     .setMessage(it.t.message ?: getString(R.string.something_went_wrong))
@@ -79,48 +84,27 @@ class AuthOptionsFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_authorization_options, container, false)
+        return inflater.inflate(R.layout.fragment_sign_in, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        password.setOnEditorActionListener(this)
 
-        sign_in_with_google.setOnClickListener {
-            val googleSingInOptions =
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
-                    .requestEmail()
-                    .build()
-
-            val googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSingInOptions)
-            startActivityForResult(googleSignInClient.signInIntent,
-                GOOGLE_SIGN_IN_REQUEST
-            )
-        }
-
-        sign_in_with_email.setOnClickListener {
-            // TODO
+        sign_in.setOnClickListener {
+            model.signIn(email.text.toString(), password.text.toString())
+                .observe(this, authObserver)
         }
 
         model.authState.observe(this, authObserver)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GOOGLE_SIGN_IN_REQUEST && resultCode == Activity.RESULT_OK) {
-            model.signIn(GoogleSignIn.getSignedInAccountFromIntent(data).result.idToken!!).observe(
-                this,
-                authObserver
-            )
+    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+            model.signIn(email.text.toString(), password.text.toString())
+                .observe(this, authObserver)
+            return true
         }
-    }
 
-    private fun setLoading(loading: Boolean) {
-        view_switcher.displayedChild = if (loading) 1 else 0
-    }
-
-    companion object {
-        private const val GOOGLE_SIGN_IN_REQUEST = 10
+        return false
     }
 }

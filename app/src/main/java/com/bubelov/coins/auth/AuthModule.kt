@@ -25,22 +25,9 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins
+package com.bubelov.coins.auth
 
-import android.os.Bundle
-import androidx.navigation.NavHost
-import androidx.navigation.findNavController
-import dagger.android.support.DaggerAppCompatActivity
+import dagger.Module
 
-class AppActivity : DaggerAppCompatActivity(), NavHost {
-    private val navigationController by lazy { findNavController(R.id.nav_host_fragment) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app)
-    }
-
-    override fun getNavController() = navigationController
-
-    override fun onSupportNavigateUp() = navigationController.navigateUp()
-}
+@Module
+class AuthModule

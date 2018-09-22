@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.editplace
+package com.bubelov.coins.editplace
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer

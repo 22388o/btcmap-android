@@ -32,9 +32,9 @@ import android.arch.lifecycle.ViewModel
 import dagger.multibindings.IntoMap
 import dagger.Binds
 import android.arch.lifecycle.ViewModelProvider
-import com.bubelov.coins.feature.auth.AuthViewModel
-import com.bubelov.coins.feature.editplace.EditPlaceViewModel
-import com.bubelov.coins.feature.notificationarea.NotificationAreaViewModel
+import com.bubelov.coins.auth.AuthViewModel
+import com.bubelov.coins.editplace.EditPlaceViewModel
+import com.bubelov.coins.notificationarea.NotificationAreaViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.search.PlacesSearchResultsViewModel
 import com.bubelov.coins.search.PlacesSearchViewModel

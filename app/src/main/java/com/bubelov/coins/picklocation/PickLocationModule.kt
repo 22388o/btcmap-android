@@ -25,9 +25,9 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.notificationarea
+package com.bubelov.coins.picklocation
 
 import dagger.Module
 
 @Module
-class NotificationAreaModule
+class PickLocationModule

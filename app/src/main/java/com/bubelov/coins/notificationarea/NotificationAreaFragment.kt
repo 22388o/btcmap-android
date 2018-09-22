@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.notificationarea
+package com.bubelov.coins.notificationarea
 
 import android.Manifest
 import android.arch.lifecycle.ViewModelProvider

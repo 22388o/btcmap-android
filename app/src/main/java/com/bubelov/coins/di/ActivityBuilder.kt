@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.di
 
-import com.bubelov.coins.AppActivity
+import com.bubelov.coins.startup.AppActivity
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/emptyFragment"
-        android:name="com.bubelov.coins.ui.fragment.CheckPlayServicesFragment"
+        android:name="com.bubelov.coins.startup.CheckPlayServicesFragment"
         android:label="CheckPlayServicesFragment">
         <action
             android:id="@+id/action_checkPlayServicesFragment_to_mapFragment"
@@ -65,7 +65,7 @@
     </fragment>
     <fragment
         android:id="@+id/supportProjectFragment"
-        android:name="com.bubelov.coins.ui.fragment.SupportProjectFragment"
+        android:name="com.bubelov.coins.support.SupportProjectFragment"
         android:label="SupportProjectFragment" />
     <fragment
         android:id="@+id/settingsFragment"
@@ -73,15 +73,15 @@
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/authorizationOptionsFragment"
-        android:name="com.bubelov.coins.feature.auth.AuthOptionsFragment"
+        android:name="com.bubelov.coins.auth.AuthOptionsFragment"
         android:label="AuthorizationOptionsFragment" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.bubelov.coins.ui.fragment.ProfileFragment"
+        android:name="com.bubelov.coins.profile.ProfileFragment"
         android:label="ProfileFragment" />
     <fragment
         android:id="@+id/editPlaceFragment"
-        android:name="com.bubelov.coins.feature.editplace.EditPlaceFragment"
+        android:name="com.bubelov.coins.editplace.EditPlaceFragment"
         android:label="EditPlaceFragment" >
         <action
             android:id="@+id/action_editPlaceFragment_to_pickLocationFragment"
@@ -89,7 +89,7 @@
     </fragment>
     <fragment
         android:id="@+id/pickLocationFragment"
-        android:name="com.bubelov.coins.feature.picklocation.PickLocationFragment"
+        android:name="com.bubelov.coins.picklocation.PickLocationFragment"
         android:label="PickLocationFragment" />
     <fragment
         android:id="@+id/placesSearchFragment"

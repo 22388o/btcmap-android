@@ -25,9 +25,9 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.picklocation
+package com.bubelov.coins.profile
 
 import dagger.Module
 
 @Module
-class PickLocationModule
+class ProfileModule

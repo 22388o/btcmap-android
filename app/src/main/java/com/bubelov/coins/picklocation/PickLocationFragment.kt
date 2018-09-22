@@ -25,52 +25,58 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.auth
+package com.bubelov.coins.picklocation
 
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import com.bubelov.coins.R
+import com.bubelov.coins.model.Location
+import com.bubelov.coins.util.toLatLng
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapFragment
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_email_sign_in.*
+import kotlinx.android.synthetic.main.fragment_pick_location.*
 
-class EmailSignInFragment : DaggerFragment() {
+class PickLocationFragment : DaggerFragment() {
+    private val map = MutableLiveData<GoogleMap>()
+
+    private val initialLocation = Location(0.0, 0.0)
+
+    private val initialZoom = 15f
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_email_sign_in, container, false)
+        return inflater.inflate(R.layout.fragment_pick_location, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        pager.adapter = TabsAdapter(childFragmentManager)
-        tab_layout.setupWithViewPager(pager)
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-    }
+        toolbar.apply {
+            setNavigationOnClickListener { findNavController().popBackStack() }
+            inflateMenu(R.menu.pick_location)
 
-    private inner class TabsAdapter internal constructor(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        private val pages = listOf<Pair<Fragment, String>>(
-            Pair(SignInFragment(), getString(R.string.sign_in)),
-            Pair(SignUpFragment(), getString(R.string.sign_up))
-        )
+            setOnMenuItemClickListener { item ->
+                if (item.itemId == R.id.action_done) {
+                    // TODO
+                    return@setOnMenuItemClickListener true
+                }
 
-        override fun getItem(position: Int): Fragment {
-            return pages[position].first!!
+                false
+            }
         }
 
-        override fun getPageTitle(position: Int): CharSequence {
-            return pages[position].second!!
-        }
+        (childFragmentManager.findFragmentById(R.id.map) as MapFragment).getMapAsync { map.value = it }
 
-        override fun getCount(): Int {
-            return pages.size
-        }
+        map.observe(this, Observer { map ->
+            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation.toLatLng(), initialZoom))
+        })
     }
 }
