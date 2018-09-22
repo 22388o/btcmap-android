@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.model
+package com.bubelov.coins.rates
 
 data class ExchangeRateRow(
     val iconText: String,

@@ -37,7 +37,7 @@ import com.bubelov.coins.feature.editplace.EditPlaceViewModel
 import com.bubelov.coins.feature.notificationarea.NotificationAreaViewModel
 import com.bubelov.coins.feature.placessearch.PlacesSearchResultsViewModel
 import com.bubelov.coins.feature.placessearch.PlacesSearchViewModel
-import com.bubelov.coins.feature.rates.ExchangeRatesViewModel
+import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.ui.viewmodel.*
 
 @Module

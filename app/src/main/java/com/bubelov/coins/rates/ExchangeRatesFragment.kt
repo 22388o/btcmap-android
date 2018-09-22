@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.rates
+package com.bubelov.coins.rates
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -38,7 +38,6 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.CurrencyPair
-import com.bubelov.coins.ui.adapter.ExchangeRatesAdapter
 import com.bubelov.coins.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_exchange_rates.*
@@ -59,22 +58,21 @@ class ExchangeRatesFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.apply {
             setNavigationOnClickListener { findNavController().popBackStack() }
+
             inflateMenu(R.menu.exchange_rates)
 
-            setOnMenuItemClickListener {
-                if (it.itemId == R.id.currency) {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle(R.string.currency)
-                        .setItems(
-                            CurrencyPair.values().map { it.toString() }.toTypedArray()
-                        ) { _, index ->
-                            val pair = CurrencyPair.values()[index]
-                            model.pair.value = pair
-                            model.analytics.logEvent(
-                                "change_exchange_rates_currency_pair",
-                                pair.toString()
-                            )
-                        }
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.currency -> {
+                        val items = CurrencyPair.values()
+                        val itemTitles = items.map { it.toString() }.toTypedArray()
+
+                        AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.currency)
+                            .setItems(itemTitles) { _, index ->
+                                model.pair.value = items[index]
+                            }
+                    }
                 }
 
                 true
@@ -83,10 +81,8 @@ class ExchangeRatesFragment : DaggerFragment() {
 
         ratesView.layoutManager = LinearLayoutManager(requireContext())
 
-        model.pair.observe(this, Observer {
-            if (it != null) {
-                toolbar.menu.findItem(R.id.currency).title = it.toString()
-            }
+        model.pair.observe(this, Observer { pair ->
+            toolbar.menu.findItem(R.id.currency).title = pair.toString()
         })
 
         model.rates.observe(this, Observer { rates ->

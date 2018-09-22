@@ -40,8 +40,8 @@ import com.bubelov.coins.feature.picklocation.PickLocationFragment
 import com.bubelov.coins.feature.picklocation.PickLocationModule
 import com.bubelov.coins.feature.placessearch.PlacesSearchFragment
 import com.bubelov.coins.feature.placessearch.PlacesSearchModule
-import com.bubelov.coins.feature.rates.ExchangeRatesFragment
-import com.bubelov.coins.feature.rates.ExchangeRatesModule
+import com.bubelov.coins.rates.ExchangeRatesFragment
+import com.bubelov.coins.rates.ExchangeRatesModule
 import com.bubelov.coins.ui.fragment.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

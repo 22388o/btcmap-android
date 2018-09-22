@@ -25,23 +25,20 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.rates
+package com.bubelov.coins.rates
 
 import android.arch.lifecycle.*
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
 import com.bubelov.coins.repository.rate.ExchangeRatesSource
-import com.bubelov.coins.ui.model.ExchangeRateRow
-import com.bubelov.coins.util.Analytics
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import java.text.NumberFormat
 import javax.inject.Inject
 
 class ExchangeRatesViewModel @Inject constructor(
-    val repository: ExchangeRatesRepository,
-    val analytics: Analytics
+    val repository: ExchangeRatesRepository
 ) : ViewModel() {
     val pair = MutableLiveData<CurrencyPair>()
 
@@ -58,7 +55,11 @@ class ExchangeRatesViewModel @Inject constructor(
                     invokeOnCompletion {
                         result.postValue(rates.mapIndexed { resultIndex, result ->
                             when (result) {
-                                is Result.Success -> sources[resultIndex].toRow(RATE_FORMAT.format(result.data))
+                                is Result.Success -> sources[resultIndex].toRow(
+                                    RATE_FORMAT.format(
+                                        result.data
+                                    )
+                                )
                                 is Result.Error -> sources[resultIndex].toRow("Error")
                                 null -> sources[resultIndex].toRow("Loading")
                             }
@@ -73,7 +74,7 @@ class ExchangeRatesViewModel @Inject constructor(
         result
     }
 
-    private fun ExchangeRatesSource.toRow(value: String) : ExchangeRateRow {
+    private fun ExchangeRatesSource.toRow(value: String): ExchangeRateRow {
         return ExchangeRateRow(name[0].toString(), name, value)
     }
 
