@@ -69,7 +69,7 @@
         android:label="SupportProjectFragment" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.bubelov.coins.ui.fragment.SettingsFragment"
+        android:name="com.bubelov.coins.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/authorizationOptionsFragment"

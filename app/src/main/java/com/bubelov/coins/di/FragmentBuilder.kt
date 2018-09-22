@@ -42,6 +42,8 @@ import com.bubelov.coins.search.PlacesSearchFragment
 import com.bubelov.coins.search.PlacesSearchModule
 import com.bubelov.coins.rates.ExchangeRatesFragment
 import com.bubelov.coins.rates.ExchangeRatesModule
+import com.bubelov.coins.settings.SettingsFragment
+import com.bubelov.coins.settings.SettingsModule
 import com.bubelov.coins.ui.fragment.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

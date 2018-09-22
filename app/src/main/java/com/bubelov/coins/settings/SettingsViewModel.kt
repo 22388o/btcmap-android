@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.viewmodel
+package com.bubelov.coins.settings
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel

@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.fragment
+package com.bubelov.coins.settings
 
 import dagger.Module
 

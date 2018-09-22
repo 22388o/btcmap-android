@@ -36,6 +36,7 @@ import com.bubelov.coins.model.SyncLogEntry
 import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
+import com.bubelov.coins.settings.SettingsViewModel
 import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.SelectedCurrencyLiveData
