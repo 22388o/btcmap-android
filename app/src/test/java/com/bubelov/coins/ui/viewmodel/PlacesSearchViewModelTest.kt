@@ -29,17 +29,14 @@ package com.bubelov.coins.ui.viewmodel
 
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
-import org.junit.Assert
-import org.junit.Test
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
-import com.bubelov.coins.feature.placessearch.PlacesSearchViewModel
+import com.bubelov.coins.search.PlacesSearchViewModel
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.LocationLiveData
 import com.bubelov.coins.util.SelectedCurrencyLiveData
-import com.bubelov.coins.util.blockingObserve
 import org.junit.Before
 import org.junit.Rule
 import org.mockito.ArgumentMatchers

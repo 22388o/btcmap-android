@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.placessearch
+package com.bubelov.coins.search
 
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
@@ -39,7 +39,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import com.bubelov.coins.ui.adapter.PlacesSearchResultsAdapter
 import com.bubelov.coins.util.TextWatcherAdapter
 import com.bubelov.coins.util.activityViewModelProvider
 import com.bubelov.coins.util.nonNull
@@ -94,10 +93,10 @@ class PlacesSearchFragment : DaggerFragment() {
                     val inputManager =
                         requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     inputManager.hideSoftInputFromWindow(query.windowToken, 0)
-                    true
                 }
-                else -> false
             }
+
+            true
         }
 
         clear.setOnClickListener { query.setText("") }

@@ -93,7 +93,7 @@
         android:label="PickLocationFragment" />
     <fragment
         android:id="@+id/placesSearchFragment"
-        android:name="com.bubelov.coins.feature.placessearch.PlacesSearchFragment"
+        android:name="com.bubelov.coins.search.PlacesSearchFragment"
         android:label="PlacesSearchFragment" ></fragment>
 
 </navigation>

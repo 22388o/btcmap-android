@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.feature.placessearch
+package com.bubelov.coins.search
 
 import android.arch.lifecycle.*
 import android.content.SharedPreferences
@@ -36,7 +36,6 @@ import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
-import com.bubelov.coins.ui.model.PlacesSearchRow
 import com.bubelov.coins.util.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
@@ -89,8 +88,6 @@ class PlacesSearchViewModel @Inject constructor(
             }
         }
     }
-
-    fun getPlace(id: Long) = placesRepository.find(id).blockingObserve()
 
     private fun Place.toRow(userLocation: Location?): PlacesSearchRow {
         val distanceStringBuilder = StringBuilder()

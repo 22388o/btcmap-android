@@ -25,23 +25,9 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui
+package com.bubelov.coins.search
 
-import android.os.Bundle
-import androidx.navigation.NavHost
-import androidx.navigation.findNavController
-import com.bubelov.coins.R
-import dagger.android.support.DaggerAppCompatActivity
+import dagger.Module
 
-class AppActivity : DaggerAppCompatActivity(), NavHost {
-    private val navigationController by lazy { findNavController(R.id.nav_host_fragment) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app)
-    }
-
-    override fun getNavController() = navigationController
-
-    override fun onSupportNavigateUp() = navigationController.navigateUp()
-}
+@Module
+class PlacesSearchModule

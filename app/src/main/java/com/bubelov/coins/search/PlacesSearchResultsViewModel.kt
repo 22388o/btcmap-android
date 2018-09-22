@@ -25,13 +25,12 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.model
+package com.bubelov.coins.search
 
-import android.graphics.Bitmap
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import javax.inject.Inject
 
-data class PlacesSearchRow(
-    val placeId: Long,
-    val icon: Bitmap,
-    val name: String,
-    val distance: String
-)
+class PlacesSearchResultsViewModel @Inject constructor() : ViewModel() {
+    val pickedPlaceId = MutableLiveData<Long>()
+}

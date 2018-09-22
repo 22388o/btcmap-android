@@ -53,7 +53,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bubelov.coins.BuildConfig
-import com.bubelov.coins.feature.placessearch.PlacesSearchResultsViewModel
+import com.bubelov.coins.search.PlacesSearchResultsViewModel
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.ui.model.PlaceMarker
 import com.bubelov.coins.ui.viewmodel.MapViewModel

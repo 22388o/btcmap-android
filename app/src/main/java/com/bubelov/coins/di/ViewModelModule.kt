@@ -35,8 +35,8 @@ import android.arch.lifecycle.ViewModelProvider
 import com.bubelov.coins.feature.auth.AuthViewModel
 import com.bubelov.coins.feature.editplace.EditPlaceViewModel
 import com.bubelov.coins.feature.notificationarea.NotificationAreaViewModel
-import com.bubelov.coins.feature.placessearch.PlacesSearchResultsViewModel
-import com.bubelov.coins.feature.placessearch.PlacesSearchViewModel
+import com.bubelov.coins.search.PlacesSearchResultsViewModel
+import com.bubelov.coins.search.PlacesSearchViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.ui.viewmodel.*
 

@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.adapter
+package com.bubelov.coins.search
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -33,7 +33,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.bubelov.coins.R
-import com.bubelov.coins.ui.model.PlacesSearchRow
 
 import kotlinx.android.synthetic.main.row_places_search_result.view.*
 
