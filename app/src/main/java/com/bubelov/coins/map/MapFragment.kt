@@ -157,7 +157,6 @@ class MapFragment :
             drawerLayout.closeDrawers()
 
             when (item.itemId) {
-                R.id.action_notification_area -> openNotificationAreaScreen()
                 R.id.action_chat -> openSupportChat()
             }
 
@@ -404,13 +403,6 @@ class MapFragment :
             model.onDrawerHeaderClick()
             drawerLayout.closeDrawers()
         }
-    }
-
-    private fun openNotificationAreaScreen() {
-        // TODO
-//        val intent =
-//            NotificationAreaActivity.newIntent(requireContext(), map.value!!.cameraPosition)
-//        startActivity(intent)
     }
 
     private fun openSupportChat() {
