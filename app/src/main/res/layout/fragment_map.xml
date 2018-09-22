@@ -30,7 +30,7 @@
 
         </FrameLayout>
 
-        <com.bubelov.coins.ui.widget.PlaceDetailsView
+        <com.bubelov.coins.map.PlaceDetailsView
             android:id="@+id/place_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

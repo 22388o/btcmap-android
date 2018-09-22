@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.viewmodel
+package com.bubelov.coins.map
 
 import android.arch.lifecycle.*
 import com.bubelov.coins.model.Location
@@ -35,7 +35,6 @@ import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.ui.model.PlaceMarker
 import com.bubelov.coins.util.Analytics
 import com.bubelov.coins.util.LocationLiveData
 import com.google.android.gms.maps.model.LatLngBounds

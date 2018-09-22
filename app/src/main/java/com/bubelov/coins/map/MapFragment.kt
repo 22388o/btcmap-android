@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.fragment
+package com.bubelov.coins.map
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -55,9 +55,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.search.PlacesSearchResultsViewModel
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.ui.model.PlaceMarker
-import com.bubelov.coins.ui.viewmodel.MapViewModel
-import com.bubelov.coins.ui.widget.PlaceDetailsView
 import com.bubelov.coins.util.Analytics
 import com.bubelov.coins.util.activityViewModelProvider
 import com.bubelov.coins.util.currencyCodeToName

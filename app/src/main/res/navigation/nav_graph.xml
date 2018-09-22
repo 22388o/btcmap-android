@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.bubelov.coins.ui.fragment.MapFragment"
+        android:name="com.bubelov.coins.map.MapFragment"
         android:label="MapFragment" >
         <action
             android:id="@+id/action_mapFragment_to_supportProjectFragment"

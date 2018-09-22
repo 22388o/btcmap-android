@@ -38,6 +38,8 @@ import com.bubelov.coins.feature.notificationarea.NotificationAreaFragment
 import com.bubelov.coins.feature.notificationarea.NotificationAreaModule
 import com.bubelov.coins.feature.picklocation.PickLocationFragment
 import com.bubelov.coins.feature.picklocation.PickLocationModule
+import com.bubelov.coins.map.MapFragment
+import com.bubelov.coins.map.MapModule
 import com.bubelov.coins.search.PlacesSearchFragment
 import com.bubelov.coins.search.PlacesSearchModule
 import com.bubelov.coins.rates.ExchangeRatesFragment

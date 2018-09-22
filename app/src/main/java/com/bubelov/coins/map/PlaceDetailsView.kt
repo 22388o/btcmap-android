@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.widget
+package com.bubelov.coins.map
 
 import android.content.Context
 import android.graphics.Paint
