@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import java.util.ArrayList
 import javax.inject.Inject
 import com.bubelov.coins.util.SelectedCurrencyLiveData
+import com.bubelov.coins.util.SingleLiveEvent
 
 class MapViewModel @Inject constructor(
     private val notificationAreaRepository: NotificationAreaRepository,
@@ -90,11 +91,13 @@ class MapViewModel @Inject constructor(
         location
     }
 
+    val shouldOpenSignInScreen = SingleLiveEvent<Boolean>()
+
     fun onAddPlaceClick() {
         if (userRepository.signedIn()) {
             callback?.addPlace()
         } else {
-            callback?.signIn()
+            shouldOpenSignInScreen.value = true
         }
     }
 
@@ -102,7 +105,7 @@ class MapViewModel @Inject constructor(
         if (userRepository.signedIn()) {
             callback?.editPlace(place)
         } else {
-            callback?.signIn()
+            shouldOpenSignInScreen.value = true
         }
     }
 
@@ -110,7 +113,7 @@ class MapViewModel @Inject constructor(
         if (userRepository.signedIn()) {
             callback?.showUserProfile()
         } else {
-            callback?.signIn()
+            shouldOpenSignInScreen.value = true
         }
     }
 
@@ -119,7 +122,6 @@ class MapViewModel @Inject constructor(
     fun onLocationPermissionGranted() = location.onLocationPermissionGranted()
 
     interface Callback {
-        fun signIn()
         fun addPlace()
         fun editPlace(place: Place)
         fun showUserProfile()

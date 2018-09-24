@@ -38,7 +38,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.BottomSheetBehavior
 import android.view.LayoutInflater
 import android.view.View
@@ -166,7 +165,8 @@ class MapFragment :
         model.selectedCurrency.observe(this, Observer {
             toolbar.title = getString(R.string.s_map, it!!.currencyCodeToName())
             toolbar.menu.findItem(R.id.action_add).isVisible = it == "BTC"
-            navigation_view.menu.findItem(R.id.action_mapFragment_to_exchangeRatesFragment).isVisible = it == "BTC"
+            navigation_view.menu.findItem(R.id.action_mapFragment_to_exchangeRatesFragment)
+                .isVisible = it == "BTC"
         })
 
         drawerToggle = ActionBarDrawerToggle(
@@ -235,9 +235,16 @@ class MapFragment :
             model.selectedPlaceId.value = id
         })
 
-        Handler().post {
-            drawerToggle.syncState()
-        }
+        model.shouldOpenSignInScreen.observe(this, Observer { should ->
+            if (should == true) {
+                findNavController().navigate(R.id.action_mapFragment_to_authorizationOptionsFragment)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        drawerToggle.syncState()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -312,12 +319,8 @@ class MapFragment :
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
-    }
-
-    override fun signIn() {
-        findNavController().navigate(R.id.action_mapFragment_to_authorizationOptionsFragment)
+        super.onConfigurationChanged(newConfig)
     }
 
     override fun addPlace() {
@@ -400,8 +403,8 @@ class MapFragment :
         }
 
         drawerHeader.setOnClickListener {
+            drawerLayout.closeDrawer(navigation_view)
             model.onDrawerHeaderClick()
-            drawerLayout.closeDrawers()
         }
     }
 
