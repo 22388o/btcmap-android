@@ -32,7 +32,6 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -47,8 +46,8 @@ import com.bubelov.coins.util.OnSeekBarChangeAdapter
 import com.bubelov.coins.util.viewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
@@ -63,7 +62,7 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
     @Inject lateinit var modelFactory: ViewModelProvider.Factory
     private val model by lazy { viewModelProvider(modelFactory) as NotificationAreaViewModel }
 
-    private var map: GoogleMap? = null
+    private lateinit var map: GoogleMap
 
     private var marker: Marker? = null
     private var areaCircle: Circle? = null
@@ -82,38 +81,36 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
             findNavController().popBackStack()
         }
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+
         mapFragment.getMapAsync(this)
 
-        seek_bar_radius.progressDrawable.setColorFilter(
+        radiusSeekBar.progressDrawable.setColorFilter(
             ContextCompat.getColor(requireContext(), R.color.accent),
             PorterDuff.Mode.SRC_IN
         )
 
-        seek_bar_radius.thumb.setColorFilter(ContextCompat.getColor(requireContext(), R.color.accent), PorterDuff.Mode.SRC_IN)
-
-        Handler().post {
-            bottom_panel.post { map!!.setPadding(0, 0, 0, bottom_panel.height) }
-        }
+        radiusSeekBar.thumb.setColorFilter(ContextCompat.getColor(requireContext(), R.color.accent), PorterDuff.Mode.SRC_IN)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map!!.uiSettings.isMyLocationButtonEnabled = false
-        map!!.uiSettings.isZoomControlsEnabled = false
-        map!!.uiSettings.isCompassEnabled = false
-        map!!.setOnMarkerDragListener(OnMarkerDragListener())
+
+        map.uiSettings.isMyLocationButtonEnabled = false
+        map.uiSettings.isZoomControlsEnabled = false
+        map.uiSettings.isCompassEnabled = false
+
+        map.setOnMarkerDragListener(OnMarkerDragListener())
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            map!!.isMyLocationEnabled = true
+            map.isMyLocationEnabled = true
         }
 
-        // TODO
-        //showArea(model.getNotificationArea(defaultCameraPosition))
+        showArea(model.getNotificationArea())
     }
 
     private fun showArea(area: NotificationArea) {
@@ -122,7 +119,7 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
 
         val markerDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_location)
 
-        marker = map!!.addMarker(
+        marker = map.addMarker(
             MarkerOptions()
                 .position(LatLng(area.latitude, area.longitude))
                 .icon(markerDescriptor)
@@ -137,50 +134,57 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
             .strokeColor(ContextCompat.getColor(requireContext(), R.color.notification_area_border))
             .strokeWidth(4f)
 
-        areaCircle = map!!.addCircle(circleOptions)
+        areaCircle = map.addCircle(circleOptions)
 
-        seek_bar_radius.max = 500000
-        seek_bar_radius.progress = areaCircle!!.radius.toInt()
-        seek_bar_radius.setOnSeekBarChangeListener(SeekBarChangeListener())
+        radiusSeekBar.max = 500000
+        radiusSeekBar.progress = area.radius.toInt()
+        radiusSeekBar.setOnSeekBarChangeListener(SeekBarChangeListener())
 
         val areaCenter = LatLng(area.latitude, area.longitude)
-        map!!.moveCamera(
+
+        map.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 areaCenter,
-                (model.getZoomLevel(areaCircle!!) - 1).toFloat()
+                (model.getZoomLevel(area.radius) - 1).toFloat()
             )
         )
     }
 
     private fun saveArea() {
+        val circle = areaCircle ?: return
+
         val area = NotificationArea(
-            areaCircle!!.center.latitude,
-            areaCircle!!.center.longitude,
-            areaCircle!!.radius
+            circle.center.latitude,
+            circle.center.longitude,
+            circle.radius
         )
 
-        model.save(area)
+        model.setNotificationArea(area)
     }
 
     private inner class OnMarkerDragListener : GoogleMap.OnMarkerDragListener {
         override fun onMarkerDragStart(marker: Marker) {
-            areaCircle!!.fillColor = ContextCompat.getColor(requireContext(), android.R.color.transparent)
+            val circle = areaCircle ?: return
+            circle.fillColor = ContextCompat.getColor(requireContext(), android.R.color.transparent)
         }
 
         override fun onMarkerDrag(marker: Marker) {
-            areaCircle!!.center = marker.position
-            map!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
+            val circle = areaCircle ?: return
+            circle.center = marker.position
+            map.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
         }
 
         override fun onMarkerDragEnd(marker: Marker) {
-            areaCircle!!.fillColor = ContextCompat.getColor(requireContext(), R.color.notification_area)
+            val circle = areaCircle ?: return
+            circle.fillColor = ContextCompat.getColor(requireContext(), R.color.notification_area)
             saveArea()
         }
     }
 
     private inner class SeekBarChangeListener : OnSeekBarChangeAdapter() {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            areaCircle!!.radius = progress.toDouble()
+            val circle = areaCircle ?: return
+            circle.radius = progress.toDouble()
         }
     }
 }

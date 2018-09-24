@@ -28,30 +28,29 @@
 package com.bubelov.coins.notificationarea
 
 import android.arch.lifecycle.ViewModel
+import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.Circle
 import javax.inject.Inject
 
 class NotificationAreaViewModel @Inject constructor(
-    private var areaRepository: NotificationAreaRepository
+    private val areaRepository: NotificationAreaRepository
 ) : ViewModel() {
 
-    fun getNotificationArea(defaultCameraPosition: CameraPosition): NotificationArea {
+    fun getNotificationArea(): NotificationArea {
         return areaRepository.notificationArea ?: NotificationArea(
-            defaultCameraPosition.target.latitude,
-            defaultCameraPosition.target.longitude,
+            BuildConfig.DEFAULT_LOCATION_LAT,
+            BuildConfig.DEFAULT_LOCATION_LON,
             NotificationAreaRepository.DEFAULT_RADIUS_METERS
         )
     }
 
-    fun getZoomLevel(circle: Circle): Int {
-        val scale = circle.radius / 500
-        return (16 - Math.log(scale) / Math.log(2.0)).toInt()
+    fun setNotificationArea(notificationArea: NotificationArea) {
+        areaRepository.notificationArea = notificationArea
     }
 
-    fun save(notificationArea: NotificationArea) {
-        areaRepository.notificationArea = notificationArea
+    fun getZoomLevel(area: Double): Int {
+        val scale = area / 500
+        return (16 - Math.log(scale) / Math.log(2.0)).toInt()
     }
 }

@@ -39,6 +39,9 @@ android {
         buildConfigField "Float", "MAP_MARKER_ANCHOR_U", "$map_marker_anchor_u"
         buildConfigField "Float", "MAP_MARKER_ANCHOR_V", "$map_marker_anchor_v"
 
+        buildConfigField "Double", "DEFAULT_LOCATION_LAT", "$default_location_lat"
+        buildConfigField "Double", "DEFAULT_LOCATION_LON", "$default_location_lon"
+
         project.ext.set("archivesBaseName", "Coins-" + defaultConfig.versionName)
 
         manifestPlaceholders = [crashlyticsEnabled: true]
