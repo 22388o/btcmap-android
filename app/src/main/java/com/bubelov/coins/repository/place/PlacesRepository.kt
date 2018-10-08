@@ -30,12 +30,14 @@ package com.bubelov.coins.repository.place
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
+import com.bubelov.coins.api.await
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.repository.Result
-import com.bubelov.coins.util.Analytics
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import java.util.*
 
 import javax.inject.Inject
@@ -45,8 +47,7 @@ import javax.inject.Singleton
 class PlacesRepository @Inject constructor(
     private val api: PlacesApi,
     private val db: PlacesDb,
-    private val assetsCache: PlacesAssetsCache,
-    private val analytics: Analytics
+    private val assetsCache: PlacesAssetsCache
 ) {
     private val allPlaces = db.allAsync()
 
@@ -73,58 +74,28 @@ class PlacesRepository @Inject constructor(
             }
         }
 
-    fun fetchNewPlaces(): Result<List<Place>> {
-        try {
+    suspend fun fetchNewPlaces(): List<Place> {
+        return withContext(Dispatchers.IO) {
             val latestPlaceUpdatedAt = db.maxUpdatedAt() ?: Date(0)
-            val response = api.getPlaces(Date(latestPlaceUpdatedAt.time + 1)).execute()
-
-            return if (response.isSuccessful) {
-                val places = response.body()!!
-
-                if (!places.isEmpty()) {
-                    db.insert(places)
-                }
-
-                Result.Success(places)
-            } else {
-                throw Exception("HTTP code: ${response.code()}, message: ${response.message()}")
-            }
-        } catch (e: Exception) {
-            return Result.Error(e)
+            val response = api.getPlaces(Date(latestPlaceUpdatedAt.time + 1)).await()
+            db.insert(response)
+            response
         }
     }
 
-    fun addPlace(place: Place): Result<Place> {
-        return try {
-            val response = api.addPlace(place).execute()
-
-            if (response.isSuccessful) {
-                val createdPlace = response.body()!!
-                db.insert(listOf(createdPlace))
-                analytics.logEvent("create_place")
-                Result.Success(createdPlace)
-            } else {
-                throw Exception("HTTP code: ${response.code()}, message: ${response.message()}")
-            }
-        } catch (e: Exception) {
-            Result.Error(e)
+    suspend fun addPlace(place: Place): Place {
+        return withContext(Dispatchers.IO) {
+            val result = api.addPlace(place).await()
+            db.insert(listOf(result))
+            result
         }
     }
 
-    fun updatePlace(place: Place): Result<Place> {
-        return try {
-            val response = api.updatePlace(place).execute()
-
-            if (response.isSuccessful) {
-                val updatedPlace = response.body()!!
-                db.update(updatedPlace)
-                analytics.logEvent("edit_place")
-                Result.Success(updatedPlace)
-            } else {
-                throw Exception("HTTP code: ${response.code()}, message: ${response.message()}")
-            }
-        } catch (e: Exception) {
-            Result.Error(e)
+    suspend fun updatePlace(place: Place): Place {
+        return withContext(Dispatchers.IO) {
+            val result = api.updatePlace(place).await()
+            db.update(result)
+            result
         }
     }
 }

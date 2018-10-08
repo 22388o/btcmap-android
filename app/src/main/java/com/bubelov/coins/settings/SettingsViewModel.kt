@@ -40,7 +40,8 @@ import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.SelectedCurrencyLiveData
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -63,7 +64,7 @@ class SettingsViewModel @Inject constructor(
 
     val syncLogs = MutableLiveData<List<String>>()
 
-    fun showCurrencySelector() = launch {
+    fun showCurrencySelector() = GlobalScope.launch {
         val allCurrencies = currenciesRepository.getAllCurrencies()
         val currenciesToPlaces = mutableListOf<Pair<Currency, Int>>()
 

@@ -41,7 +41,6 @@ import android.content.Intent
 import android.support.v7.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
-import com.bubelov.coins.util.AsyncResult
 import com.bubelov.coins.util.viewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -51,28 +50,6 @@ import javax.inject.Inject
 class AuthOptionsFragment : DaggerFragment() {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
     val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
-
-    private val authObserver = Observer<AsyncResult<Any>> {
-        when (it) {
-            is AsyncResult.Loading -> {
-                setLoading(true)
-            }
-
-            is AsyncResult.Success -> {
-                // TODO
-                findNavController().popBackStack()
-            }
-
-            is AsyncResult.Error -> {
-                setLoading(false)
-
-                AlertDialog.Builder(requireContext())
-                    .setMessage(it.t.message ?: getString(R.string.something_went_wrong))
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show()
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +62,7 @@ class AuthOptionsFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        sign_in_with_google.setOnClickListener {
+        signInWithGoogle.setOnClickListener {
             val googleSingInOptions =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
@@ -93,31 +70,43 @@ class AuthOptionsFragment : DaggerFragment() {
                     .build()
 
             val googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSingInOptions)
-            startActivityForResult(googleSignInClient.signInIntent,
+            startActivityForResult(
+                googleSignInClient.signInIntent,
                 GOOGLE_SIGN_IN_REQUEST
             )
         }
 
-        sign_in_with_email.setOnClickListener {
+        signInWithEmail.setOnClickListener {
             // TODO
         }
 
-        model.authState.observe(this, authObserver)
+        model.showProgress.observe(this, Observer { show ->
+            viewSwitcher.displayedChild = when (show) {
+                true -> 1
+                else -> 0
+            }
+        })
+
+        model.authorized.observe(this, Observer { authorized ->
+            if (authorized == true) {
+                findNavController().popBackStack()
+            }
+        })
+
+        model.errorMessage.observe(this, Observer { message ->
+            AlertDialog.Builder(requireContext())
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST && resultCode == Activity.RESULT_OK) {
-            model.signIn(GoogleSignIn.getSignedInAccountFromIntent(data).result.idToken!!).observe(
-                this,
-                authObserver
-            )
+            model.signIn(GoogleSignIn.getSignedInAccountFromIntent(data).result.idToken ?: "")
         }
-    }
-
-    private fun setLoading(loading: Boolean) {
-        view_switcher.displayedChild = if (loading) 1 else 0
     }
 
     companion object {

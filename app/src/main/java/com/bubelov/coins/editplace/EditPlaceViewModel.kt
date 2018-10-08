@@ -27,57 +27,58 @@
 
 package com.bubelov.coins.editplace
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.place.PlacesRepository
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 class EditPlaceViewModel @Inject constructor(
     private val placesRepository: PlacesRepository
 ) : ViewModel() {
 
+    private val job = Job()
+    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + job)
+
     lateinit var place: Place
 
-    private val submittingChanges = MutableLiveData<Boolean>()
-    val showProgress: LiveData<Boolean> = submittingChanges
+    val showProgress = MutableLiveData<Boolean>()
 
-    private val submitChangesResult = MutableLiveData<Result<Place>>()
+    val changesSubmitted = MutableLiveData<Boolean>()
 
-    val submittedSuccessfully: LiveData<Boolean> = Transformations.map(submitChangesResult) {
-        when (it) {
-            is Result.Success -> true
-            is Result.Error -> false
-            else -> null
-        }
-    }
+    val errorMessage = MutableLiveData<String>()
 
     fun init(place: Place) {
         this.place = place
     }
 
-    fun submitChanges() = launch {
-        submittingChanges.postValue(true)
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
 
-        val result = async {
-            if (place.id == 0L) {
-                placesRepository.addPlace(place)
-            } else {
-                placesRepository.updatePlace(place)
+    fun submitChanges() {
+        uiScope.launch {
+            showProgress.value = true
+
+            try {
+                if (place.id == 0L) {
+                    placesRepository.addPlace(place)
+                } else {
+                    placesRepository.updatePlace(place)
+                }
+
+                changesSubmitted.value = true
+            } catch (error: Exception) {
+                errorMessage.value = error.message
+            } finally {
+                showProgress.value = false
             }
-        }.await()
-
-        submitChangesResult.postValue(result)
-        submittingChanges.postValue(false)
-
-        if (result is Result.Error) {
-            Timber.e(result.e)
         }
     }
 }

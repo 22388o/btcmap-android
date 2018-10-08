@@ -122,10 +122,4 @@ dependencies {
     androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$navigationVersion"
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 apply plugin: 'com.google.gms.google-services'

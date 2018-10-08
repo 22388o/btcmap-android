@@ -129,19 +129,17 @@ class EditPlaceFragment : DaggerFragment() {
             )
         })
 
-        model.submittedSuccessfully.observe(this, Observer {
-            when (it) {
-                true -> {
-                    // TODO
-                }
-
-                false -> {
-                    AlertDialog.Builder(requireContext())
-                        .setMessage(R.string.could_not_submit_changes)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show()
-                }
+        model.changesSubmitted.observe(this, Observer { success ->
+            if (success == true) {
+                findNavController().popBackStack()
             }
+        })
+
+        model.errorMessage.observe(this, Observer { message ->
+            AlertDialog.Builder(requireContext())
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
         })
     }
 

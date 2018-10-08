@@ -40,41 +40,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 
 import com.bubelov.coins.R
-import com.bubelov.coins.util.AsyncResult
 import com.bubelov.coins.util.viewModelProvider
+import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 import javax.inject.Inject
-
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class SignUpFragment : Fragment(), TextView.OnEditorActionListener {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
     private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
-
-    private val authObserver = Observer<AsyncResult<Any>> {
-        when (it) {
-            is AsyncResult.Loading -> {
-                setLoading(true)
-            }
-
-            is AsyncResult.Success -> {
-// TODO
-//                startActivity(
-//                    Intent(
-//                        activity,
-//                        MapActivity::class.java
-//                    ).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) })
-            }
-
-            is AsyncResult.Error -> {
-                setLoading(false)
-
-                AlertDialog.Builder(requireContext())
-                    .setMessage(it.t.message ?: getString(R.string.something_went_wrong))
-                    .show()
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,7 +69,22 @@ class SignUpFragment : Fragment(), TextView.OnEditorActionListener {
             )
         }
 
-        model.authState.observe(this, authObserver)
+        model.showProgress.observe(this, Observer { show ->
+            state_switcher.displayedChild = when (show) {
+                true -> 1
+                else -> 0
+            }
+        })
+
+        model.authorized.observe(this, Observer { authorized ->
+            // TODO
+        })
+
+        model.errorMessage.observe(this, Observer { message ->
+            AlertDialog.Builder(requireContext())
+                .setMessage(message)
+                .show()
+        })
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
@@ -115,10 +103,6 @@ class SignUpFragment : Fragment(), TextView.OnEditorActionListener {
     }
 
     private fun signUp(email: String, password: String, firstName: String, lastName: String) {
-        model.signUp(email, password, firstName, lastName).observe(this, authObserver)
-    }
-
-    private fun setLoading(loading: Boolean) {
-        state_switcher.displayedChild = if (loading) 1 else 0
+        model.signUp(email, password, firstName, lastName)
     }
 }

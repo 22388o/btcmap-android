@@ -39,45 +39,15 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 
 import com.bubelov.coins.R
-import com.bubelov.coins.util.AsyncResult
 import com.bubelov.coins.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 import javax.inject.Inject
 
-import kotlinx.android.synthetic.main.fragment_sign_in.*
-
 class SignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
-
     private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
-
-    private val authObserver = Observer<AsyncResult<Any>> {
-        when (it) {
-            is AsyncResult.Loading -> {
-                sign_in_panel.visibility = View.GONE
-                progress.visibility = View.VISIBLE
-            }
-
-            is AsyncResult.Success -> {
-// TODO
-//                startActivity(
-//                    Intent(activity, MapActivity::class.java).apply {
-//                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                    })
-            }
-
-            is AsyncResult.Error -> {
-                sign_in_panel.visibility = View.VISIBLE
-                progress.visibility = View.GONE
-
-                AlertDialog.Builder(requireContext())
-                    .setMessage(it.t.message ?: getString(R.string.something_went_wrong))
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show()
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,20 +61,43 @@ class SignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
         password.setOnEditorActionListener(this)
 
         sign_in.setOnClickListener {
-            model.signIn(email.text.toString(), password.text.toString())
-                .observe(this, authObserver)
+            signIn()
         }
 
-        model.authState.observe(this, authObserver)
+        model.showProgress.observe(this, Observer { show ->
+            sign_in_panel.visibility = when(show) {
+                true -> View.GONE
+                else -> View.VISIBLE
+            }
+
+            progress.visibility = when(show) {
+                true -> View.VISIBLE
+                else -> View.GONE
+            }
+        })
+
+        model.authorized.observe(this, Observer { authorized ->
+            // TODO
+        })
+
+        model.errorMessage.observe(this, Observer { message ->
+            AlertDialog.Builder(requireContext())
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+        })
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
         if (actionId == EditorInfo.IME_ACTION_GO) {
-            model.signIn(email.text.toString(), password.text.toString())
-                .observe(this, authObserver)
+            signIn()
             return true
         }
 
         return false
+    }
+
+    private fun signIn() {
+        model.signIn(email.text.toString(), password.text.toString())
     }
 }

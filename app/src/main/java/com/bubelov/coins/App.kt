@@ -27,18 +27,13 @@
 
 package com.bubelov.coins
 
-import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.di.DaggerAppComponent
 import com.bubelov.coins.util.CrashlyticsTree
 import dagger.android.*
 
-import javax.inject.Inject
-
 import timber.log.Timber
 
 class App : DaggerApplication(), HasActivityInjector, HasServiceInjector {
-    @Inject lateinit var databaseSync: DatabaseSync
-
     override fun onCreate() {
         super.onCreate()
 
@@ -47,8 +42,6 @@ class App : DaggerApplication(), HasActivityInjector, HasServiceInjector {
         } else {
             Timber.plant(CrashlyticsTree())
         }
-
-        databaseSync.sync()
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

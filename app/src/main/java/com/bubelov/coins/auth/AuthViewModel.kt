@@ -27,30 +27,60 @@
 
 package com.bubelov.coins.auth
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.AsyncResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 class AuthViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
-    var authState: LiveData<AsyncResult<Any>> = MutableLiveData<AsyncResult<Any>>()
 
-    fun signIn(googleToken: String): LiveData<AsyncResult<Any>> {
-        authState = userRepository.signIn(googleToken)
-        return authState
+    private val job = Job()
+    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + job)
+
+    val showProgress = MutableLiveData<Boolean>()
+    val authorized = MutableLiveData<Boolean>()
+    val errorMessage = MutableLiveData<String>()
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
     }
 
-    fun signIn(email: String, password: String): LiveData<AsyncResult<Any>> {
-        authState = userRepository.signIn(email, password)
-        return authState
+    fun signIn(googleToken: String) {
+        launchAuthFlow {
+            userRepository.signIn(googleToken)
+        }
     }
 
-    fun signUp(email: String, password: String, firstName: String, lastName: String): LiveData<AsyncResult<Any>> {
-        authState = userRepository.signUp(email, password, firstName, lastName)
-        return authState
+    fun signIn(email: String, password: String) {
+        launchAuthFlow {
+            userRepository.signIn(email, password)
+        }
+    }
+
+    fun signUp(email: String, password: String, firstName: String, lastName: String) {
+        launchAuthFlow {
+            userRepository.signUp(email, password, firstName, lastName)
+        }
+    }
+
+    private fun launchAuthFlow(block: suspend () -> Unit): Job {
+        return uiScope.launch {
+            try {
+                showProgress.value = true
+                block()
+            } catch (error: Exception) {
+                errorMessage.value = error.message
+            } finally {
+                showProgress.value = false
+            }
+        }
     }
 }

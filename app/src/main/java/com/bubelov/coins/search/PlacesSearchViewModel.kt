@@ -37,8 +37,10 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.*
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import javax.inject.Inject
 
@@ -64,7 +66,7 @@ class PlacesSearchViewModel @Inject constructor(
             return
         }
 
-        searchJob = launch {
+        searchJob = GlobalScope.launch {
             var places = placesRepository.findBySearchQuery(query)
                 .filter { it.currencies.contains(currency) }
 

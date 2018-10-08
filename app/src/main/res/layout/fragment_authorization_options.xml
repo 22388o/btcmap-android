@@ -11,7 +11,7 @@
         app:title="@string/sign_in" />
 
     <ViewSwitcher
-        android:id="@+id/view_switcher"
+        android:id="@+id/viewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,14 +31,14 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/sign_in_with_google"
+                android:id="@+id/signInWithGoogle"
                 style="@style/Button.SignIn"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/btn_google_sign_in"
                 android:text="@string/sign_in_with_google" />
 
             <TextView
-                android:id="@+id/sign_in_with_email"
+                android:id="@+id/signInWithEmail"
                 style="@style/Button.SignIn"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/btn_email_sign_in"

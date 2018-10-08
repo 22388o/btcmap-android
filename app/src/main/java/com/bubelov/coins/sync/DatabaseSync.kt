@@ -29,17 +29,19 @@ package com.bubelov.coins.sync
 
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.SyncLogEntry
-import com.bubelov.coins.repository.Result
 
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 
 import javax.inject.Inject
 import javax.inject.Singleton
 
 import timber.log.Timber
+import java.lang.Exception
 
 @Singleton
 class DatabaseSync @Inject constructor(
@@ -48,19 +50,16 @@ class DatabaseSync @Inject constructor(
     private val syncLogsRepository: SyncLogsRepository,
     private val databaseSyncScheduler: DatabaseSyncScheduler
 ) {
-    fun sync() = launch {
-        try {
-            val result = placesRepository.fetchNewPlaces()
-
-            when (result) {
-                is Result.Success -> onFetchNewPlaces(result.data)
-                is Result.Error -> throw result.e
+    suspend fun sync() {
+        withContext(Dispatchers.IO) {
+            try {
+                onFetchNewPlaces(placesRepository.fetchNewPlaces())
+            } catch (error: Exception) {
+                Timber.e(error, "Couldn't sync database")
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Couldn't sync database")
-        }
 
-        databaseSyncScheduler.scheduleNextSync()
+            databaseSyncScheduler.scheduleNextSync()
+        }
     }
 
     private fun onFetchNewPlaces(places: Collection<Place>) {

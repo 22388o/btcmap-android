@@ -27,12 +27,8 @@
 
 package com.bubelov.coins.sync
 
-import android.app.job.JobScheduler
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import android.app.job.JobInfo
-import android.content.ComponentName
 import android.content.Context
 
 @Singleton
@@ -40,17 +36,6 @@ class DatabaseSyncScheduler @Inject constructor(
     private val context: Context
 ) {
     fun scheduleNextSync() {
-        val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-
-        val jobId = DatabaseSyncService.JOB_ID
-        val jobComponent = ComponentName(context, DatabaseSyncService::class.java)
-
-        scheduler.schedule(
-            JobInfo.Builder(jobId, jobComponent)
-                .setPeriodic(TimeUnit.DAYS.toMillis(1))
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPersisted(true)
-                .build()
-        )
+        // TODO
     }
 }

@@ -43,7 +43,6 @@ import dagger.android.AndroidInjector
         AndroidInjectionModule::class,
         ActivityBuilder::class,
         FragmentBuilder::class,
-        ServiceBuilder::class,
         ViewModelModule::class
     ]
 )

@@ -27,17 +27,18 @@
 
 package com.bubelov.coins.repository.user
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
+import com.bubelov.coins.api.await
 
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreateUserArgs
 import com.bubelov.coins.model.User
 import com.bubelov.coins.util.AsyncResult
-import com.bubelov.coins.util.getException
 import com.google.gson.Gson
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -60,94 +61,48 @@ class UserRepository @Inject constructor(
         get() = preferences.getString(API_AUTH_METHOD_KEY, "")
         set(method) = preferences.edit().putString(API_AUTH_METHOD_KEY, method).apply()
 
-    fun signIn(googleToken: String): LiveData<AsyncResult<Any>> {
-        val result = MutableLiveData<AsyncResult<Any>>()
-        result.postValue(AsyncResult.Loading)
-
-        launch {
-            try {
-                api.authWithGoogle(googleToken).execute().apply {
-                    if (isSuccessful) {
-                        val body = body() ?: throw getException()
-                        user = body.user
-                        userAuthToken = body.token
-                        userAuthMethod = "google"
-                        result.postValue(AsyncResult.Success(Any()))
-                    } else {
-                        throw getException()
-                    }
-                }
-            } catch (t: Throwable) {
-                result.postValue(AsyncResult.Error(t))
-            }
+    suspend fun signIn(googleToken: String) {
+        withContext(Dispatchers.IO) {
+            val response = api.authWithGoogle(googleToken).await()
+            user = response.user
+            userAuthToken = response.token
+            userAuthMethod = "google"
         }
-
-        return result
     }
 
-    fun signIn(email: String, password: String): LiveData<AsyncResult<Any>> {
-        val result = MutableLiveData<AsyncResult<Any>>()
-        result.postValue(AsyncResult.Loading)
-
-        launch {
-            try {
-                api.authWithEmail(email, password).execute().apply {
-                    if (isSuccessful) {
-                        val body = body() ?: throw getException()
-                        user = body.user
-                        userAuthToken = body.token
-                        userAuthMethod = "email"
-                    } else {
-                        throw getException()
-                    }
-                }
-
-                result.postValue(AsyncResult.Success(Any()))
-            } catch (t: Throwable) {
-                result.postValue(AsyncResult.Error(t))
-            }
+    suspend fun signIn(email: String, password: String) {
+        withContext(Dispatchers.IO) {
+            val response = api.authWithEmail(email, password).await()
+            user = response.user
+            userAuthToken = response.token
+            userAuthMethod = "email"
         }
 
-        return result
+        val result = MutableLiveData<AsyncResult<Any>>()
+        result.postValue(AsyncResult.Loading)
     }
 
-    fun signUp(
+    suspend fun signUp(
         email: String,
         password: String,
         firstName: String,
         lastName: String
-    ): LiveData<AsyncResult<Any>> {
-        val result = MutableLiveData<AsyncResult<Any>>()
-        result.postValue(AsyncResult.Loading)
+    ) {
+        val args = CreateUserArgs(
+            CreateUserArgs.User(
+                email = email,
+                password = password,
+                firstName = firstName,
+                lastName = lastName
+            )
+        )
 
-        launch {
-            try {
-                val args = CreateUserArgs(
-                    CreateUserArgs.User(
-                        email = email,
-                        password = password,
-                        firstName = firstName,
-                        lastName = lastName
-                    )
-                )
-
-                api.createUser(args)
-                    .execute().apply {
-                        if (isSuccessful) {
-                            val body = body() ?: throw getException()
-                            user = body.user
-                            userAuthToken = body.token
-                            userAuthMethod = "email"
-                        } else {
-                            throw getException()
-                        }
-                    }
-            } catch (t: Throwable) {
-                result.postValue(AsyncResult.Error(t))
-            }
+        withContext(Dispatchers.IO) {
+            val response = api.createUser(args).await()
+            user = response.user
+            userAuthToken = response.token
+            userAuthMethod = "email"
         }
-
-        return result
     }
 
     fun signedIn() = !userAuthToken.isBlank()

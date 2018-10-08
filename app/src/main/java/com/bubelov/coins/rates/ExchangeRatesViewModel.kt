@@ -32,14 +32,20 @@ import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
 import com.bubelov.coins.repository.rate.ExchangeRatesSource
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import javax.inject.Inject
 
 class ExchangeRatesViewModel @Inject constructor(
     val repository: ExchangeRatesRepository
 ) : ViewModel() {
+    private val job = Job()
+    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + job)
+
     val pair = MutableLiveData<CurrencyPair>()
 
     val rates: LiveData<List<ExchangeRateRow>> = Transformations.switchMap(pair) { pair ->
@@ -49,7 +55,7 @@ class ExchangeRatesViewModel @Inject constructor(
 
         result.value = sources.map { it.toRow("Loading") }
 
-        launch {
+        uiScope.launch {
             val jobs = sources.mapIndexed { sourceIndex, source ->
                 async { rates[sourceIndex] = source.getExchangeRate(pair) }.apply {
                     invokeOnCompletion {
