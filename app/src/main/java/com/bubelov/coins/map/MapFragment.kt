@@ -235,9 +235,11 @@ class MapFragment :
             model.selectedPlaceId.value = id
         })
 
-        model.shouldOpenSignInScreen.observe(this, Observer { should ->
-            if (should == true) {
-                findNavController().navigate(R.id.action_mapFragment_to_authorizationOptionsFragment)
+        model.shouldOpenSignInScreen.observe(this, Observer { value ->
+            value?.consume { value ->
+                if (value) {
+                    findNavController().navigate(R.id.action_mapFragment_to_authorizationOptionsFragment)
+                }
             }
         })
     }

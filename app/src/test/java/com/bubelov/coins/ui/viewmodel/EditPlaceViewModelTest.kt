@@ -30,10 +30,11 @@ package com.bubelov.coins.ui.viewmodel
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.any
 import com.bubelov.coins.editplace.EditPlaceViewModel
-import com.bubelov.coins.util.blockingObserve
-import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.util.blockingObserve
 import com.bubelov.coins.util.emptyPlace
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -51,49 +52,55 @@ class EditPlaceViewModelTest {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        model = EditPlaceViewModel(placesRepository)
+        model = EditPlaceViewModel(placesRepository, Dispatchers.Default)
     }
 
     @Test
     fun submitNewPlace() {
-        val place = emptyPlace().copy(
-            id = 0,
-            name = "Crypto Library"
-        )
+        runBlocking {
+            val place = emptyPlace().copy(
+                id = 0,
+                name = "Crypto Library"
+            )
 
-        `when`(placesRepository.addPlace(place)).thenReturn(Result.Success(place))
+            `when`(placesRepository.addPlace(place)).thenReturn(place)
 
-        model.init(place)
-        model.submitChanges()
+            model.init(place)
+            model.submitChanges()
 
-        Assert.assertTrue(model.submittedSuccessfully.blockingObserve())
-        verify(placesRepository).addPlace(place)
-        verify(placesRepository, never()).updatePlace(place)
+            Assert.assertTrue(model.changesSubmitted.blockingObserve())
+            verify(placesRepository).addPlace(place)
+            verify(placesRepository, never()).updatePlace(place)
+        }
     }
 
     @Test
     fun updateExistingPlace() {
-        val place = emptyPlace().copy(
-            id = 50,
-            name = "Crypto Library"
-        )
+        runBlocking {
+            val place = emptyPlace().copy(
+                id = 50,
+                name = "Crypto Library"
+            )
 
-        `when`(placesRepository.updatePlace(place)).thenReturn(Result.Success(place))
+            `when`(placesRepository.updatePlace(place)).thenReturn(place)
 
-        model.init(place)
-        model.submitChanges()
+            model.init(place)
+            model.submitChanges()
 
-        Assert.assertTrue(model.submittedSuccessfully.blockingObserve())
-        verify(placesRepository).updatePlace(place)
-        verify(placesRepository, never()).addPlace(place)
+            Assert.assertTrue(model.changesSubmitted.blockingObserve())
+            verify(placesRepository).updatePlace(place)
+            verify(placesRepository, never()).addPlace(place)
+        }
     }
 
     @Test
     fun handleFailure() {
-        `when`(placesRepository.addPlace(any())).thenReturn(Result.Error(IllegalStateException("Test")))
+        runBlocking {
+            `when`(placesRepository.addPlace(any())).thenThrow(IllegalStateException("Test"))
 
-        model.init(emptyPlace())
-        model.submitChanges()
-        Assert.assertEquals(false, model.submittedSuccessfully.blockingObserve())
+            model.init(emptyPlace())
+            model.submitChanges()
+            Assert.assertNotNull(model.errorMessage.blockingObserve())
+        }
     }
 }

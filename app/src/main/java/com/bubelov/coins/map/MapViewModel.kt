@@ -35,13 +35,10 @@ import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.Analytics
-import com.bubelov.coins.util.LocationLiveData
+import com.bubelov.coins.util.*
 import com.google.android.gms.maps.model.LatLngBounds
 import java.util.ArrayList
 import javax.inject.Inject
-import com.bubelov.coins.util.SelectedCurrencyLiveData
-import com.bubelov.coins.util.SingleLiveEvent
 
 class MapViewModel @Inject constructor(
     private val notificationAreaRepository: NotificationAreaRepository,
@@ -91,13 +88,14 @@ class MapViewModel @Inject constructor(
         location
     }
 
-    val shouldOpenSignInScreen = SingleLiveEvent<Boolean>()
+    private val _shouldOpenSignInScreen = MutableLiveData<Boolean>()
+    val shouldOpenSignInScreen = Transformations.map(_shouldOpenSignInScreen) { ConsumableValue(it) }
 
     fun onAddPlaceClick() {
         if (userRepository.signedIn()) {
             callback?.addPlace()
         } else {
-            shouldOpenSignInScreen.value = true
+            _shouldOpenSignInScreen.value = true
         }
     }
 
@@ -105,7 +103,7 @@ class MapViewModel @Inject constructor(
         if (userRepository.signedIn()) {
             callback?.editPlace(place)
         } else {
-            shouldOpenSignInScreen.value = true
+            _shouldOpenSignInScreen.value = true
         }
     }
 
@@ -113,7 +111,7 @@ class MapViewModel @Inject constructor(
         if (userRepository.signedIn()) {
             callback?.showUserProfile()
         } else {
-            shouldOpenSignInScreen.value = true
+            _shouldOpenSignInScreen.value = true
         }
     }
 

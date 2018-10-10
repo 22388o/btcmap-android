@@ -48,7 +48,6 @@ class PlacesRepositoryTest {
     @Mock private lateinit var placesApi: PlacesApi
     @Mock private lateinit var placesDb: PlacesDb
     @Mock private lateinit var placesAssetsCache: PlacesAssetsCache
-    @Mock private lateinit var analytics: Analytics
 
     init {
         MockitoAnnotations.initMocks(this)
@@ -65,7 +64,7 @@ class PlacesRepositoryTest {
         val places = listOf(emptyPlace().copy(id = 1, name = "Cafe"))
         `when`(placesAssetsCache.getPlaces()).thenReturn(places)
 
-        PlacesRepository(placesApi, placesDb, placesAssetsCache, analytics)
+        PlacesRepository(placesApi, placesDb, placesAssetsCache)
 
         verify(placesAssetsCache).getPlaces()
         verify(placesDb).insert(places)

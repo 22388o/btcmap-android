@@ -29,12 +29,11 @@ package com.bubelov.coins
 
 import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.sync.DatabaseSyncScheduler
-import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.emptyPlace
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -63,19 +62,21 @@ class DatabaseSyncTest {
 
     @Test
     fun handleSuccessfulSync() {
-        val fetchedPlaces = listOf(
-            emptyPlace().copy(id = 1),
-            emptyPlace().copy(id = 2),
-            emptyPlace().copy(id = 3)
-        )
+        runBlocking {
+            val fetchedPlaces = listOf(
+                emptyPlace().copy(id = 1),
+                emptyPlace().copy(id = 2),
+                emptyPlace().copy(id = 3)
+            )
 
-        `when`(placesRepository.fetchNewPlaces())
-            .thenReturn(Result.Success(fetchedPlaces))
+            `when`(placesRepository.fetchNewPlaces())
+                .thenReturn(fetchedPlaces)
 
-        runBlocking { databaseSync.sync().join() }
+            databaseSync.sync()
 
-        verify(placeNotificationManager).issueNotificationsIfNecessary(fetchedPlaces)
-        verify(syncLogsRepository).insert(any())
-        verify(databaseSyncScheduler).scheduleNextSync()
+            verify(placeNotificationManager).issueNotificationsIfNecessary(fetchedPlaces)
+            verify(syncLogsRepository).insert(any())
+            verify(databaseSyncScheduler).scheduleNextSync()
+        }
     }
 }

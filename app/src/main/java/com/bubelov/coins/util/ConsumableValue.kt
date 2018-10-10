@@ -27,42 +27,37 @@
 
 package com.bubelov.coins.util
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.support.annotation.MainThread
-import android.util.Log
+import android.support.annotation.UiThread
 
-import java.util.concurrent.atomic.AtomicBoolean
+/**
+ * Value class for passing through LiveData. Values will only be consumed once, unless the consumer
+ * explicitly calls [release].
+ *
+ * For background see this blog post:
+ * https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150
+ */
+class ConsumableValue<T>(private val data: T) {
+    var consumed = false
+        private set
 
-class SingleLiveEvent<T> : MutableLiveData<T>() {
-    private val pending = AtomicBoolean(false)
-
-    @MainThread
-    override fun observe(owner: LifecycleOwner, observer: Observer<T>) {
-        if (hasActiveObservers()) {
-            Log.w(TAG, "Multiple observers registered but only one will be notified of changes.")
+    /**
+     * Process this value, block will only be called once.
+     */
+    @UiThread
+    fun consume(block: ConsumableValue<T>.(T) -> Unit) {
+        val wasConsumed = consumed
+        consumed = true
+        if (!wasConsumed) {
+            this.block(data)
         }
-
-        super.observe(owner, Observer { t ->
-            if (pending.compareAndSet(true, false)) {
-                observer.onChanged(t)
-            }
-        })
     }
 
-    @MainThread
-    override fun setValue(t: T?) {
-        pending.set(true)
-        super.setValue(t)
-    }
-
-    @MainThread
-    fun call() {
-        value = null
-    }
-
-    companion object {
-        private const val TAG = "SingleLiveEvent"
+    /**
+     * Inside a handle lambda, you may call this if you discover that you cannot handle
+     * the event right now. It will mark the event as available to be handled by another handler.
+     */
+    @UiThread
+    fun ConsumableValue<T>.release() {
+        consumed = false
     }
 }

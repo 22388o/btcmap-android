@@ -41,7 +41,7 @@ import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.SelectedCurrencyLiveData
 import com.bubelov.coins.util.emptyPlace
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule

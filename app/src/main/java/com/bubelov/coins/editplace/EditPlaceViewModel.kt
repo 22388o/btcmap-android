@@ -33,17 +33,18 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class EditPlaceViewModel @Inject constructor(
-    private val placesRepository: PlacesRepository
+    private val placesRepository: PlacesRepository,
+    coroutineContext: CoroutineContext
 ) : ViewModel() {
 
     private val job = Job()
-    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + job)
+    private val uiScope = CoroutineScope(coroutineContext + job)
 
     lateinit var place: Place
 
