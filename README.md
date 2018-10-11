@@ -6,8 +6,6 @@ Key features:
 - __Get updates:__ Get notified of new places in your area of interest
 - __Contribute:__ Report missing places or add more details to existing ones
 
-[![Build Status](https://travis-ci.org/bubelov/coins-android.svg?branch=develop)](https://travis-ci.org/bubelov/coins-android)
-
 Build instructions:
 
 1. Check out the repo
@@ -15,3 +13,5 @@ Build instructions:
 3. Generate **google-services.json** and put it to the /app folder
 4. Assemble the app (**./gradlew assemble**)
 5. You can find the APK files in the **/app/build/outputs/apk** folder
+
+[![Build Status](https://travis-ci.org/bubelov/coins-android.svg?branch=develop)](https://travis-ci.org/bubelov/coins-android)
