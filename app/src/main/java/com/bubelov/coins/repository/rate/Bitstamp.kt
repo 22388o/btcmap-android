@@ -27,6 +27,7 @@
 
 package com.bubelov.coins.repository.rate
 
+import com.bubelov.coins.api.await
 import com.bubelov.coins.api.rates.BitstampApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
@@ -51,7 +52,7 @@ class Bitstamp @Inject constructor(gson: Gson) : ExchangeRatesSource {
         return listOf(CurrencyPair.BTC_USD, CurrencyPair.BTC_EUR)
     }
 
-    override fun getExchangeRate(pair: CurrencyPair): Result<Double> {
+    override suspend fun getExchangeRate(pair: CurrencyPair): Result<Double> {
         return when (pair) {
             CurrencyPair.BTC_USD -> fromTicker(api.getBtcUsdTicker())
             CurrencyPair.BTC_EUR -> fromTicker(api.getBtcEurTicker())
@@ -59,9 +60,10 @@ class Bitstamp @Inject constructor(gson: Gson) : ExchangeRatesSource {
         }
     }
 
-    private fun fromTicker(call: Call<BitstampApi.BitstampTicker>): Result<Double> {
+    private suspend fun fromTicker(call: Call<BitstampApi.BitstampTicker>): Result<Double> {
         return try {
-            Result.Success(call.execute().body()!!.last.toDouble())
+            val result = call.await()
+            Result.Success(result.last.toDouble())
         } catch (e: Exception) {
             Result.Error(e)
         }

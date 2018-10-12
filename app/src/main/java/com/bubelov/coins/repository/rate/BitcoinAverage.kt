@@ -27,6 +27,7 @@
 
 package com.bubelov.coins.repository.rate
 
+import com.bubelov.coins.api.await
 import com.bubelov.coins.api.rates.BitcoinAverageApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
@@ -50,10 +51,11 @@ class BitcoinAverage @Inject constructor(gson: Gson) : ExchangeRatesSource {
         return listOf(CurrencyPair.BTC_USD)
     }
 
-    override fun getExchangeRate(pair: CurrencyPair): Result<Double> {
+    override suspend fun getExchangeRate(pair: CurrencyPair): Result<Double> {
         if (pair == CurrencyPair.BTC_USD) {
             return try {
-                Result.Success(api.getUsdTicker().execute().body()!!.btcUsd.last)
+                val result = api.getUsdTicker().await()
+                Result.Success(result.btcUsd.last)
             } catch (e: Exception) {
                 Result.Error(e)
             }

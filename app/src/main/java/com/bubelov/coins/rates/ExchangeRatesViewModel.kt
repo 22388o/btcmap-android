@@ -32,52 +32,54 @@ import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
 import com.bubelov.coins.repository.rate.ExchangeRatesSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.android.Main
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import javax.inject.Inject
 
 class ExchangeRatesViewModel @Inject constructor(
-    val repository: ExchangeRatesRepository
+    private val exchangeRatesRepository: ExchangeRatesRepository
 ) : ViewModel() {
     private val job = Job()
     private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + job)
 
-    val pair = MutableLiveData<CurrencyPair>()
+    private val _currencyPair = MutableLiveData<CurrencyPair>()
+    val currencyPair: LiveData<CurrencyPair> = _currencyPair
 
-    val rates: LiveData<List<ExchangeRateRow>> = Transformations.switchMap(pair) { pair ->
-        val result = MutableLiveData<List<ExchangeRateRow>>()
-        val sources = repository.getExchangeRatesSources(pair)
-        val rates = arrayOfNulls<Result<Double>>(sources.size)
+    private val _ratesRows = MutableLiveData<List<ExchangeRateRow>>()
+    val ratesRows: LiveData<List<ExchangeRateRow>> = _ratesRows
 
-        result.value = sources.map { it.toRow("Loading") }
+    fun selectCurrencyPair(pair: CurrencyPair) {
+        _currencyPair.value = pair
 
         uiScope.launch {
-            val jobs = sources.mapIndexed { sourceIndex, source ->
-                async { rates[sourceIndex] = source.getExchangeRate(pair) }.apply {
-                    invokeOnCompletion {
-                        result.postValue(rates.mapIndexed { resultIndex, result ->
-                            when (result) {
-                                is Result.Success -> sources[resultIndex].toRow(
-                                    RATE_FORMAT.format(
-                                        result.data
-                                    )
-                                )
-                                is Result.Error -> sources[resultIndex].toRow("Error")
-                                null -> sources[resultIndex].toRow("Loading")
-                            }
-                        })
+            val sources = exchangeRatesRepository.getExchangeRatesSources(pair)
+
+            val rows = sources
+                .map { it.toRow("Loading") }
+                .toMutableList()
+
+            _ratesRows.value = rows
+
+            sources.forEachIndexed { index, source ->
+                val rate = withContext(Dispatchers.IO) {
+                    source.getExchangeRate(pair)
+                }
+
+                val row = when (rate) {
+                    is Result.Success -> {
+                        source.toRow(RATE_FORMAT.format(rate.data))
+                    }
+
+                    is Result.Error -> {
+                        source.toRow("Error")
                     }
                 }
+
+                rows[index] = row
+                _ratesRows.value = rows
             }
-
-            jobs.forEach { it.await() }
         }
-
-        result
     }
 
     private fun ExchangeRatesSource.toRow(value: String): ExchangeRateRow {

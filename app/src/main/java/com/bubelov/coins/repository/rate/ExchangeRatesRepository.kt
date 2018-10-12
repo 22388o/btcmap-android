@@ -33,12 +33,12 @@ import javax.inject.Singleton
 
 @Singleton
 class ExchangeRatesRepository @Inject constructor(
-        bitcoinAverage: BitcoinAverage,
-        bitstamp: Bitstamp,
-        coinbase: Coinbase
+    bitcoinAverage: BitcoinAverage,
+    bitstamp: Bitstamp,
+    coinbase: Coinbase
 ) {
     private val sources = listOf(bitcoinAverage, bitstamp, coinbase)
 
-    fun getExchangeRatesSources(currencyPair: CurrencyPair)
-            = sources.filter { it.getCurrencyPairs().contains(currencyPair) }
+    fun getExchangeRatesSources(currencyPair: CurrencyPair) =
+        sources.filter { it.getCurrencyPairs().contains(currencyPair) }
 }

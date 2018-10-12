@@ -27,6 +27,7 @@
 
 package com.bubelov.coins.repository.rate
 
+import com.bubelov.coins.api.await
 import com.bubelov.coins.api.rates.CoinbaseApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
@@ -50,10 +51,11 @@ class Coinbase @Inject constructor(gson: Gson) : ExchangeRatesSource {
         return listOf(CurrencyPair.BTC_USD, CurrencyPair.BTC_EUR, CurrencyPair.BTC_GBP)
     }
 
-    override fun getExchangeRate(pair: CurrencyPair): Result<Double> {
+    override suspend fun getExchangeRate(pair: CurrencyPair): Result<Double> {
         if (pair == CurrencyPair.BTC_USD || pair == CurrencyPair.BTC_EUR || pair == CurrencyPair.BTC_GBP) {
             return try {
-                Result.Success(api.getExchangeRates().execute().body()!!.data.rates[pair.quoteCurrency]!!)
+                val result = api.getExchangeRates().await()
+                Result.Success(result.data.rates[pair.quoteCurrency]!!)
             } catch (e: Exception) {
                 Result.Error(e)
             }

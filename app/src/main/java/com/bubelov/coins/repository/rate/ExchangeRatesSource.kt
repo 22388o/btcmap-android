@@ -35,5 +35,5 @@ interface ExchangeRatesSource {
 
     fun getCurrencyPairs(): Collection<CurrencyPair>
 
-    fun getExchangeRate(pair: CurrencyPair): Result<Double>
+    suspend fun getExchangeRate(pair: CurrencyPair): Result<Double>
 }

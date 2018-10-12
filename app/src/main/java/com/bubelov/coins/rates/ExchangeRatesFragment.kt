@@ -70,7 +70,7 @@ class ExchangeRatesFragment : DaggerFragment() {
                         AlertDialog.Builder(requireContext())
                             .setTitle(R.string.currency)
                             .setItems(itemTitles) { _, index ->
-                                model.pair.value = items[index]
+                                model.selectCurrencyPair(items[index])
                             }
                             .show()
                     }
@@ -82,14 +82,14 @@ class ExchangeRatesFragment : DaggerFragment() {
 
         ratesView.layoutManager = LinearLayoutManager(requireContext())
 
-        model.pair.observe(this, Observer { pair ->
+        model.currencyPair.observe(this, Observer { pair ->
             toolbar.menu.findItem(R.id.currency).title = pair.toString()
         })
 
-        model.rates.observe(this, Observer { rates ->
-            ratesView.adapter = ExchangeRatesAdapter(rates ?: emptyList())
+        model.ratesRows.observe(this, Observer { rows ->
+            ratesView.adapter = ExchangeRatesAdapter(rows ?: emptyList())
         })
 
-        model.pair.value = CurrencyPair.BTC_USD
+        model.selectCurrencyPair(CurrencyPair.BTC_USD)
     }
 }
