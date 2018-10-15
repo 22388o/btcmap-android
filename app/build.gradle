@@ -47,21 +47,11 @@ android {
         manifestPlaceholders = [crashlyticsEnabled: true]
     }
 
-    signingConfigs {
-        release {
-            storeFile file("../keys/release.keystore")
-            keyAlias "coins"
-            storePassword project.hasProperty('RELEASE_PASSWORD') ? RELEASE_PASSWORD : System.getenv('RELEASE_PASSWORD')
-            keyPassword project.hasProperty('RELEASE_PASSWORD') ? RELEASE_PASSWORD : System.getenv('RELEASE_PASSWORD')
-        }
-    }
-
     buildTypes {
         debug {
             manifestPlaceholders = [crashlyticsEnabled: false]
         }
         release {
-            signingConfig signingConfigs.release
             manifestPlaceholders = [crashlyticsEnabled: true]
         }
     }
