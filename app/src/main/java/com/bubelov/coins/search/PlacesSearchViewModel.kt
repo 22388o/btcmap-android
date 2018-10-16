@@ -37,40 +37,51 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.text.NumberFormat
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class PlacesSearchViewModel @Inject constructor(
-    locationLiveData: LocationLiveData,
-    currencyLiveData: SelectedCurrencyLiveData,
     private val placesRepository: PlacesRepository,
     private val placeIconsRepository: PlaceIconsRepository,
     private val preferences: SharedPreferences,
-    private val resources: Resources
+    private val resources: Resources,
+    coroutineContext: CoroutineContext
 ) : ViewModel() {
-    private val userLocation: Location? = locationLiveData.blockingObserve()
-    private val currency: String = currencyLiveData.blockingObserve()
-
+    private val mainJob = Job()
     private var searchJob: Job? = null
-    val results = MutableLiveData<List<PlacesSearchRow>>()
+    private val uiScope = CoroutineScope(coroutineContext + mainJob)
 
-    fun search(query: String) {
+    private lateinit var currency: String
+    private var location: Location? = null
+
+    private val _rows = MutableLiveData<List<PlacesSearchRow>>()
+    val rows: LiveData<List<PlacesSearchRow>> = _rows
+
+    fun setUp(currency: String, location: Location?) {
+        this.currency = currency
+        this.location = location
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        mainJob.cancel()
+    }
+
+    fun setQuery(query: String) {
         searchJob?.cancel()
 
         if (query.length < MIN_QUERY_LENGTH) {
-            results.value = emptyList()
+            _rows.value = emptyList()
             return
         }
 
-        searchJob = GlobalScope.launch {
+        searchJob = uiScope.launch {
             var places = placesRepository.findBySearchQuery(query)
                 .filter { it.currencies.contains(currency) }
 
-            val location = userLocation
+            val location = location
 
             if (location != null) {
                 places = places.sortedBy {
@@ -86,7 +97,7 @@ class PlacesSearchViewModel @Inject constructor(
             val rows = places.map { it.toRow(location) }
 
             if (isActive) {
-                results.postValue(rows)
+                _rows.value = rows
             }
         }
     }

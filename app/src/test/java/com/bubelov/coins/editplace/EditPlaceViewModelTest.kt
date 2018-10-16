@@ -25,11 +25,10 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.viewmodel
+package com.bubelov.coins.editplace
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.any
-import com.bubelov.coins.editplace.EditPlaceViewModel
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.util.blockingObserve
 import com.bubelov.coins.util.emptyPlace
@@ -44,9 +43,11 @@ import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 class EditPlaceViewModelTest {
-    @Rule @JvmField val instantExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var placesRepository: PlacesRepository
+    @Mock
+    private lateinit var placesRepository: PlacesRepository
     private lateinit var model: EditPlaceViewModel
 
     @Before
@@ -56,51 +57,45 @@ class EditPlaceViewModelTest {
     }
 
     @Test
-    fun submitNewPlace() {
-        runBlocking {
-            val place = emptyPlace().copy(
-                id = 0,
-                name = "Crypto Library"
-            )
+    fun submitNewPlace() = runBlocking<Unit> {
+        val place = emptyPlace().copy(
+            id = 0,
+            name = "Crypto Library"
+        )
 
-            `when`(placesRepository.addPlace(place)).thenReturn(place)
+        `when`(placesRepository.addPlace(place)).thenReturn(place)
 
-            model.init(place)
-            model.submitChanges()
+        model.init(place)
+        model.submitChanges()
 
-            Assert.assertTrue(model.changesSubmitted.blockingObserve())
-            verify(placesRepository).addPlace(place)
-            verify(placesRepository, never()).updatePlace(place)
-        }
+        Assert.assertTrue(model.changesSubmitted.blockingObserve())
+        verify(placesRepository).addPlace(place)
+        verify(placesRepository, never()).updatePlace(place)
     }
 
     @Test
-    fun updateExistingPlace() {
-        runBlocking {
-            val place = emptyPlace().copy(
-                id = 50,
-                name = "Crypto Library"
-            )
+    fun updateExistingPlace() = runBlocking<Unit> {
+        val place = emptyPlace().copy(
+            id = 50,
+            name = "Crypto Library"
+        )
 
-            `when`(placesRepository.updatePlace(place)).thenReturn(place)
+        `when`(placesRepository.updatePlace(place)).thenReturn(place)
 
-            model.init(place)
-            model.submitChanges()
+        model.init(place)
+        model.submitChanges()
 
-            Assert.assertTrue(model.changesSubmitted.blockingObserve())
-            verify(placesRepository).updatePlace(place)
-            verify(placesRepository, never()).addPlace(place)
-        }
+        Assert.assertTrue(model.changesSubmitted.blockingObserve())
+        verify(placesRepository).updatePlace(place)
+        verify(placesRepository, never()).addPlace(place)
     }
 
     @Test
-    fun handleFailure() {
-        runBlocking {
-            `when`(placesRepository.addPlace(any())).thenThrow(IllegalStateException("Test"))
+    fun handleFailure() = runBlocking {
+        `when`(placesRepository.addPlace(any())).thenThrow(IllegalStateException("Test"))
 
-            model.init(emptyPlace())
-            model.submitChanges()
-            Assert.assertNotNull(model.errorMessage.blockingObserve())
-        }
+        model.init(emptyPlace())
+        model.submitChanges()
+        Assert.assertNotNull(model.errorMessage.blockingObserve())
     }
 }

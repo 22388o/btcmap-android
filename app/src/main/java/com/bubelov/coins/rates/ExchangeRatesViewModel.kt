@@ -49,6 +49,11 @@ class ExchangeRatesViewModel @Inject constructor(
     private val _ratesRows = MutableLiveData<List<ExchangeRateRow>>()
     val ratesRows: LiveData<List<ExchangeRateRow>> = _ratesRows
 
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
+
     fun selectCurrencyPair(pair: CurrencyPair) {
         _currencyPair.value = pair
 

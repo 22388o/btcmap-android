@@ -61,7 +61,11 @@ class PlacesRepository @Inject constructor(
 
     fun find(id: Long) = db.find(id)
 
-    fun findBySearchQuery(searchQuery: String) = db.findBySearchQuery(searchQuery)
+    suspend fun findBySearchQuery(searchQuery: String): List<Place> {
+        return withContext(Dispatchers.IO) {
+            db.findBySearchQuery(searchQuery)
+        }
+    }
 
     fun countByCurrency(currency: Currency) = db.countByCurrencyCode(currency.code)
 

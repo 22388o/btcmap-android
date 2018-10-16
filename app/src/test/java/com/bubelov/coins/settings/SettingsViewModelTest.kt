@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.viewmodel
+package com.bubelov.coins.settings
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
@@ -36,7 +36,6 @@ import com.bubelov.coins.model.SyncLogEntry
 import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
-import com.bubelov.coins.settings.SettingsViewModel
 import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.SelectedCurrencyLiveData
@@ -51,7 +50,8 @@ import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 class SettingsViewModelTest {
-    @JvmField @Rule val instantExecutor = InstantTaskExecutorRule()
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock private lateinit var selectedCurrencyLiveData: SelectedCurrencyLiveData
     @Mock private lateinit var distanceUnitsLiveData: DistanceUnitsLiveData
@@ -82,7 +82,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun returnsCurrencies() {
+    fun returnsCurrencies() = runBlocking {
         val currencies = listOf(
             Currency("ABC"),
             Currency("BTC"),
@@ -95,32 +95,28 @@ class SettingsViewModelTest {
         `when`(placesRepository.countByCurrency(currencies[1])).thenReturn(2)
         `when`(placesRepository.countByCurrency(currencies[2])).thenReturn(3)
 
-        runBlocking {
-            model.showCurrencySelector().join()
-            val rows = model.currencySelectorItems.value!!
+        model.showCurrencySelector().join()
+        val rows = model.currencySelectorItems.value!!
 
-            Assert.assertEquals(rows.size, 3)
-            Assert.assertTrue(rows[0].places == 3)
-            Assert.assertTrue(rows[1].places == 2)
-            Assert.assertTrue(rows[2].places == 1)
+        Assert.assertEquals(rows.size, 3)
+        Assert.assertTrue(rows[0].places == 3)
+        Assert.assertTrue(rows[1].places == 2)
+        Assert.assertTrue(rows[2].places == 1)
 
-            verify(currenciesRepository).getAllCurrencies()
-            verifyNoMoreInteractions(currenciesRepository)
+        verify(currenciesRepository).getAllCurrencies()
+        verifyNoMoreInteractions(currenciesRepository)
 
-            currencies.forEach {
-                verify(placesRepository).countByCurrency(it)
-            }
-
-            verifyNoMoreInteractions(placesRepository)
+        currencies.forEach {
+            verify(placesRepository).countByCurrency(it)
         }
+
+        verifyNoMoreInteractions(placesRepository)
     }
 
     @Test
-    fun callsSync() {
-        runBlocking {
-            model.syncDatabase().join()
-            verify(databaseSync).sync()
-        }
+    fun callsSync() = runBlocking {
+        model.syncDatabase().join()
+        verify(databaseSync).sync()
     }
 
     @Test

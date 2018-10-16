@@ -61,22 +61,20 @@ class DatabaseSyncTest {
     }
 
     @Test
-    fun handleSuccessfulSync() {
-        runBlocking {
-            val fetchedPlaces = listOf(
-                emptyPlace().copy(id = 1),
-                emptyPlace().copy(id = 2),
-                emptyPlace().copy(id = 3)
-            )
+    fun handleSuccessfulSync() = runBlocking {
+        val fetchedPlaces = listOf(
+            emptyPlace().copy(id = 1),
+            emptyPlace().copy(id = 2),
+            emptyPlace().copy(id = 3)
+        )
 
-            `when`(placesRepository.fetchNewPlaces())
-                .thenReturn(fetchedPlaces)
+        `when`(placesRepository.fetchNewPlaces())
+            .thenReturn(fetchedPlaces)
 
-            databaseSync.sync()
+        databaseSync.sync()
 
-            verify(placeNotificationManager).issueNotificationsIfNecessary(fetchedPlaces)
-            verify(syncLogsRepository).insert(any())
-            verify(databaseSyncScheduler).scheduleNextSync()
-        }
+        verify(placeNotificationManager).issueNotificationsIfNecessary(fetchedPlaces)
+        verify(syncLogsRepository).insert(any())
+        verify(databaseSyncScheduler).scheduleNextSync()
     }
 }

@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.ui.viewmodel
+package com.bubelov.coins.search
 
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
@@ -33,12 +33,14 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
-import com.bubelov.coins.search.PlacesSearchViewModel
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.util.LocationLiveData
-import com.bubelov.coins.util.SelectedCurrencyLiveData
+import com.bubelov.coins.util.blockingObserve
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
@@ -46,10 +48,9 @@ import org.mockito.MockitoAnnotations
 import java.util.*
 
 class PlacesSearchViewModelTest {
-    @JvmField @Rule val instantExecutor = InstantTaskExecutorRule()
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var locationLiveData: LocationLiveData
-    @Mock private lateinit var currencyLiveData: SelectedCurrencyLiveData
     @Mock private lateinit var placesRepository: PlacesRepository
     @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
     @Mock private lateinit var preferences: SharedPreferences
@@ -61,51 +62,54 @@ class PlacesSearchViewModelTest {
         MockitoAnnotations.initMocks(this)
 
         model = PlacesSearchViewModel(
-            locationLiveData,
-            currencyLiveData,
             placesRepository,
             placeIconsRepository,
             preferences,
-            resources
+            resources,
+            Dispatchers.Default
         )
 
-        `when`(placesRepository.findBySearchQuery(ArgumentMatchers.anyString()))
-            .thenReturn(
-                listOf(
-                    generatePlace("Bar 1", "BTC"),
-                    generatePlace("Bar 2", "BTC"),
-                    generatePlace("Bar 3", "LTC")
-                )
-            )
+        model.setUp("BTC", null)
 
-        `when`(placeIconsRepository.getPlaceIcon(ArgumentMatchers.anyString()))
-            .thenReturn(mock(Bitmap::class.java))
+        runBlocking {
+            `when`(placesRepository.findBySearchQuery(ArgumentMatchers.anyString()))
+                .thenReturn(
+                    listOf(
+                        generatePlace("Bar 1", "BTC"),
+                        generatePlace("Bar 2", "BTC"),
+                        generatePlace("Bar 3", "LTC")
+                    )
+                )
+
+            `when`(placeIconsRepository.getPlaceIcon(ArgumentMatchers.anyString()))
+                .thenReturn(mock(Bitmap::class.java))
+        }
     }
 
-//    @Test
-//    fun searchBars() {
-//        model.search("bar")
-//        val results = model.results.blockingObserve()
-//        verify(placesRepository).findBySearchQuery("bar")
-//        Assert.assertEquals(2, results.size)
-//        Assert.assertTrue(results.all { it.name.contains("bar", ignoreCase = true) })
-//    }
+    @Test
+    fun searchBars() = runBlocking {
+        model.setQuery("bar")
+        val rows = model.rows.blockingObserve()
+        verify(placesRepository).findBySearchQuery("bar")
+        Assert.assertEquals(2, rows.size)
+        Assert.assertTrue(rows.all { it.name.contains("bar", ignoreCase = true) })
+    }
 
-//    @Test
-//    fun emptyOnShortQuery() {
-//        model.search("b")
-//        val results = model.results.blockingObserve()
-//        verifyZeroInteractions(placesRepository)
-//        Assert.assertTrue(results.isEmpty())
-//    }
+    @Test
+    fun emptyOnShortQuery() = runBlocking {
+        model.setQuery("b")
+        val results = model.rows.blockingObserve()
+        verifyZeroInteractions(placesRepository)
+        Assert.assertTrue(results.isEmpty())
+    }
 
-//    @Test
-//    fun resetsLastSearch() {
-//        model.search("bar")
-//        model.search("")
-//        val results = model.results.blockingObserve()
-//        Assert.assertTrue(results.isEmpty())
-//    }
+    @Test
+    fun resetsLastSearch() = runBlocking {
+        model.setQuery("bar")
+        model.setQuery("")
+        val results = model.rows.blockingObserve()
+        Assert.assertTrue(results.isEmpty())
+    }
 
     private fun generatePlace(name: String, currency: String): Place {
         return Place(

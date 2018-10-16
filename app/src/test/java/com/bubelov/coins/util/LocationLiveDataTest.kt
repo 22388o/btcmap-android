@@ -44,7 +44,8 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.`when`
 
 class LocationLiveDataTest {
-    @Rule @JvmField val instantExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock private lateinit var context: Context
     @Mock private lateinit var locationManager: LocationManager
@@ -88,11 +89,11 @@ class LocationLiveDataTest {
                 ArgumentMatchers.anyFloat(),
                 any(LocationListener::class.java)
             )
-        ).thenAnswer({ invocation ->
+        ).thenAnswer { invocation ->
             val locationListener = invocation.arguments[3] as LocationListener
             locationListener.onLocationChanged(location)
             null
-        })
+        }
 
         locationLiveData = LocationLiveData(context, permissionChecker)
 

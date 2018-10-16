@@ -27,6 +27,7 @@
 
 package com.bubelov.coins.search
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
@@ -41,8 +42,6 @@ import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.TextWatcherAdapter
 import com.bubelov.coins.util.activityViewModelProvider
-import com.bubelov.coins.util.nonNull
-import com.bubelov.coins.util.observe
 import com.bubelov.coins.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_places_search.*
@@ -78,11 +77,16 @@ class PlacesSearchFragment : DaggerFragment() {
         }
 
         list.adapter = adapter
-        model.results.nonNull().observe(this) { adapter.swapItems(it) }
+
+        model.rows.observe(this, Observer { rows ->
+            if (rows != null) {
+                adapter.swapItems(rows)
+            }
+        })
 
         query.addTextChangedListener(object : TextWatcherAdapter() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                model.search(s.toString())
+                model.setQuery(s.toString())
                 clear.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
             }
         })
