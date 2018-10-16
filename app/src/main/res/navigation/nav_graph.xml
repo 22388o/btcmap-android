@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.bubelov.coins.map.MapFragment"
-        android:label="MapFragment" >
+        android:label="MapFragment">
         <action
             android:id="@+id/action_mapFragment_to_supportProjectFragment"
             app:destination="@id/supportProjectFragment" />
@@ -88,7 +88,7 @@
     <fragment
         android:id="@+id/editPlaceFragment"
         android:name="com.bubelov.coins.editplace.EditPlaceFragment"
-        android:label="EditPlaceFragment" >
+        android:label="EditPlaceFragment">
         <action
             android:id="@+id/action_editPlaceFragment_to_pickLocationFragment"
             app:destination="@id/pickLocationFragment" />
@@ -100,7 +100,15 @@
     <fragment
         android:id="@+id/placesSearchFragment"
         android:name="com.bubelov.coins.search.PlacesSearchFragment"
-        android:label="PlacesSearchFragment" ></fragment>
+        android:label="PlacesSearchFragment">
+        <argument
+            android:name="currency"
+            app:argType="string" />
+        <argument
+            android:name="location"
+            app:argType="com.bubelov.coins.model.Location"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/exchangeRatesFragment"
         android:name="com.bubelov.coins.rates.ExchangeRatesFragment"

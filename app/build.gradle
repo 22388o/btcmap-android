@@ -57,18 +57,37 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+    implementation "androidx.core:core-ktx:$ktxVersion"
 
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
+    // Dependency injection
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+
+    // Network
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion"
+
+    // Cache
     implementation "android.arch.persistence.room:runtime:$roomVersion"
-    implementation "androidx.core:core-ktx:$ktxVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+
+    // Navigation
+    implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
+
+    implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
     implementation "com.android.support:customtabs:$supportLibraryVersion"
@@ -80,19 +99,11 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "com.google.dagger:dagger:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     implementation "com.google.firebase:firebase-core:$firebaseVersion"
     implementation "com.google.maps.android:android-maps-utils:$mapsUtilsVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion"
     implementation "com.squareup.picasso:picasso:$picassoVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
     implementation "de.hdodenhof:circleimageview:$circleImageViewVersion" // TODO Remove
-
-    implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
 
     testImplementation "android.arch.core:core-testing:$lifecycleVersion"
     testImplementation "junit:junit:$junitVersion"

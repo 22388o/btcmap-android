@@ -73,6 +73,7 @@ import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class MapFragment :
@@ -311,7 +312,12 @@ class MapFragment :
             R.id.action_add -> model.onAddPlaceClick()
 
             R.id.action_search -> {
-                findNavController().navigate(R.id.action_mapFragment_to_placesSearchFragment)
+                val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
+                    model.selectedCurrency.value ?: throw IllegalStateException(),
+                    model.userLocation.value
+                )
+
+                findNavController().navigate(action)
             }
 
             else -> return super.onOptionsItemSelected(item)
