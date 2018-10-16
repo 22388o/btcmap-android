@@ -9,9 +9,6 @@ Key features:
 Build instructions:
 
 1. git clone https://github.com/bubelov/coins-android.git
-2. Generate the app keys and put in into the /keys folder
-3. Generate **google-services.json** and put it into the /app folder
-4. Build the app (**./gradlew build**)
-5. You can find the APK files in the **/app/build/outputs/apk** folder
-
-[![Build Status](https://travis-ci.org/bubelov/coins-android.svg?branch=develop)](https://travis-ci.org/bubelov/coins-android)
+2. Generate **google-services.json** and put it into the /app folder
+3. Build the app (**./gradlew build**)
+4. You can find the APK files in the **/app/build/outputs/apk** folder
