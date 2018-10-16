@@ -31,12 +31,15 @@ import android.content.SharedPreferences
 import com.bubelov.coins.model.SyncLogEntry
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.google.gson.Gson
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 class SyncLogsRepositoryTest {
@@ -51,28 +54,28 @@ class SyncLogsRepositoryTest {
 
     @Test
     fun returnsEmptyListWithEmptyPreferences() {
-        `when`(sharedPreferences.getString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-            .thenReturn("")
+        whenever(sharedPreferences.getString(anyString(), anyString())).thenReturn("")
 
         Assert.assertTrue(repository.all().isEmpty())
-        verify(sharedPreferences).getString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
+        verify(sharedPreferences).getString(anyString(), anyString())
         verifyNoMoreInteractions(sharedPreferences)
     }
 
     @Test
     fun savesNewEntry() {
-        `when`(sharedPreferences.getString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-            .thenReturn("")
+        whenever(sharedPreferences.getString(anyString(), anyString())).thenReturn("")
 
-        val editor = mock(SharedPreferences.Editor::class.java)
-        `when`(editor.putString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(editor)
-        `when`(sharedPreferences.edit()).thenReturn(editor)
+        val editor = mock<SharedPreferences.Editor> {
+            on { putString(anyString(), anyString()) }.thenReturn(mock)
+        }
+
+        whenever(sharedPreferences.edit()).thenReturn(editor)
 
         val entry = SyncLogEntry(time = System.currentTimeMillis(), affectedPlaces = 5)
         repository.insert(entry)
 
         verify(sharedPreferences).edit()
-        verify(editor).putString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
+        verify(editor).putString(anyString(), anyString())
         verify(editor).apply()
     }
 }

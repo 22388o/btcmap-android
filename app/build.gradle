@@ -96,7 +96,9 @@ dependencies {
 
     testImplementation "android.arch.core:core-testing:$lifecycleVersion"
     testImplementation "junit:junit:$junitVersion"
+
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
 
     androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$espressoVersion"

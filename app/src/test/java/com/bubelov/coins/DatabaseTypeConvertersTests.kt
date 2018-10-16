@@ -28,7 +28,7 @@
 package com.bubelov.coins
 
 import com.bubelov.coins.db.Converters
-import junit.framework.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
 
@@ -39,21 +39,21 @@ class DatabaseTypeConvertersTests {
 
     @Test
     fun convertsLongToDate() {
-        Assert.assertEquals(date, converters.longToDate(date.time))
+        assertEquals(date, converters.longToDate(date.time))
     }
 
     @Test
     fun convertsDateToLong() {
-        Assert.assertEquals(date.time, converters.dateToLong(date))
+        assertEquals(date.time, converters.dateToLong(date))
     }
 
     @Test
     fun convertsStringToArrayList() {
-        Assert.assertEquals(arrayListOf("1", "2"), converters.stringToArrayList("[\"1\",\"2\"]"))
+        assertEquals(arrayListOf("1", "2"), converters.stringToArrayList("[\"1\",\"2\"]"))
     }
 
     @Test
     fun convertsArrayListToString() {
-        Assert.assertEquals("[\"1\",\"2\"]", converters.arrayListToString(arrayListOf("1", "2")))
+        assertEquals("[\"1\",\"2\"]", converters.arrayListToString(arrayListOf("1", "2")))
     }
 }

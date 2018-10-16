@@ -33,13 +33,13 @@ import com.bubelov.coins.repository.place.PlacesApi
 import com.bubelov.coins.repository.place.PlacesAssetsCache
 import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.util.Analytics
 import com.bubelov.coins.util.emptyPlace
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 class PlacesRepositoryTest {
@@ -60,9 +60,9 @@ class PlacesRepositoryTest {
 
     @Test
     fun usesAssetsCacheWhenEmpty() {
-        `when`(placesDb.count()).thenReturn(MutableLiveData<Int>().apply { value = 0 })
+        whenever(placesDb.count()).thenReturn(MutableLiveData<Int>().apply { value = 0 })
         val places = listOf(emptyPlace().copy(id = 1, name = "Cafe"))
-        `when`(placesAssetsCache.getPlaces()).thenReturn(places)
+        whenever(placesAssetsCache.getPlaces()).thenReturn(places)
 
         PlacesRepository(placesApi, placesDb, placesAssetsCache)
 

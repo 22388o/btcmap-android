@@ -54,7 +54,7 @@ class EditPlaceViewModel @Inject constructor(
 
     val errorMessage = MutableLiveData<String>()
 
-    fun init(place: Place) {
+    fun setUp(place: Place) {
         this.place = place
     }
 

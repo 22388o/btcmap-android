@@ -31,13 +31,14 @@ import android.content.SharedPreferences
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.google.gson.Gson
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert
 import org.junit.Before
-
 import org.junit.Test
-import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 class NotificationAreaRepositoryTest {
@@ -52,28 +53,28 @@ class NotificationAreaRepositoryTest {
 
     @Test
     fun returnsNullIfNotSet() {
-        `when`(sharedPreferences.getString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-            .thenReturn("")
-
+        whenever(sharedPreferences.getString(anyString(), anyString())).thenReturn("")
         Assert.assertTrue(repository.notificationArea == null)
-        verify(sharedPreferences).getString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
+        verify(sharedPreferences).getString(anyString(), anyString())
     }
 
     @Test
     fun savesArea() {
-        val editor = mock(SharedPreferences.Editor::class.java)
-        `when`(editor.putString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(editor)
-        `when`(sharedPreferences.edit()).thenReturn(editor)
+        val editor = mock<SharedPreferences.Editor> {
+            on { putString(anyString(), anyString()) }.thenReturn(mock)
+        }
+
+        whenever(sharedPreferences.edit()).thenReturn(editor)
 
         val area = NotificationArea(
-                latitude = 50.0,
-                longitude = 0.0,
-                radius = 100.0
+            latitude = 50.0,
+            longitude = 0.0,
+            radius = 100.0
         )
 
         repository.notificationArea = area
         verify(sharedPreferences).edit()
-        verify(editor).putString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
+        verify(editor).putString(anyString(), anyString())
         verify(editor).apply()
     }
 }

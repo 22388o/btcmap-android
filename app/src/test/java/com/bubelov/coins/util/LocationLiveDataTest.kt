@@ -37,11 +37,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import android.location.Location
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.`when`
+import com.nhaarman.mockitokotlin2.*
+import org.mockito.ArgumentMatchers.anyFloat
+import org.mockito.ArgumentMatchers.anyLong
 
 class LocationLiveDataTest {
     @get:Rule
@@ -55,14 +55,12 @@ class LocationLiveDataTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-
-        `when`(context.getSystemService(Context.LOCATION_SERVICE))
-            .thenReturn(locationManager)
+        whenever(context.getSystemService(Context.LOCATION_SERVICE)).thenReturn(locationManager)
     }
 
     @Test
     fun returnsNullWhenLacksPermissions() {
-        `when`(permissionChecker.check(Manifest.permission.ACCESS_FINE_LOCATION))
+        whenever(permissionChecker.check(Manifest.permission.ACCESS_FINE_LOCATION))
             .thenReturn(PermissionChecker.CheckResult.DENIED)
 
         locationLiveData = LocationLiveData(context, permissionChecker)
@@ -75,19 +73,20 @@ class LocationLiveDataTest {
 
     @Test
     fun queriesLocation() {
-        `when`(permissionChecker.check(Manifest.permission.ACCESS_FINE_LOCATION))
+        whenever(permissionChecker.check(Manifest.permission.ACCESS_FINE_LOCATION))
             .thenReturn(PermissionChecker.CheckResult.GRANTED)
 
-        val location = mock(Location::class.java)
-        `when`(location.latitude).thenReturn(50.0)
-        `when`(location.longitude).thenReturn(0.0)
+        val location = mock<Location> {
+            on { latitude }.doReturn(50.0)
+            on { longitude }.doReturn(0.0)
+        }
 
-        `when`(
+        whenever(
             locationManager.requestLocationUpdates(
-                com.bubelov.coins.eq(LocationManager.GPS_PROVIDER),
-                ArgumentMatchers.anyLong(),
-                ArgumentMatchers.anyFloat(),
-                any(LocationListener::class.java)
+                eq(LocationManager.GPS_PROVIDER),
+                anyLong(),
+                anyFloat(),
+                any<LocationListener>()
             )
         ).thenAnswer { invocation ->
             val locationListener = invocation.arguments[3] as LocationListener

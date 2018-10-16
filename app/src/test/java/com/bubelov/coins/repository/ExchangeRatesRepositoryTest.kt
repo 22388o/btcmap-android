@@ -32,12 +32,12 @@ import com.bubelov.coins.repository.rate.BitcoinAverage
 import com.bubelov.coins.repository.rate.Bitstamp
 import com.bubelov.coins.repository.rate.Coinbase
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 class ExchangeRatesRepositoryTest {
@@ -59,9 +59,9 @@ class ExchangeRatesRepositoryTest {
 
     @Test
     fun filtersSources() {
-        `when`(bitcoinAverage.getCurrencyPairs()).thenReturn(listOf(CurrencyPair.BTC_EUR))
-        `when`(bitstamp.getCurrencyPairs()).thenReturn(emptyList())
-        `when`(coinbase.getCurrencyPairs()).thenReturn(listOf(CurrencyPair.BTC_GBP))
+        whenever(bitcoinAverage.getCurrencyPairs()).thenReturn(listOf(CurrencyPair.BTC_EUR))
+        whenever(bitstamp.getCurrencyPairs()).thenReturn(emptyList())
+        whenever(coinbase.getCurrencyPairs()).thenReturn(listOf(CurrencyPair.BTC_GBP))
 
         val btcEurSources = repository.getExchangeRatesSources(CurrencyPair.BTC_EUR)
         Assert.assertEquals(1, btcEurSources.size)

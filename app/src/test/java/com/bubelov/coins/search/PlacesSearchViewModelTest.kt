@@ -32,18 +32,20 @@ import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import android.content.res.Resources
-import android.graphics.Bitmap
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.blockingObserve
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import java.util.*
 
@@ -72,7 +74,7 @@ class PlacesSearchViewModelTest {
         model.setUp("BTC", null)
 
         runBlocking {
-            `when`(placesRepository.findBySearchQuery(ArgumentMatchers.anyString()))
+            whenever(placesRepository.findBySearchQuery(anyString()))
                 .thenReturn(
                     listOf(
                         generatePlace("Bar 1", "BTC"),
@@ -81,8 +83,8 @@ class PlacesSearchViewModelTest {
                     )
                 )
 
-            `when`(placeIconsRepository.getPlaceIcon(ArgumentMatchers.anyString()))
-                .thenReturn(mock(Bitmap::class.java))
+            whenever(placeIconsRepository.getPlaceIcon(anyString()))
+                .thenReturn(mock())
         }
     }
 

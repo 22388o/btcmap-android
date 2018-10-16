@@ -40,13 +40,15 @@ import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.SelectedCurrencyLiveData
 import com.bubelov.coins.util.emptyPlace
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 class SettingsViewModelTest {
@@ -89,11 +91,11 @@ class SettingsViewModelTest {
             Currency("LTC")
         )
 
-        `when`(currenciesRepository.getAllCurrencies()).thenReturn(currencies)
+        whenever(currenciesRepository.getAllCurrencies()).thenReturn(currencies)
 
-        `when`(placesRepository.countByCurrency(currencies[0])).thenReturn(1)
-        `when`(placesRepository.countByCurrency(currencies[1])).thenReturn(2)
-        `when`(placesRepository.countByCurrency(currencies[2])).thenReturn(3)
+        whenever(placesRepository.countByCurrency(currencies[0])).thenReturn(1)
+        whenever(placesRepository.countByCurrency(currencies[1])).thenReturn(2)
+        whenever(placesRepository.countByCurrency(currencies[2])).thenReturn(3)
 
         model.showCurrencySelector().join()
         val rows = model.currencySelectorItems.value!!
@@ -121,7 +123,7 @@ class SettingsViewModelTest {
 
     @Test
     fun returnsSyncLogs() = runBlocking {
-        `when`(syncLogsRepository.all()).thenReturn(listOf(SyncLogEntry(0, 10)))
+        whenever(syncLogsRepository.all()).thenReturn(listOf(SyncLogEntry(0, 10)))
 
         model.showSyncLogs().join()
         val logs = model.syncLogs.value!!
@@ -133,7 +135,7 @@ class SettingsViewModelTest {
 
     @Test
     fun sendsRandomPlaceNotification() = runBlocking {
-        `when`(placesRepository.findRandom()).thenReturn(
+        whenever(placesRepository.findRandom()).thenReturn(
             emptyPlace().copy(
                 id = 1,
                 name = "Random Place"

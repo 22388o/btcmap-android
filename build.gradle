@@ -25,6 +25,7 @@ buildscript {
         loggingInterceptorVersion = '3.10.0'
         mapsUtilsVersion = '0.5'
         mockitoVersion = '2.23.0'
+        mockitoKotlinVersion = '2.0.0-RC1'
         picassoVersion = '2.5.2'
         playServicesVersion = '15.0.1'
         retrofitVersion = '2.3.0'

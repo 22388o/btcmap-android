@@ -28,32 +28,35 @@
 package com.bubelov.coins.editplace
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.bubelov.coins.any
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.util.blockingObserve
 import com.bubelov.coins.util.emptyPlace
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 class EditPlaceViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock
-    private lateinit var placesRepository: PlacesRepository
+    @Mock private lateinit var placesRepository: PlacesRepository
     private lateinit var model: EditPlaceViewModel
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        model = EditPlaceViewModel(placesRepository, Dispatchers.Default)
+
+        model = EditPlaceViewModel(
+            placesRepository = placesRepository,
+            coroutineContext = Dispatchers.Default
+        )
     }
 
     @Test
@@ -63,12 +66,12 @@ class EditPlaceViewModelTest {
             name = "Crypto Library"
         )
 
-        `when`(placesRepository.addPlace(place)).thenReturn(place)
+        whenever(placesRepository.addPlace(place)).thenReturn(place)
 
-        model.init(place)
+        model.setUp(place)
         model.submitChanges()
 
-        Assert.assertTrue(model.changesSubmitted.blockingObserve())
+        assertTrue(model.changesSubmitted.blockingObserve())
         verify(placesRepository).addPlace(place)
         verify(placesRepository, never()).updatePlace(place)
     }
@@ -80,21 +83,21 @@ class EditPlaceViewModelTest {
             name = "Crypto Library"
         )
 
-        `when`(placesRepository.updatePlace(place)).thenReturn(place)
+        whenever(placesRepository.updatePlace(place)).thenReturn(place)
 
-        model.init(place)
+        model.setUp(place)
         model.submitChanges()
 
-        Assert.assertTrue(model.changesSubmitted.blockingObserve())
+        assertTrue(model.changesSubmitted.blockingObserve())
         verify(placesRepository).updatePlace(place)
         verify(placesRepository, never()).addPlace(place)
     }
 
     @Test
     fun handleFailure() = runBlocking {
-        `when`(placesRepository.addPlace(any())).thenThrow(IllegalStateException("Test"))
+        whenever(placesRepository.addPlace(any())).thenThrow(IllegalStateException("Test"))
 
-        model.init(emptyPlace())
+        model.setUp(emptyPlace())
         model.submitChanges()
         Assert.assertNotNull(model.errorMessage.blockingObserve())
     }
