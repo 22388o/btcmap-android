@@ -25,27 +25,28 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins
+package com.bubelov.coins.sync
 
-import com.bubelov.coins.sync.DatabaseSync
-import com.bubelov.coins.sync.DatabaseSyncScheduler
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.emptyPlace
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.lang.IllegalStateException
 
 class DatabaseSyncTest {
     @Mock private lateinit var placesRepository: PlacesRepository
     @Mock private lateinit var placeNotificationManager: PlaceNotificationManager
     @Mock private lateinit var syncLogsRepository: SyncLogsRepository
-    @Mock private lateinit var databaseSyncScheduler: DatabaseSyncScheduler
     private lateinit var databaseSync: DatabaseSync
 
     @Before
@@ -55,8 +56,7 @@ class DatabaseSyncTest {
         databaseSync = DatabaseSync(
             placesRepository,
             placeNotificationManager,
-            syncLogsRepository,
-            databaseSyncScheduler
+            syncLogsRepository
         )
     }
 
@@ -73,7 +73,20 @@ class DatabaseSyncTest {
         databaseSync.sync()
 
         verify(placeNotificationManager).issueNotificationsIfNecessary(fetchedPlaces)
-        verify(syncLogsRepository).insert(com.nhaarman.mockitokotlin2.any())
-        verify(databaseSyncScheduler).scheduleNextSync()
+        verify(syncLogsRepository).insert(any())
+    }
+
+    @Test
+    fun handleFailedFetch() = runBlocking {
+        whenever(placesRepository.fetchNewPlaces()).thenThrow(IllegalStateException())
+
+        try {
+            databaseSync.sync()
+            assertFalse(true)
+        } catch (e: IllegalStateException) {
+        }
+
+        verifyZeroInteractions(placeNotificationManager)
+        verifyZeroInteractions(syncLogsRepository)
     }
 }

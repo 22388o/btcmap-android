@@ -27,15 +27,37 @@
 
 package com.bubelov.coins.sync
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ProcessLifecycleOwner
 import javax.inject.Inject
 import javax.inject.Singleton
-import android.content.Context
+import androidx.work.Constraints
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
 
 @Singleton
-class DatabaseSyncScheduler @Inject constructor(
-    private val context: Context
-) {
-    fun scheduleNextSync() {
-        // TODO
+class DatabaseSyncScheduler @Inject constructor() {
+    fun schedule() {
+        val lifecycleOwner = ProcessLifecycleOwner.get()
+
+        WorkManager.getInstance().getStatusesByTagLiveData(TAG).observe(lifecycleOwner, Observer { statuses ->
+            if (statuses.isNullOrEmpty()) {
+                val constraints = Constraints.Builder()
+                    .setRequiresBatteryNotLow(true)
+                    .build()
+
+                val databaseSyncWork = PeriodicWorkRequestBuilder<DatabaseSyncWorker>(12, TimeUnit.HOURS)
+                    .setConstraints(constraints)
+                    .addTag(TAG)
+                    .build()
+
+                WorkManager.getInstance().enqueue(databaseSyncWork)
+            }
+        })
+    }
+
+    companion object {
+        private const val TAG = "databaseSync"
     }
 }

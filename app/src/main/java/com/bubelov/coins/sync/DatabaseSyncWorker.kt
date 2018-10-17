@@ -27,31 +27,22 @@
 
 package com.bubelov.coins.sync
 
-import com.bubelov.coins.model.SyncLogEntry
+import android.content.Context
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import com.bubelov.coins.App
+import kotlinx.coroutines.runBlocking
+import timber.log.Timber
+import java.lang.Exception
 
-import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
-import com.bubelov.coins.util.PlaceNotificationManager
-
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class DatabaseSync @Inject constructor(
-    private val placesRepository: PlacesRepository,
-    private val placeNotificationManager: PlaceNotificationManager,
-    private val syncLogsRepository: SyncLogsRepository
-) {
-    suspend fun sync() {
-        val newPlaces = placesRepository.fetchNewPlaces()
-
-        syncLogsRepository.insert(
-            SyncLogEntry(
-                System.currentTimeMillis(),
-                newPlaces.size
-            )
-        )
-
-        placeNotificationManager.issueNotificationsIfNecessary(newPlaces)
+class DatabaseSyncWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+    override fun doWork() = runBlocking {
+        try {
+            (applicationContext as App).databaseSync.sync()
+            Result.SUCCESS
+        } catch (error: Exception) {
+            Timber.e(error)
+            Result.FAILURE
+        }
     }
 }

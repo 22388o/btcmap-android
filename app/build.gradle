@@ -87,6 +87,10 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
 
+    // Scheduling
+    implementation "android.arch.work:work-runtime-ktx:$workVersion"
+    androidTestImplementation "android.arch.work:work-testing:$workVersion"
+
     implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
