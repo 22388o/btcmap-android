@@ -40,8 +40,9 @@ import javax.inject.Inject
 class ExchangeRatesViewModel @Inject constructor(
     private val exchangeRatesRepository: ExchangeRatesRepository
 ) : ViewModel() {
-    private val job = Job()
-    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + job)
+    private val mainJob = Job()
+    private var fetchRatesJob = Job()
+    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + mainJob)
 
     private val _currencyPair = MutableLiveData<CurrencyPair>()
     val currencyPair: LiveData<CurrencyPair> = _currencyPair
@@ -51,13 +52,15 @@ class ExchangeRatesViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        job.cancel()
+        mainJob.cancel()
     }
 
     fun selectCurrencyPair(pair: CurrencyPair) {
         _currencyPair.value = pair
 
-        uiScope.launch {
+        fetchRatesJob.cancel()
+
+        fetchRatesJob = uiScope.launch {
             val sources = exchangeRatesRepository.getExchangeRatesSources(pair)
 
             val rows = sources
@@ -66,24 +69,32 @@ class ExchangeRatesViewModel @Inject constructor(
 
             _ratesRows.value = rows
 
+            val results = mutableListOf<Deferred<Unit>>()
+
             sources.forEachIndexed { index, source ->
-                val rate = withContext(Dispatchers.IO) {
-                    source.getExchangeRate(pair)
-                }
-
-                val row = when (rate) {
-                    is Result.Success -> {
-                        source.toRow(RATE_FORMAT.format(rate.data))
+                results += async {
+                    val rate = withContext(Dispatchers.IO) {
+                        source.getExchangeRate(pair)
                     }
 
-                    is Result.Error -> {
-                        source.toRow("Error")
+                    val row = when (rate) {
+                        is Result.Success -> {
+                            source.toRow(RATE_FORMAT.format(rate.data))
+                        }
+
+                        is Result.Error -> {
+                            source.toRow("Error")
+                        }
+                    }
+
+                    if (isActive) {
+                        rows[index] = row
+                        _ratesRows.value = rows
                     }
                 }
-
-                rows[index] = row
-                _ratesRows.value = rows
             }
+
+            results.forEach { it.await() }
         }
     }
 
