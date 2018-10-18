@@ -31,11 +31,13 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
@@ -111,5 +113,23 @@ class PlacesSearchFragment : DaggerFragment() {
         }
 
         clear.setOnClickListener { query.setText("") }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val window = requireActivity().window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.search_status_bar)
+    }
+
+    override fun onPause() {
+        val window = requireActivity().window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.primary_dark)
+
+        super.onPause()
     }
 }
