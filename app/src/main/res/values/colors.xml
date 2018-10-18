@@ -28,4 +28,6 @@
     <color name="amber_700">#FFA000</color>
     <color name="indigo_a_200">#536DFE</color>
 
+    <color name="grey_background">@color/grey_200</color>
+
 </resources>

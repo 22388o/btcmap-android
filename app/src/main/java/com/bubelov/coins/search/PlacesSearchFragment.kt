@@ -30,7 +30,6 @@ package com.bubelov.coins.search
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
@@ -38,11 +37,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.TextWatcherAdapter
 import com.bubelov.coins.util.activityViewModelProvider
+import com.bubelov.coins.util.hideKeyboard
+import com.bubelov.coins.util.showKeyboard
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_places_search.*
 import javax.inject.Inject
@@ -87,6 +87,14 @@ class PlacesSearchFragment : DaggerFragment() {
             }
         })
 
+        query.setOnFocusChangeListener { query, hasFocus ->
+            if (hasFocus) {
+                requireContext().showKeyboard(query)
+            } else {
+                requireContext().hideKeyboard(query)
+            }
+        }
+
         query.addTextChangedListener(object : TextWatcherAdapter() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 model.setQuery(s.toString())
@@ -96,11 +104,7 @@ class PlacesSearchFragment : DaggerFragment() {
 
         query.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
-                EditorInfo.IME_ACTION_SEARCH -> {
-                    val inputManager =
-                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    inputManager.hideSoftInputFromWindow(query.windowToken, 0)
-                }
+                EditorInfo.IME_ACTION_SEARCH -> requireContext().hideKeyboard(query)
             }
 
             true

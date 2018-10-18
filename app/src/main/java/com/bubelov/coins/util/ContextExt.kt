@@ -30,6 +30,8 @@ package com.bubelov.coins.util
 import android.content.Context
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import timber.log.Timber
 
 fun Context.openUrl(url: String): Boolean {
@@ -52,4 +54,14 @@ fun Context.openUrl(url: String): Boolean {
         Timber.e(e)
         false
     }
+}
+
+fun Context.showKeyboard(view: View) {
+    val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputManager.showSoftInput(view, 0)
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 }

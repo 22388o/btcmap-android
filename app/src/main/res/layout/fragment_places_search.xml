@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_200">
+    android:background="@color/grey_background">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -37,7 +39,8 @@
                 android:contentDescription="@string/clear_search"
                 android:src="@drawable/ic_close"
                 android:tint="@color/text_secondary"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </FrameLayout>
 
@@ -47,8 +50,8 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/white"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>
