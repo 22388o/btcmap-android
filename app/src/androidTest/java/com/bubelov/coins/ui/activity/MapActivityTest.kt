@@ -27,26 +27,19 @@
 
 package com.bubelov.coins.ui.activity
 
-import android.support.test.rule.ActivityTestRule
-import android.support.test.rule.GrantPermissionRule
-import android.support.test.runner.AndroidJUnit4
-
-import com.bubelov.coins.R
-
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.DrawerActions.openDrawer
 import android.support.test.espresso.contrib.DrawerMatchers.isClosed
 import android.support.test.espresso.contrib.DrawerMatchers.isOpen
-import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.isEnabled
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.support.test.espresso.matcher.ViewMatchers.*
+import android.support.test.rule.ActivityTestRule
+import android.support.test.rule.GrantPermissionRule
+import android.support.test.runner.AndroidJUnit4
+import com.bubelov.coins.R
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MapActivityTest {

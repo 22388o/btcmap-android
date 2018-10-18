@@ -32,7 +32,6 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
 import com.bubelov.coins.App
-
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
@@ -41,15 +40,9 @@ import com.bubelov.coins.repository.place.PlacesAssetsCache
 import com.bubelov.coins.util.JsonStringConverterFactory
 import com.bubelov.coins.util.StringAdapter
 import com.bubelov.coins.util.UtcDateTypeAdapter
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-
-import java.util.Date
-
-import javax.inject.Singleton
-
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
@@ -60,6 +53,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
+import java.util.*
+import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
 @Module
@@ -71,11 +66,6 @@ class AppModule {
 
     @Provides
     fun providePlacesDb(database: Database) = database.placesDb()
-
-    @Provides
-    fun provideFirebaseAnalytics(context: Context): FirebaseAnalytics {
-        return FirebaseAnalytics.getInstance(context)
-    }
 
     @Provides
     fun providePreferences(context: Context): SharedPreferences {

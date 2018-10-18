@@ -27,18 +27,16 @@
 
 package com.bubelov.coins.util
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-
+import android.os.Build
 import com.bubelov.coins.R
-import com.bubelov.coins.repository.area.NotificationAreaRepository
+import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.model.Place
-
+import com.bubelov.coins.repository.area.NotificationAreaRepository
 import javax.inject.Inject
 import javax.inject.Singleton
-import android.app.NotificationChannel
-import android.os.Build
-import com.bubelov.coins.model.NotificationArea
 
 @Singleton
 class PlaceNotificationManager @Inject

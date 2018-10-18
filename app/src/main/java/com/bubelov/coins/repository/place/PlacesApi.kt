@@ -27,16 +27,14 @@
 
 package com.bubelov.coins.repository.place
 
-import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.AddPlaceArgs
+import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.user.UserRepository
 import com.google.gson.Gson
 import retrofit2.Call
-
 import java.util.*
-
 import javax.inject.Inject
 import javax.inject.Singleton
 

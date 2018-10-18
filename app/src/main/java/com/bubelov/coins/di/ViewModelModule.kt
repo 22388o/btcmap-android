@@ -27,19 +27,19 @@
 
 package com.bubelov.coins.di
 
-import dagger.Module
 import android.arch.lifecycle.ViewModel
-import dagger.multibindings.IntoMap
-import dagger.Binds
 import android.arch.lifecycle.ViewModelProvider
 import com.bubelov.coins.auth.AuthViewModel
 import com.bubelov.coins.editplace.EditPlaceViewModel
-import com.bubelov.coins.notificationarea.NotificationAreaViewModel
 import com.bubelov.coins.map.MapViewModel
+import com.bubelov.coins.notificationarea.NotificationAreaViewModel
+import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.search.PlacesSearchResultsViewModel
 import com.bubelov.coins.search.PlacesSearchViewModel
-import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.settings.SettingsViewModel
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
 
 @Module
 abstract class ViewModelModule {

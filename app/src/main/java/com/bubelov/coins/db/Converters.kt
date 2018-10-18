@@ -30,7 +30,6 @@ package com.bubelov.coins.db
 import android.arch.persistence.room.TypeConverter
 import com.google.gson.Gson
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Converters {
     @TypeConverter

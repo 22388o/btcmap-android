@@ -28,20 +28,18 @@
 package com.bubelov.coins.map
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Paint
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.view.*
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
-
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.openUrl
-
 import kotlinx.android.synthetic.main.widget_place_details.view.*
-import android.content.Intent
 
 class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
     internal lateinit var place: Place

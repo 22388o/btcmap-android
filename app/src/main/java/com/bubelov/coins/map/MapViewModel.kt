@@ -27,7 +27,10 @@
 
 package com.bubelov.coins.map
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
+import android.arch.lifecycle.ViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.model.Place
@@ -35,9 +38,11 @@ import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.*
+import com.bubelov.coins.util.ConsumableValue
+import com.bubelov.coins.util.LocationLiveData
+import com.bubelov.coins.util.SelectedCurrencyLiveData
 import com.google.android.gms.maps.model.LatLngBounds
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 class MapViewModel @Inject constructor(
@@ -46,7 +51,6 @@ class MapViewModel @Inject constructor(
     private val placeIconsRepository: PlaceIconsRepository,
     private val location: LocationLiveData,
     val userRepository: UserRepository,
-    val analytics: Analytics,
     val selectedCurrency: SelectedCurrencyLiveData
 ) : ViewModel() {
 

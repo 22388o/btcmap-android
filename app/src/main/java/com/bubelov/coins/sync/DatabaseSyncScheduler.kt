@@ -29,12 +29,12 @@ package com.bubelov.coins.sync
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ProcessLifecycleOwner
-import javax.inject.Inject
-import javax.inject.Singleton
 import androidx.work.Constraints
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class DatabaseSyncScheduler @Inject constructor() {

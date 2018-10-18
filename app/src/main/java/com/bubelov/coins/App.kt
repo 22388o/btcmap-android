@@ -31,8 +31,10 @@ import com.bubelov.coins.di.DaggerAppComponent
 import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.sync.DatabaseSyncScheduler
 import com.bubelov.coins.util.CrashlyticsTree
-import dagger.android.*
-
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
+import dagger.android.HasActivityInjector
+import dagger.android.HasServiceInjector
 import timber.log.Timber
 import javax.inject.Inject
 

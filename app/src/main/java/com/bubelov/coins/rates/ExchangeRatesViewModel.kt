@@ -27,7 +27,9 @@
 
 package com.bubelov.coins.rates
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository

@@ -34,7 +34,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.android.Main
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 class AuthViewModel @Inject constructor(

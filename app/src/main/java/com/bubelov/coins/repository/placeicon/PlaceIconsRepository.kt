@@ -29,21 +29,20 @@ package com.bubelov.coins.repository.placeicon
 
 import android.content.Context
 import android.graphics.*
-import com.bubelov.coins.R
-
-import javax.inject.Inject
-import javax.inject.Singleton
 import android.graphics.drawable.BitmapDrawable
-import android.support.annotation.DrawableRes
-import android.support.graphics.drawable.VectorDrawableCompat
 import android.graphics.drawable.VectorDrawable
 import android.os.Build
+import android.support.annotation.DrawableRes
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toColorFilter
 import androidx.core.graphics.toRect
+import com.bubelov.coins.R
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class PlaceIconsRepository @Inject constructor(

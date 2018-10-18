@@ -27,25 +27,21 @@
 
 package com.bubelov.coins.di
 
-import com.bubelov.coins.auth.AuthModule
-import com.bubelov.coins.auth.AuthOptionsFragment
-import com.bubelov.coins.auth.EmailSignInFragment
-import com.bubelov.coins.auth.SignInFragment
-import com.bubelov.coins.auth.SignUpFragment
+import com.bubelov.coins.auth.*
 import com.bubelov.coins.editplace.EditPlaceFragment
 import com.bubelov.coins.editplace.EditPlaceModule
+import com.bubelov.coins.map.MapFragment
+import com.bubelov.coins.map.MapModule
 import com.bubelov.coins.notificationarea.NotificationAreaFragment
 import com.bubelov.coins.notificationarea.NotificationAreaModule
 import com.bubelov.coins.picklocation.PickLocationFragment
 import com.bubelov.coins.picklocation.PickLocationModule
-import com.bubelov.coins.map.MapFragment
-import com.bubelov.coins.map.MapModule
 import com.bubelov.coins.profile.ProfileFragment
 import com.bubelov.coins.profile.ProfileModule
-import com.bubelov.coins.search.PlacesSearchFragment
-import com.bubelov.coins.search.PlacesSearchModule
 import com.bubelov.coins.rates.ExchangeRatesFragment
 import com.bubelov.coins.rates.ExchangeRatesModule
+import com.bubelov.coins.search.PlacesSearchFragment
+import com.bubelov.coins.search.PlacesSearchModule
 import com.bubelov.coins.settings.SettingsFragment
 import com.bubelov.coins.settings.SettingsModule
 import com.bubelov.coins.support.SupportProjectFragment

@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.util
 
-import java.util.Locale
+import java.util.*
 
 enum class DistanceUnits {
     KILOMETERS,

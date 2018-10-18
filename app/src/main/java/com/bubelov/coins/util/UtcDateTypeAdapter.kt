@@ -32,13 +32,8 @@ import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
-
 import java.text.ParseException
-import java.util.Calendar
-import java.util.Date
-import java.util.GregorianCalendar
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 
 class UtcDateTypeAdapter : TypeAdapter<Date>() {
     override fun write(out: JsonWriter, date: Date?) {

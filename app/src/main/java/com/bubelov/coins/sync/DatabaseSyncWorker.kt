@@ -33,7 +33,6 @@ import androidx.work.WorkerParameters
 import com.bubelov.coins.App
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
-import java.lang.Exception
 
 class DatabaseSyncWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
     override fun doWork() = runBlocking {

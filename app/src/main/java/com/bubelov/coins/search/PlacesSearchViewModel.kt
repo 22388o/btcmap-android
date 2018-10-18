@@ -27,17 +27,23 @@
 
 package com.bubelov.coins.search
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import android.content.SharedPreferences
 import android.content.res.Resources
-
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
-import com.bubelov.coins.util.*
-import kotlinx.coroutines.*
+import com.bubelov.coins.util.DistanceUnits
+import com.bubelov.coins.util.DistanceUtils
+import com.bubelov.coins.util.distanceTo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext

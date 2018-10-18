@@ -30,18 +30,19 @@ package com.bubelov.coins.util
 import android.Manifest
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
+import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import org.junit.Assert.*
+import com.nhaarman.mockitokotlin2.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import android.location.Location
-import com.nhaarman.mockitokotlin2.*
 import org.mockito.ArgumentMatchers.anyFloat
 import org.mockito.ArgumentMatchers.anyLong
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 
 class LocationLiveDataTest {
     @get:Rule

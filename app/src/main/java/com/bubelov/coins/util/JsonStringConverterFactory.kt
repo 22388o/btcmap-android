@@ -27,12 +27,12 @@
 
 package com.bubelov.coins.util
 
-import retrofit2.Converter
-import retrofit2.Retrofit
-import java.lang.reflect.Type
 import okhttp3.RequestBody
 import okio.Buffer
+import retrofit2.Converter
+import retrofit2.Retrofit
 import java.io.IOException
+import java.lang.reflect.Type
 
 class JsonStringConverterFactory(private val delegateFactory: Converter.Factory) : Converter.Factory() {
     override fun stringConverter(

@@ -27,12 +27,12 @@
 
 package com.bubelov.coins.search
 
-import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import android.content.res.Resources
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify

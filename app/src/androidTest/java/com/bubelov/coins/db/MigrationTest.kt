@@ -27,13 +27,13 @@
 
 package com.bubelov.coins.db
 
-import android.support.test.runner.AndroidJUnit4
-import org.junit.runner.RunWith
-import android.arch.persistence.room.testing.MigrationTestHelper
-import org.junit.Rule
 import android.arch.persistence.db.framework.FrameworkSQLiteOpenHelperFactory
+import android.arch.persistence.room.testing.MigrationTestHelper
 import android.support.test.InstrumentationRegistry
+import android.support.test.runner.AndroidJUnit4
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MigrationTest {

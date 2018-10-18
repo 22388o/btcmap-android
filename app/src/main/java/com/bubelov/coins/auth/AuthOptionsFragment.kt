@@ -30,20 +30,19 @@ package com.bubelov.coins.auth
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.bubelov.coins.R
-import dagger.android.support.DaggerFragment
-import android.content.Intent
-import android.support.v7.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
+import com.bubelov.coins.R
 import com.bubelov.coins.util.viewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_authorization_options.*
 import javax.inject.Inject
 

@@ -32,9 +32,8 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.arch.persistence.room.migration.Migration
-
-import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.util.transaction
 
 @Database(entities = [Place::class], version = 2, exportSchema = true)

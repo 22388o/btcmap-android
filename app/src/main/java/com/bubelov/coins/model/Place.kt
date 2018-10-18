@@ -31,7 +31,6 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import java.io.Serializable
 import java.util.*
-import kotlin.collections.ArrayList
 
 @Entity
 data class Place(

@@ -34,7 +34,6 @@ import com.bubelov.coins.repository.place.PlacesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 

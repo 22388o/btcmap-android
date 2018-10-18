@@ -28,12 +28,10 @@
 package com.bubelov.coins.di
 
 import com.bubelov.coins.App
-
-import javax.inject.Singleton
-
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
+import javax.inject.Singleton
 
 @Singleton
 @Component(

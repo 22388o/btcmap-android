@@ -39,28 +39,21 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-
-import com.bubelov.coins.R
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bubelov.coins.BuildConfig
-import com.bubelov.coins.search.PlacesSearchResultsViewModel
+import com.bubelov.coins.R
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.util.Analytics
-import com.bubelov.coins.util.activityViewModelProvider
-import com.bubelov.coins.util.currencyCodeToName
-import com.bubelov.coins.util.emptyPlace
-import com.bubelov.coins.util.openUrl
-import com.bubelov.coins.util.toLatLng
-import com.bubelov.coins.util.viewModelProvider
+import com.bubelov.coins.search.PlacesSearchResultsViewModel
+import com.bubelov.coins.util.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -73,7 +66,6 @@ import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class MapFragment :
@@ -100,8 +92,6 @@ class MapFragment :
     private val placesManager = MutableLiveData<ClusterManager<PlaceMarker>>()
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
-
-    @Inject internal lateinit var analytics: Analytics
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -145,7 +135,6 @@ class MapFragment :
             }
 
             override fun onShared(place: Place) {
-                analytics.logShareContent(place.id.toString(), place.name, "place")
             }
         }
 
@@ -195,16 +184,6 @@ class MapFragment :
         place_details.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-                val selectedPlace = model.selectedPlace.value
-
-                if (selectedPlace != null) {
-                    analytics.logViewContent(
-                        selectedPlace.id.toString(),
-                        selectedPlace.name,
-                        "place"
-                    )
-                }
             } else {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
             }
@@ -214,7 +193,6 @@ class MapFragment :
             if (it != null) {
                 place_details.setPlace(it)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                analytics.logSelectContent(it.id.toString(), it.name, "place")
             }
         })
 
@@ -418,7 +396,6 @@ class MapFragment :
 
     private fun openSupportChat() {
         requireContext().openUrl("https://t.me/joinchat/AAAAAAwVT4aVBdFzcKKbsw")
-        analytics.logViewContent("chat", null, "screen")
     }
 
     private fun initClustering(map: GoogleMap) {

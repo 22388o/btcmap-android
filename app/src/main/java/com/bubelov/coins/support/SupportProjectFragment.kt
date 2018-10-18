@@ -27,20 +27,19 @@
 
 package com.bubelov.coins.support
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.bubelov.coins.R
-import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_support_project.*
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.bubelov.coins.R
 import com.bubelov.coins.util.openUrl
+import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_support_project.*
 
 class SupportProjectFragment : DaggerFragment() {
     override fun onCreateView(

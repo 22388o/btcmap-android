@@ -34,15 +34,14 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-
-import com.bubelov.coins.R
-import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_profile.*
 import androidx.navigation.fragment.findNavController
+import com.bubelov.coins.R
 import com.bubelov.coins.repository.user.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.squareup.picasso.Picasso
+import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
 
 class ProfileFragment : DaggerFragment(), Toolbar.OnMenuItemClickListener {
