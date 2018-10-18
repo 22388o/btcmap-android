@@ -193,6 +193,8 @@ class MapFragment :
             if (it != null) {
                 place_details.setPlace(it)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
         })
 
@@ -211,7 +213,7 @@ class MapFragment :
 
         placesSearchResultsModel.pickedPlaceId.observe(this, Observer { id ->
             model.navigateToNextSelectedPlace = true
-            model.selectedPlaceId.value = id
+            model.selectPlace(id ?: 0)
         })
 
         model.shouldOpenSignInScreen.observe(this, Observer { value ->
@@ -347,7 +349,7 @@ class MapFragment :
         if (model.isLocationPermissionGranted()) {
             map.isMyLocationEnabled = true
 
-            if (model.selectedPlaceId.value == null || model.selectedPlaceId.value == 0L) {
+            if (model.selectedPlace.value == null) {
                 moveToUserLocation()
             }
         } else {
@@ -414,8 +416,7 @@ class MapFragment :
         map.setOnMarkerClickListener(placesManager)
 
         map.setOnMapClickListener {
-            model.selectedPlaceId.value = 0
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+            model.selectPlace(0)
         }
 
         this.placesManager.value = placesManager
@@ -441,7 +442,7 @@ class MapFragment :
     private inner class ClusterItemClickListener :
         ClusterManager.OnClusterItemClickListener<PlaceMarker> {
         override fun onClusterItemClick(placeMarker: PlaceMarker): Boolean {
-            model.selectedPlaceId.value = placeMarker.placeId
+            model.selectPlace(placeMarker.placeId)
             return true
         }
     }

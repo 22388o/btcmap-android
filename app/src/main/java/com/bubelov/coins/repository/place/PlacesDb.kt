@@ -44,8 +44,8 @@ interface PlacesDb {
     @Query("SELECT * FROM Place")
     fun allAsync(): LiveData<List<Place>>
 
-    @Query("SELECT * from Place WHERE id = :id LIMIT 1")
-    fun find(id: Long): LiveData<Place>
+    @Query("SELECT * FROM Place WHERE id = :id LIMIT 1")
+    fun find(id: Long): Place?
 
     @Query("SELECT * FROM Place WHERE " +
             "UPPER(name) LIKE '%' || UPPER(:query) || '%' " +

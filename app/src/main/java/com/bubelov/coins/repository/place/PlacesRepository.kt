@@ -59,7 +59,11 @@ class PlacesRepository @Inject constructor(
         }
     }
 
-    fun find(id: Long) = db.find(id)
+    suspend fun find(id: Long): Place? {
+        return withContext(Dispatchers.IO) {
+            db.find(id)
+        }
+    }
 
     suspend fun findBySearchQuery(searchQuery: String): List<Place> {
         return withContext(Dispatchers.IO) {

@@ -42,8 +42,12 @@ import com.bubelov.coins.util.ConsumableValue
 import com.bubelov.coins.util.LocationLiveData
 import com.bubelov.coins.util.SelectedCurrencyLiveData
 import com.google.android.gms.maps.model.LatLngBounds
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class MapViewModel @Inject constructor(
     private val notificationAreaRepository: NotificationAreaRepository,
@@ -51,11 +55,15 @@ class MapViewModel @Inject constructor(
     private val placeIconsRepository: PlaceIconsRepository,
     private val location: LocationLiveData,
     val userRepository: UserRepository,
-    val selectedCurrency: SelectedCurrencyLiveData
+    val selectedCurrency: SelectedCurrencyLiveData,
+    coroutineContext: CoroutineContext
 ) : ViewModel() {
+    private val job = Job()
+    private val uiScope = CoroutineScope(coroutineContext + job)
 
-    val selectedPlaceId = MutableLiveData<Long>()
-    val selectedPlace: LiveData<Place> = Transformations.switchMap(selectedPlaceId) { placesRepository.find(it) }
+    private val _selectedPlace = MutableLiveData<Place>()
+    val selectedPlace: LiveData<Place> = _selectedPlace
+
     var navigateToNextSelectedPlace = false
 
     var callback: Callback? = null
@@ -93,7 +101,20 @@ class MapViewModel @Inject constructor(
     }
 
     private val _shouldOpenSignInScreen = MutableLiveData<Boolean>()
-    val shouldOpenSignInScreen = Transformations.map(_shouldOpenSignInScreen) { ConsumableValue(it) }
+    val shouldOpenSignInScreen: LiveData<ConsumableValue<Boolean>> =
+        Transformations.map(_shouldOpenSignInScreen) { ConsumableValue(it) }
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
+
+    fun selectPlace(id: Long) {
+        uiScope.launch {
+            val place = placesRepository.find(id)
+            _selectedPlace.value = place
+        }
+    }
 
     fun onAddPlaceClick() {
         if (userRepository.signedIn()) {
