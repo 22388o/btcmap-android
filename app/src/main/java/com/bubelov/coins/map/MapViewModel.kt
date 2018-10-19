@@ -104,6 +104,14 @@ class MapViewModel @Inject constructor(
     val shouldOpenSignInScreen: LiveData<ConsumableValue<Boolean>> =
         Transformations.map(_shouldOpenSignInScreen) { ConsumableValue(it) }
 
+    private val _shouldOpenAddPlaceScreen = MutableLiveData<Boolean>()
+    val shouldOpenAddPlaceScreen: LiveData<ConsumableValue<Boolean>> =
+        Transformations.map(_shouldOpenAddPlaceScreen) { ConsumableValue(it) }
+
+    private val _shouldOpenEditPlaceScreen = MutableLiveData<Boolean>()
+    val shouldOpenEditPlaceScreen: LiveData<ConsumableValue<Boolean>> =
+        Transformations.map(_shouldOpenEditPlaceScreen) { ConsumableValue(it) }
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
@@ -118,15 +126,15 @@ class MapViewModel @Inject constructor(
 
     fun onAddPlaceClick() {
         if (userRepository.signedIn()) {
-            callback?.addPlace()
+            _shouldOpenAddPlaceScreen.value = true
         } else {
             _shouldOpenSignInScreen.value = true
         }
     }
 
-    fun onEditPlaceClick(place: Place) {
+    fun onEditPlaceClick() {
         if (userRepository.signedIn()) {
-            callback?.editPlace(place)
+            _shouldOpenEditPlaceScreen.value = true
         } else {
             _shouldOpenSignInScreen.value = true
         }
@@ -145,8 +153,6 @@ class MapViewModel @Inject constructor(
     fun onLocationPermissionGranted() = location.onLocationPermissionGranted()
 
     interface Callback {
-        fun addPlace()
-        fun editPlace(place: Place)
         fun showUserProfile()
     }
 }

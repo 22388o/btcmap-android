@@ -29,11 +29,11 @@ package com.bubelov.coins.repository
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
+import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.repository.place.PlacesApi
 import com.bubelov.coins.repository.place.PlacesAssetsCache
 import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.util.emptyPlace
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before

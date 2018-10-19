@@ -27,10 +27,10 @@
 
 package com.bubelov.coins.sync
 
+import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
-import com.bubelov.coins.util.emptyPlace
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions

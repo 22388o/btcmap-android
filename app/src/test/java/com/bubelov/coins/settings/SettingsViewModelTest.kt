@@ -30,6 +30,7 @@ package com.bubelov.coins.settings
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import android.content.res.Resources
+import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.SyncLogEntry
 import com.bubelov.coins.repository.currency.CurrenciesRepository
@@ -39,7 +40,6 @@ import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.SelectedCurrencyLiveData
-import com.bubelov.coins.util.emptyPlace
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever

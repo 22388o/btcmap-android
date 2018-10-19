@@ -36,7 +36,7 @@ import android.support.annotation.UiThread
  * For background see this blog post:
  * https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150
  */
-class ConsumableValue<T>(private val data: T) {
+class ConsumableValue<T>(val data: T) {
     var consumed = false
         private set
 

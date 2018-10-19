@@ -127,7 +127,7 @@ class MapFragment :
 
         place_details.callback = object : PlaceDetailsView.Callback {
             override fun onEditPlaceClick(place: Place) {
-                model.onEditPlaceClick(place)
+                model.onEditPlaceClick()
             }
 
             override fun onDismissed() {
@@ -216,10 +216,26 @@ class MapFragment :
             model.selectPlace(id ?: 0)
         })
 
-        model.shouldOpenSignInScreen.observe(this, Observer { value ->
-            value?.consume { value ->
+        model.shouldOpenSignInScreen.observe(this, Observer { consumable ->
+            consumable?.consume { value ->
                 if (value) {
                     findNavController().navigate(R.id.action_mapFragment_to_authorizationOptionsFragment)
+                }
+            }
+        })
+
+        model.shouldOpenAddPlaceScreen.observe(this, Observer { consumable ->
+            consumable?.consume { value ->
+                if (value) {
+                    findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
+                }
+            }
+        })
+
+        model.shouldOpenEditPlaceScreen.observe(this, Observer { consumable ->
+            consumable?.consume { value ->
+                if (value) {
+                    findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
                 }
             }
         })
@@ -309,19 +325,6 @@ class MapFragment :
     override fun onConfigurationChanged(newConfig: Configuration) {
         drawerToggle.onConfigurationChanged(newConfig)
         super.onConfigurationChanged(newConfig)
-    }
-
-    override fun addPlace() {
-        val place = emptyPlace().copy(
-            latitude = map.value?.cameraPosition?.target?.latitude ?: 0.0,
-            longitude = map.value?.cameraPosition?.target?.longitude ?: 0.0
-        )
-
-        // TODO
-    }
-
-    override fun editPlace(place: Place) {
-        // TODO
     }
 
     override fun showUserProfile() {

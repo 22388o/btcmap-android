@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.util
+package com.bubelov.coins
 
 import com.bubelov.coins.model.Place
 import java.util.*
