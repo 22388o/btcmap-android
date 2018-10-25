@@ -27,57 +27,69 @@
 
 package com.bubelov.coins.auth
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-
+import androidx.navigation.fragment.findNavController
+import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.util.viewModelProvider
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_sign_in.*
-
+import kotlinx.android.synthetic.main.fragment_auth_methods.*
 import javax.inject.Inject
 
-class SignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
+class AuthMethodsFragment : DaggerFragment() {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
-    private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
+    val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_sign_in, container, false)
+        return inflater.inflate(R.layout.fragment_auth_methods, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        password.setOnEditorActionListener(this)
+        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        sign_in.setOnClickListener {
-            signIn()
+        signInWithGoogle.setOnClickListener {
+            val googleSingInOptions =
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
+                    .requestEmail()
+                    .build()
+
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSingInOptions)
+            startActivityForResult(
+                googleSignInClient.signInIntent,
+                GOOGLE_SIGN_IN_REQUEST
+            )
+        }
+
+        signInWithEmail.setOnClickListener {
+            // TODO
         }
 
         model.showProgress.observe(this, Observer { show ->
-            sign_in_panel.visibility = when(show) {
-                true -> View.GONE
-                else -> View.VISIBLE
-            }
-
-            progress.visibility = when(show) {
-                true -> View.VISIBLE
-                else -> View.GONE
+            viewSwitcher.displayedChild = when (show) {
+                true -> 1
+                else -> 0
             }
         })
 
         model.authorized.observe(this, Observer { authorized ->
-            // TODO
+            if (authorized == true) {
+                findNavController().popBackStack()
+            }
         })
 
         model.errorMessage.observe(this, Observer { message ->
@@ -88,16 +100,15 @@ class SignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
         })
     }
 
-    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
-        if (actionId == EditorInfo.IME_ACTION_GO) {
-            signIn()
-            return true
-        }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        return false
+        if (requestCode == GOOGLE_SIGN_IN_REQUEST && resultCode == Activity.RESULT_OK) {
+            model.signIn(GoogleSignIn.getSignedInAccountFromIntent(data).result.idToken ?: "")
+        }
     }
 
-    private fun signIn() {
-        model.signIn(email.text.toString(), password.text.toString())
+    companion object {
+        private const val GOOGLE_SIGN_IN_REQUEST = 10
     }
 }

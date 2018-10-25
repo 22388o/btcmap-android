@@ -79,7 +79,7 @@
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/authorizationOptionsFragment"
-        android:name="com.bubelov.coins.auth.AuthOptionsFragment"
+        android:name="com.bubelov.coins.auth.AuthMethodsFragment"
         android:label="AuthorizationOptionsFragment" />
     <fragment
         android:id="@+id/profileFragment"

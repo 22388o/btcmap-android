@@ -27,20 +27,28 @@
 
 package com.bubelov.coins.auth
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.util.Pair
+import android.support.v7.app.AlertDialog
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+
 import com.bubelov.coins.R
+import com.bubelov.coins.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_email_sign_in.*
 
-class EmailSignInFragment : DaggerFragment() {
+import javax.inject.Inject
+
+class EmailSignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
+    @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
+    private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,27 +58,46 @@ class EmailSignInFragment : DaggerFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        pager.adapter = TabsAdapter(childFragmentManager)
-        tab_layout.setupWithViewPager(pager)
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        password.setOnEditorActionListener(this)
+
+        sign_in.setOnClickListener {
+            signIn()
+        }
+
+        model.showProgress.observe(this, Observer { show ->
+            sign_in_panel.visibility = when(show) {
+                true -> View.GONE
+                else -> View.VISIBLE
+            }
+
+            progress.visibility = when(show) {
+                true -> View.VISIBLE
+                else -> View.GONE
+            }
+        })
+
+        model.authorized.observe(this, Observer { authorized ->
+            // TODO
+        })
+
+        model.errorMessage.observe(this, Observer { message ->
+            AlertDialog.Builder(requireContext())
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+        })
     }
 
-    private inner class TabsAdapter internal constructor(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        private val pages = listOf<Pair<Fragment, String>>(
-            Pair(SignInFragment(), getString(R.string.sign_in)),
-            Pair(SignUpFragment(), getString(R.string.sign_up))
-        )
-
-        override fun getItem(position: Int): Fragment {
-            return pages[position].first!!
+    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+            signIn()
+            return true
         }
 
-        override fun getPageTitle(position: Int): CharSequence {
-            return pages[position].second!!
-        }
+        return false
+    }
 
-        override fun getCount(): Int {
-            return pages.size
-        }
+    private fun signIn() {
+        model.signIn(email.text.toString(), password.text.toString())
     }
 }

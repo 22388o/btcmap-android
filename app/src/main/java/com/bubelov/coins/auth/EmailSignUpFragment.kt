@@ -41,11 +41,11 @@ import android.widget.TextView
 
 import com.bubelov.coins.R
 import com.bubelov.coins.util.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.android.synthetic.main.fragment_email_sign_up.*
 
 import javax.inject.Inject
 
-class SignUpFragment : Fragment(), TextView.OnEditorActionListener {
+class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
     private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
 
@@ -54,7 +54,7 @@ class SignUpFragment : Fragment(), TextView.OnEditorActionListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        return inflater.inflate(R.layout.fragment_email_sign_up, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
