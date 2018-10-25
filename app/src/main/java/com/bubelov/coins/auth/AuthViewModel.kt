@@ -27,25 +27,35 @@
 
 package com.bubelov.coins.auth
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import com.bubelov.coins.repository.user.UserRepository
+import com.bubelov.coins.util.ConsumableValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class AuthViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    coroutineContext: CoroutineContext
 ) : ViewModel() {
 
     private val job = Job()
-    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + job)
+    private val uiScope = CoroutineScope(coroutineContext + job)
 
-    val showProgress = MutableLiveData<Boolean>()
-    val authorized = MutableLiveData<Boolean>()
-    val errorMessage = MutableLiveData<String>()
+    private val _showProgress = MutableLiveData<Boolean>()
+    val showProgress: LiveData<Boolean> = _showProgress
+
+    private val _authorized = MutableLiveData<Boolean>()
+    val authorized: LiveData<Boolean> = _authorized
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<ConsumableValue<String>> =
+        Transformations.map(_errorMessage) { ConsumableValue(it) }
 
     override fun onCleared() {
         super.onCleared()
@@ -73,12 +83,12 @@ class AuthViewModel @Inject constructor(
     private fun launchAuthFlow(block: suspend () -> Unit): Job {
         return uiScope.launch {
             try {
-                showProgress.value = true
+                _showProgress.value = true
                 block()
             } catch (error: Exception) {
-                errorMessage.value = error.message
+                _errorMessage.value = error.message
             } finally {
-                showProgress.value = false
+                _showProgress.value = false
             }
         }
     }

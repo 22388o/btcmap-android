@@ -62,6 +62,11 @@ class AuthMethodsFragment : DaggerFragment() {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         signInWithGoogle.setOnClickListener {
+            if (BuildConfig.MOCK_API) {
+                model.signIn("GOOGLE")
+                return@setOnClickListener
+            }
+
             val googleSingInOptions =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
@@ -92,11 +97,13 @@ class AuthMethodsFragment : DaggerFragment() {
             }
         })
 
-        model.errorMessage.observe(this, Observer { message ->
-            AlertDialog.Builder(requireContext())
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
+        model.errorMessage.observe(this, Observer {
+            it?.consume { message ->
+                AlertDialog.Builder(requireContext())
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
         })
     }
 

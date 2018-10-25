@@ -80,10 +80,13 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
             // TODO
         })
 
-        model.errorMessage.observe(this, Observer { message ->
-            AlertDialog.Builder(requireContext())
-                .setMessage(message)
-                .show()
+        model.errorMessage.observe(this, Observer {
+            it?.consume { message ->
+                AlertDialog.Builder(requireContext())
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
         })
     }
 

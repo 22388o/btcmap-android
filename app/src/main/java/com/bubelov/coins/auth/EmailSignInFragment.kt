@@ -65,12 +65,12 @@ class EmailSignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
         }
 
         model.showProgress.observe(this, Observer { show ->
-            sign_in_panel.visibility = when(show) {
+            sign_in_panel.visibility = when (show) {
                 true -> View.GONE
                 else -> View.VISIBLE
             }
 
-            progress.visibility = when(show) {
+            progress.visibility = when (show) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
@@ -80,11 +80,13 @@ class EmailSignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
             // TODO
         })
 
-        model.errorMessage.observe(this, Observer { message ->
-            AlertDialog.Builder(requireContext())
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
+        model.errorMessage.observe(this, Observer {
+            it?.consume { message ->
+                AlertDialog.Builder(requireContext())
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
         })
     }
 
