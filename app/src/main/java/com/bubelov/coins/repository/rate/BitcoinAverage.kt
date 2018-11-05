@@ -27,11 +27,11 @@
 
 package com.bubelov.coins.repository.rate
 
-import com.bubelov.coins.api.await
 import com.bubelov.coins.api.rates.BitcoinAverageApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.google.gson.Gson
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -42,10 +42,11 @@ class BitcoinAverage @Inject constructor(gson: Gson) : ExchangeRatesSource {
     override val name = "BitcoinAverage"
 
     val api: BitcoinAverageApi = Retrofit.Builder()
-            .baseUrl("https://apiv2.bitcoinaverage.com/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(BitcoinAverageApi::class.java)
+        .baseUrl("https://apiv2.bitcoinaverage.com/")
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+        .create(BitcoinAverageApi::class.java)
 
     override fun getCurrencyPairs(): Collection<CurrencyPair> {
         return listOf(CurrencyPair.BTC_USD)

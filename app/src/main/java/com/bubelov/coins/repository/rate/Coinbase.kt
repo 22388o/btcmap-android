@@ -27,11 +27,11 @@
 
 package com.bubelov.coins.repository.rate
 
-import com.bubelov.coins.api.await
 import com.bubelov.coins.api.rates.CoinbaseApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.google.gson.Gson
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -42,10 +42,11 @@ class Coinbase @Inject constructor(gson: Gson) : ExchangeRatesSource {
     override val name = "Coinbase"
 
     val api: CoinbaseApi = Retrofit.Builder()
-            .baseUrl("https://api.coinbase.com/v2/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(CoinbaseApi::class.java)
+        .baseUrl("https://api.coinbase.com/v2/")
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+        .create(CoinbaseApi::class.java)
 
     override fun getCurrencyPairs(): Collection<CurrencyPair> {
         return listOf(CurrencyPair.BTC_USD, CurrencyPair.BTC_EUR, CurrencyPair.BTC_GBP)

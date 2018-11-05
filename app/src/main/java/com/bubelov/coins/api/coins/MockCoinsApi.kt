@@ -30,7 +30,7 @@ package com.bubelov.coins.api.coins
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.place.PlacesAssetsCache
-import retrofit2.Call
+import kotlinx.coroutines.Deferred
 import retrofit2.mock.BehaviorDelegate
 import java.util.*
 
@@ -44,7 +44,7 @@ class MockCoinsApi(
         places.addAll(assetsCache.getPlaces())
     }
 
-    override fun createUser(args: CreateUserArgs): Call<AuthResponse> {
+    override fun createUser(args: CreateUserArgs): Deferred<AuthResponse> {
         val response = AuthResponse(
             user = User(1L, args.user.email, args.user.firstName, args.user.lastName, ""),
             token = UUID.randomUUID().toString()
@@ -53,7 +53,7 @@ class MockCoinsApi(
         return delegate.returningResponse(response).createUser(args)
     }
 
-    override fun authWithEmail(email: String, password: String): Call<AuthResponse> {
+    override fun authWithEmail(email: String, password: String): Deferred<AuthResponse> {
         val response = AuthResponse(
             user = User(1L, email, "Foo", "Bar", ""),
             token = UUID.randomUUID().toString()
@@ -62,7 +62,7 @@ class MockCoinsApi(
         return delegate.returningResponse(response).authWithEmail(email, password)
     }
 
-    override fun authWithGoogle(token: String): Call<AuthResponse> {
+    override fun authWithGoogle(token: String): Deferred<AuthResponse> {
         val response = AuthResponse(
             user = User(1L, "foo@bar.com", "Foo", "Bar", ""),
             token = UUID.randomUUID().toString()
@@ -71,17 +71,17 @@ class MockCoinsApi(
         return delegate.returningResponse(response).authWithGoogle(token)
     }
 
-    override fun getPlaces(since: String, limit: Int): Call<List<Place>> {
+    override fun getPlaces(since: String, limit: Int): Deferred<List<Place>> {
         return delegate.returningResponse(emptyList<Place>()).getPlaces(since, limit)
     }
 
-    override fun addPlace(session: String, args: AddPlaceArgs): Call<Place> {
+    override fun addPlace(session: String, args: AddPlaceArgs): Deferred<Place> {
         val place = args.place.copy(id = UUID.randomUUID().toString().hashCode().toLong())
         places += place
         return delegate.returningResponse(place).addPlace(session, args)
     }
 
-    override fun updatePlace(id: Long, session: String, args: UpdatePlaceArgs): Call<Place> {
+    override fun updatePlace(id: Long, session: String, args: UpdatePlaceArgs): Deferred<Place> {
         val existingPlace = places.find { it.id == id }
         places.remove(existingPlace)
         places += args.place

@@ -30,7 +30,6 @@ package com.bubelov.coins.repository.place
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
-import com.bubelov.coins.api.await
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.toLatLng

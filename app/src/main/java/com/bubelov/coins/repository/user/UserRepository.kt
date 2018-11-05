@@ -29,7 +29,6 @@ package com.bubelov.coins.repository.user
 
 import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
-import com.bubelov.coins.api.await
 
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreateUserArgs

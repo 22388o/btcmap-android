@@ -33,7 +33,7 @@ import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.user.UserRepository
 import com.google.gson.Gson
-import retrofit2.Call
+import kotlinx.coroutines.Deferred
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -45,15 +45,15 @@ internal constructor(
     private val gson: Gson,
     private val userRepository: UserRepository
 ) {
-    fun getPlaces(updatedAfter: Date): Call<List<Place>> {
+    fun getPlaces(updatedAfter: Date): Deferred<List<Place>> {
         return api.getPlaces(gson.toJson(updatedAfter), Integer.MAX_VALUE)
     }
 
-    fun addPlace(place: Place): Call<Place> {
+    fun addPlace(place: Place): Deferred<Place> {
         return api.addPlace(userRepository.userAuthToken, AddPlaceArgs(place))
     }
 
-    fun updatePlace(place: Place): Call<Place> {
+    fun updatePlace(place: Place): Deferred<Place> {
         return api.updatePlace(place.id, userRepository.userAuthToken, UpdatePlaceArgs(place))
     }
 }

@@ -27,12 +27,12 @@
 
 package com.bubelov.coins.repository.rate
 
-import com.bubelov.coins.api.await
 import com.bubelov.coins.api.rates.BitstampApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.google.gson.Gson
-import retrofit2.Call
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -43,10 +43,11 @@ class Bitstamp @Inject constructor(gson: Gson) : ExchangeRatesSource {
     override val name = "Bitstamp"
 
     val api: BitstampApi = Retrofit.Builder()
-            .baseUrl("https://www.bitstamp.net/api/v2/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(BitstampApi::class.java)
+        .baseUrl("https://www.bitstamp.net/api/v2/")
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+        .create(BitstampApi::class.java)
 
     override fun getCurrencyPairs(): Collection<CurrencyPair> {
         return listOf(CurrencyPair.BTC_USD, CurrencyPair.BTC_EUR)
@@ -60,7 +61,7 @@ class Bitstamp @Inject constructor(gson: Gson) : ExchangeRatesSource {
         }
     }
 
-    private suspend fun fromTicker(call: Call<BitstampApi.BitstampTicker>): Result<Double> {
+    private suspend fun fromTicker(call: Deferred<BitstampApi.BitstampTicker>): Result<Double> {
         return try {
             val result = call.await()
             Result.Success(result.last.toDouble())

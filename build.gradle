@@ -29,6 +29,7 @@ buildscript {
         picassoVersion = '2.5.2'
         playServicesVersion = '15.0.1'
         retrofitVersion = '2.3.0'
+        retrofitCoroutinesVersion = '0.9.2'
         roomVersion = '1.1.1'
         runnerVersion = '1.0.1'
         supportLibraryVersion = '27.1.1'

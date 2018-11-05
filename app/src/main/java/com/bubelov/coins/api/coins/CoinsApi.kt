@@ -29,42 +29,42 @@ package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.Json
-import retrofit2.Call
+import kotlinx.coroutines.Deferred
 import retrofit2.http.*
 
 interface CoinsApi {
     @POST("users")
     fun createUser(
         @Json @Body args: CreateUserArgs
-    ): Call<AuthResponse>
+    ): Deferred<AuthResponse>
 
     @POST("auth/email")
     fun authWithEmail(
         @Query("email") email: String,
         @Query("password") password: String
-    ): Call<AuthResponse>
+    ): Deferred<AuthResponse>
 
     @POST("auth/google-token")
     fun authWithGoogle(
         @Header("token") token: String
-    ): Call<AuthResponse>
+    ): Deferred<AuthResponse>
 
     @GET("places")
     fun getPlaces(
         @Query("since") since: String,
         @Query("limit") limit: Int
-    ): Call<List<Place>>
+    ): Deferred<List<Place>>
 
     @POST("places")
     fun addPlace(
         @Header("session") session: String,
         @Json @Body args: AddPlaceArgs
-    ): Call<Place>
+    ): Deferred<Place>
 
     @PATCH("places/{id}")
     fun updatePlace(
         @Path("id") id: Long,
         @Header("session") session: String,
         @Json @Body args: UpdatePlaceArgs
-    ): Call<Place>
+    ): Deferred<Place>
 }
