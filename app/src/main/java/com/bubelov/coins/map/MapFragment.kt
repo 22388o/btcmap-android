@@ -30,7 +30,6 @@ package com.bubelov.coins.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
@@ -87,11 +86,9 @@ class MapFragment :
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
 
-    private var map = MutableLiveData<GoogleMap>()
-
-    private val placesManager = MutableLiveData<ClusterManager<PlaceMarker>>()
-
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
+
+    private var map: GoogleMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -152,7 +149,7 @@ class MapFragment :
             true
         }
 
-        model.selectedCurrency.observe(this, Observer {
+        model.selectedCurrency.observe(viewLifecycleOwner, Observer {
             toolbar.title = getString(R.string.s_map, it!!.currencyCodeToName())
             toolbar.menu.findItem(R.id.action_add).isVisible = it == "BTC"
             navigation_view.menu.findItem(R.id.action_mapFragment_to_exchangeRatesFragment)
@@ -171,16 +168,6 @@ class MapFragment :
 
         updateDrawerHeader()
 
-        placesManager.observe(this, Observer { placesManager ->
-            if (placesManager != null) {
-                model.placeMarkers.observe(this, Observer { markers ->
-                    placesManager.clearItems()
-                    placesManager.addItems(markers)
-                    placesManager.cluster()
-                })
-            }
-        })
-
         place_details.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -189,7 +176,7 @@ class MapFragment :
             }
         }
 
-        model.selectedPlace.observe(this, Observer {
+        model.selectedPlace.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 place_details.setPlace(it)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -198,7 +185,7 @@ class MapFragment :
             }
         })
 
-        model.userLocation.observe(this, Observer {
+        model.userLocation.observe(viewLifecycleOwner, Observer {
             fab.setOnClickListener {
                 if (!model.isLocationPermissionGranted()) {
                     requestLocationPermissions()
@@ -211,12 +198,12 @@ class MapFragment :
 
         navigation_view.setupWithNavController(findNavController())
 
-        placesSearchResultsModel.pickedPlaceId.observe(this, Observer { id ->
+        placesSearchResultsModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
             model.navigateToNextSelectedPlace = true
             model.selectPlace(id ?: 0)
         })
 
-        model.shouldOpenSignInScreen.observe(this, Observer { consumable ->
+        model.shouldOpenSignInScreen.observe(viewLifecycleOwner, Observer { consumable ->
             consumable?.consume { value ->
                 if (value) {
                     findNavController().navigate(R.id.action_mapFragment_to_authorizationOptionsFragment)
@@ -224,7 +211,7 @@ class MapFragment :
             }
         })
 
-        model.shouldOpenAddPlaceScreen.observe(this, Observer { consumable ->
+        model.shouldOpenAddPlaceScreen.observe(viewLifecycleOwner, Observer { consumable ->
             consumable?.consume { value ->
                 if (value) {
                     findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
@@ -232,7 +219,7 @@ class MapFragment :
             }
         })
 
-        model.shouldOpenEditPlaceScreen.observe(this, Observer { consumable ->
+        model.shouldOpenEditPlaceScreen.observe(viewLifecycleOwner, Observer { consumable ->
             consumable?.consume { value ->
                 if (value) {
                     findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
@@ -282,7 +269,7 @@ class MapFragment :
         when (requestCode) {
             REQUEST_ACCESS_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 model.onLocationPermissionGranted()
-                map.value?.isMyLocationEnabled = true
+                map?.isMyLocationEnabled = true
                 moveToUserLocation()
             }
         }
@@ -292,7 +279,7 @@ class MapFragment :
         val location = model.userLocation.value
 
         if (location != null) {
-            map.value?.animateCamera(
+            map?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     location.toLatLng(),
                     DEFAULT_MAP_ZOOM
@@ -340,7 +327,7 @@ class MapFragment :
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
-        this.map.value = map
+        this.map = map
 
         map.uiSettings.isMyLocationButtonEnabled = false
         map.uiSettings.isZoomControlsEnabled = false
@@ -359,7 +346,7 @@ class MapFragment :
             requestLocationPermissions()
         }
 
-        model.selectedPlace.observe(this, Observer { place ->
+        model.selectedPlace.observe(viewLifecycleOwner, Observer { place ->
             if (place != null && model.navigateToNextSelectedPlace) {
                 map.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(
@@ -406,9 +393,12 @@ class MapFragment :
     private fun initClustering(map: GoogleMap) {
         val placesManager = ClusterManager<PlaceMarker>(requireContext(), map)
         placesManager.setAnimation(false)
+        map.setOnMarkerClickListener(placesManager)
+
         val renderer = PlacesRenderer(requireContext(), map, placesManager)
         renderer.setAnimation(false)
         placesManager.renderer = renderer
+
         renderer.setOnClusterItemClickListener(ClusterItemClickListener())
 
         map.setOnCameraIdleListener {
@@ -416,13 +406,15 @@ class MapFragment :
             model.mapBounds.value = map.projection.visibleRegion.latLngBounds
         }
 
-        map.setOnMarkerClickListener(placesManager)
-
         map.setOnMapClickListener {
             model.selectPlace(0)
         }
 
-        this.placesManager.value = placesManager
+        model.placeMarkers.observe(viewLifecycleOwner, Observer { markers ->
+            placesManager.clearItems()
+            placesManager.addItems(markers)
+            placesManager.cluster()
+        })
     }
 
     private inner class PlacesRenderer internal constructor(
