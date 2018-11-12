@@ -112,6 +112,16 @@ class MapViewModel @Inject constructor(
     val shouldOpenEditPlaceScreen: LiveData<ConsumableValue<Boolean>> =
         Transformations.map(_shouldOpenEditPlaceScreen) { ConsumableValue(it) }
 
+    private val _shouldMoveMapToLocation = MutableLiveData<Location>()
+    val shouldMoveMapToLocation: LiveData<ConsumableValue<Location>> =
+        Transformations.map(_shouldMoveMapToLocation) { ConsumableValue(it) }
+
+    private val _shouldRequestLocationPermissions = MutableLiveData<Boolean>()
+    val shouldRequestLocationPermissions: LiveData<ConsumableValue<Boolean>> =
+        Transformations.map(_shouldRequestLocationPermissions) { ConsumableValue(it) }
+
+    var initializedLocation = false
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
@@ -148,9 +158,41 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun isLocationPermissionGranted() = location.isLocationPermissionGranted()
+    fun onLocationButtonClick() {
+        if (!location.isLocationPermissionGranted()) {
+            _shouldRequestLocationPermissions.value = true
+            return
+        }
 
-    fun onLocationPermissionGranted() = location.onLocationPermissionGranted()
+        location.value?.let { _shouldMoveMapToLocation.value = it }
+    }
+
+    fun onReturnFromLocationSettings() {
+        if (!location.isLocationPermissionGranted()) {
+            _shouldRequestLocationPermissions.value = true
+        }
+    }
+
+    fun onLocationPermissionGranted() {
+        location.onLocationPermissionGranted()
+        location.value?.let { _shouldMoveMapToLocation.value = it }
+    }
+
+    fun onMapReady() {
+        if (!location.isLocationPermissionGranted()) {
+            _shouldRequestLocationPermissions.value = true
+            return
+        }
+
+        if (initializedLocation) {
+            return
+        }
+
+        if (selectedPlace.value == null) {
+            location.value?.let { _shouldMoveMapToLocation.value = it }
+            initializedLocation = true
+        }
+    }
 
     interface Callback {
         fun showUserProfile()

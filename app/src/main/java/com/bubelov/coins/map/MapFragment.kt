@@ -187,12 +187,7 @@ class MapFragment :
 
         model.userLocation.observe(viewLifecycleOwner, Observer {
             fab.setOnClickListener {
-                if (!model.isLocationPermissionGranted()) {
-                    requestLocationPermissions()
-                    return@setOnClickListener
-                }
-
-                moveToUserLocation()
+                model.onLocationButtonClick()
             }
         })
 
@@ -226,6 +221,12 @@ class MapFragment :
                 }
             }
         })
+
+        model.shouldRequestLocationPermissions.observe(viewLifecycleOwner, Observer {
+            it?.consume {
+                requestLocationPermissions()
+            }
+        })
     }
 
     override fun onResume() {
@@ -235,9 +236,7 @@ class MapFragment :
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CHECK_LOCATION_SETTINGS && resultCode == Activity.RESULT_OK) {
-            if (!model.isLocationPermissionGranted()) {
-                requestLocationPermissions()
-            }
+            model.onReturnFromLocationSettings()
         }
 
         if (requestCode == REQUEST_ADD_PLACE && resultCode == Activity.RESULT_OK) {
@@ -269,22 +268,7 @@ class MapFragment :
         when (requestCode) {
             REQUEST_ACCESS_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 model.onLocationPermissionGranted()
-                map?.isMyLocationEnabled = true
-                moveToUserLocation()
             }
-        }
-    }
-
-    private fun moveToUserLocation() {
-        val location = model.userLocation.value
-
-        if (location != null) {
-            map?.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    location.toLatLng(),
-                    DEFAULT_MAP_ZOOM
-                )
-            )
         }
     }
 
@@ -336,15 +320,7 @@ class MapFragment :
 
         initClustering(map)
 
-        if (model.isLocationPermissionGranted()) {
-            map.isMyLocationEnabled = true
-
-            if (model.selectedPlace.value == null) {
-                moveToUserLocation()
-            }
-        } else {
-            requestLocationPermissions()
-        }
+        model.onMapReady()
 
         model.selectedPlace.observe(viewLifecycleOwner, Observer { place ->
             if (place != null && model.navigateToNextSelectedPlace) {
@@ -356,6 +332,19 @@ class MapFragment :
                 )
 
                 model.navigateToNextSelectedPlace = false
+            }
+        })
+
+        model.shouldMoveMapToLocation.observe(viewLifecycleOwner, Observer {
+            it?.consume { location ->
+                map.isMyLocationEnabled = true
+
+                map.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        location.toLatLng(),
+                        DEFAULT_MAP_ZOOM
+                    )
+                )
             }
         })
     }
