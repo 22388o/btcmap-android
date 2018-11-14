@@ -41,13 +41,9 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Place
@@ -140,10 +136,26 @@ class MapFragment :
         toolbar.setOnMenuItemClickListener(this)
 
         navigation_view.setNavigationItemSelectedListener { item ->
-            drawerLayout.closeDrawers()
+            drawerLayout.closeDrawer(navigation_view, false)
 
             when (item.itemId) {
+                R.id.action_exchange_rates -> {
+                    findNavController().navigate(R.id.action_mapFragment_to_exchangeRatesFragment)
+                }
+
+                R.id.action_notification_area -> {
+                    findNavController().navigate(R.id.action_mapFragment_to_notificationAreaFragment)
+                }
+
                 R.id.action_chat -> openSupportChat()
+
+                R.id.action_support_project -> {
+                    findNavController().navigate(R.id.action_mapFragment_to_supportProjectFragment)
+                }
+
+                R.id.action_settings -> {
+                    findNavController().navigate(R.id.action_mapFragment_to_settingsFragment)
+                }
             }
 
             true
@@ -152,7 +164,7 @@ class MapFragment :
         model.selectedCurrency.observe(viewLifecycleOwner, Observer {
             toolbar.title = getString(R.string.s_map, it!!.currencyCodeToName())
             toolbar.menu.findItem(R.id.action_add).isVisible = it == "BTC"
-            navigation_view.menu.findItem(R.id.action_mapFragment_to_exchangeRatesFragment)
+            navigation_view.menu.findItem(R.id.action_exchange_rates)
                 .isVisible = it == "BTC"
         })
 
@@ -190,8 +202,6 @@ class MapFragment :
                 model.onLocationButtonClick()
             }
         })
-
-        navigation_view.setupWithNavController(findNavController())
 
         placesSearchResultsModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
             model.navigateToNextSelectedPlace = true
