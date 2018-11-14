@@ -117,6 +117,7 @@ class AppModule {
     private fun createMockApi(placesAssetsCache: PlacesAssetsCache): CoinsApi {
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
         val behavior = NetworkBehavior.create()

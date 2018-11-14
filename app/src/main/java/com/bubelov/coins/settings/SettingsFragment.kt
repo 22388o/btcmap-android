@@ -55,24 +55,8 @@ class SettingsFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        currencyButton.setOnClickListener { model.showCurrencySelector() }
-        model.selectedCurrency.observe(this, Observer { currency.text = it })
 
-        model.currencySelectorItems.observe(this, Observer { items ->
-            if (items != null && items.isNotEmpty()) {
-                val titles = items.map { it.title }.toTypedArray()
-
-                AlertDialog.Builder(requireContext())
-                    .setTitle(R.string.currency)
-                    .setItems(titles) { _, index ->
-                        model.selectCurrency(items[index].currency)
-                    }
-                    .setOnDismissListener { model.currencySelectorItems.value = null }
-                    .show()
-            }
-        })
-
-        distanceUnitsButton.setOnClickListener { _ ->
+        distanceUnitsButton.setOnClickListener {
             val labels = resources.getStringArray(R.array.distance_units)
             val values = resources.getStringArray(R.array.distance_units_values)
 
@@ -88,7 +72,7 @@ class SettingsFragment : DaggerFragment() {
                 .show()
         }
 
-        model.distanceUnits.observe(this, Observer {
+        model.distanceUnits.observe(viewLifecycleOwner, Observer {
             val labels = resources.getStringArray(R.array.distance_units)
             val values = resources.getStringArray(R.array.distance_units_values)
             distanceUnits.text = labels[values.indexOf(it)]
@@ -96,13 +80,14 @@ class SettingsFragment : DaggerFragment() {
 
         syncDatabase.setOnClickListener { model.syncDatabase() }
 
-        showSyncLog.setOnClickListener { model.showSyncLogs() }
+        showSyncLog.setOnClickListener {
+            model.showSyncLogs()
+        }
 
-        model.syncLogs.observe(this, Observer { logs ->
-            if (logs != null && !logs.isEmpty()) {
+        model.syncLogs.observe(viewLifecycleOwner, Observer { value ->
+            value?.consume { logs ->
                 AlertDialog.Builder(requireContext())
                     .setItems(logs.toTypedArray(), null)
-                    .setOnDismissListener { model.syncLogs.value = null }
                     .show()
             }
         })

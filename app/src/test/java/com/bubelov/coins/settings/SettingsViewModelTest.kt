@@ -28,23 +28,20 @@
 package com.bubelov.coins.settings
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.content.SharedPreferences
-import android.content.res.Resources
 import com.bubelov.coins.emptyPlace
-import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.SyncLogEntry
-import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
-import com.bubelov.coins.util.SelectedCurrencyLiveData
+import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -55,15 +52,11 @@ class SettingsViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var selectedCurrencyLiveData: SelectedCurrencyLiveData
     @Mock private lateinit var distanceUnitsLiveData: DistanceUnitsLiveData
     @Mock private lateinit var databaseSync: DatabaseSync
     @Mock private lateinit var syncLogsRepository: SyncLogsRepository
     @Mock private lateinit var placesRepository: PlacesRepository
-    @Mock private lateinit var currenciesRepository: CurrenciesRepository
     @Mock private lateinit var notificationManager: PlaceNotificationManager
-    @Mock private lateinit var resources: Resources
-    @Mock private lateinit var preferences: SharedPreferences
     private lateinit var model: SettingsViewModel
 
     @Before
@@ -71,48 +64,13 @@ class SettingsViewModelTest {
         MockitoAnnotations.initMocks(this)
 
         model = SettingsViewModel(
-            selectedCurrencyLiveData,
             placesRepository,
-            currenciesRepository,
             distanceUnitsLiveData,
             databaseSync,
             syncLogsRepository,
             notificationManager,
-            resources,
-            preferences
+            Dispatchers.Default
         )
-    }
-
-    @Test
-    fun returnsCurrencies() = runBlocking {
-        val currencies = listOf(
-            Currency("ABC"),
-            Currency("BTC"),
-            Currency("LTC")
-        )
-
-        whenever(currenciesRepository.getAllCurrencies()).thenReturn(currencies)
-
-        whenever(placesRepository.countByCurrency(currencies[0])).thenReturn(1)
-        whenever(placesRepository.countByCurrency(currencies[1])).thenReturn(2)
-        whenever(placesRepository.countByCurrency(currencies[2])).thenReturn(3)
-
-        model.showCurrencySelector().join()
-        val rows = model.currencySelectorItems.value!!
-
-        Assert.assertEquals(rows.size, 3)
-        Assert.assertTrue(rows[0].places == 3)
-        Assert.assertTrue(rows[1].places == 2)
-        Assert.assertTrue(rows[2].places == 1)
-
-        verify(currenciesRepository).getAllCurrencies()
-        verifyNoMoreInteractions(currenciesRepository)
-
-        currencies.forEach {
-            verify(placesRepository).countByCurrency(it)
-        }
-
-        verifyNoMoreInteractions(placesRepository)
     }
 
     @Test
@@ -123,12 +81,10 @@ class SettingsViewModelTest {
 
     @Test
     fun returnsSyncLogs() = runBlocking {
-        whenever(syncLogsRepository.all()).thenReturn(listOf(SyncLogEntry(0, 10)))
-
+        val logs = listOf(SyncLogEntry(0, 10))
+        whenever(syncLogsRepository.all()).thenReturn(logs)
         model.showSyncLogs().join()
-        val logs = model.syncLogs.value!!
-
-        Assert.assertEquals(1, logs.size)
+        assertEquals(1, model.syncLogs.blockingObserve().data.size)
         verify(syncLogsRepository).all()
         verifyNoMoreInteractions(syncLogsRepository)
     }

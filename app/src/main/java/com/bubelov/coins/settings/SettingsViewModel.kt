@@ -27,95 +27,57 @@
 
 package com.bubelov.coins.settings
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-import android.content.SharedPreferences
-import android.content.res.Resources
-import com.bubelov.coins.R
-import com.bubelov.coins.model.Currency
-import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.sync.DatabaseSync
+import com.bubelov.coins.util.ConsumableValue
 import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
-import com.bubelov.coins.util.SelectedCurrencyLiveData
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class SettingsViewModel @Inject constructor(
-    selectedCurrencyLiveData: SelectedCurrencyLiveData,
     private val placesRepository: PlacesRepository,
-    private val currenciesRepository: CurrenciesRepository,
     distanceUnitsLiveData: DistanceUnitsLiveData,
     private val databaseSync: DatabaseSync,
     private val syncLogsRepository: SyncLogsRepository,
     private val placeNotificationsManager: PlaceNotificationManager,
-    private val resources: Resources,
-    private val preferences: SharedPreferences
+    coroutineContext: CoroutineContext
 ) : ViewModel() {
-    val selectedCurrency = selectedCurrencyLiveData
-
-    val currencySelectorItems = MutableLiveData<List<CurrencySelectorItem>>()
+    private val job = Job()
+    private val uiScope = CoroutineScope(coroutineContext + job)
 
     val distanceUnits = distanceUnitsLiveData
 
-    val syncLogs = MutableLiveData<List<String>>()
+    private val _syncLogs = MutableLiveData<List<String>>()
+    val syncLogs: LiveData<ConsumableValue<List<String>>> =
+        Transformations.map(_syncLogs) { ConsumableValue(it) }
 
-    fun showCurrencySelector() = GlobalScope.launch {
-        val allCurrencies = currenciesRepository.getAllCurrencies()
-        val currenciesToPlaces = mutableListOf<Pair<Currency, Int>>()
-
-        allCurrencies.forEach { currency ->
-            currenciesToPlaces.add(Pair(currency, placesRepository.countByCurrency(currency)))
-        }
-
-        val items = currenciesToPlaces.map {
-            CurrencySelectorItem(
-                currency = it.first,
-                places = it.second,
-                title = "${it.first.code} (${it.second} ${resources.getQuantityString(
-                    R.plurals.places,
-                    it.second
-                )})"
-            )
-        }
-
-        currencySelectorItems.postValue(items.sortedByDescending { it.places })
-    }
-
-    fun selectCurrency(currency: Currency) {
-        preferences
-            .edit()
-            .putString(resources.getString(R.string.pref_currency_key), currency.code)
-            .apply()
-    }
-
-    fun syncDatabase() = launch {
+    fun syncDatabase() = uiScope.launch {
         databaseSync.sync()
     }
 
-    fun showSyncLogs() = launch {
+    fun showSyncLogs() = uiScope.launch {
         val logs = syncLogsRepository.all()
             .reversed()
             .map { "Date: ${Date(it.time)}, Affected places: ${it.affectedPlaces}" }
 
-        syncLogs.postValue(logs)
+        if (isActive && logs.isNotEmpty()) {
+            _syncLogs.value = logs
+        }
     }
 
-    fun testNotification() = launch {
+    fun testNotification() = uiScope.launch {
         val randomPlace = placesRepository.findRandom()
 
         if (randomPlace != null) {
             placeNotificationsManager.issueNotification(randomPlace)
         }
     }
-
-    data class CurrencySelectorItem(
-        val currency: Currency,
-        val places: Int,
-        val title: String
-    )
 }
