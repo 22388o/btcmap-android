@@ -55,7 +55,7 @@ class PlacesSearchFragment : DaggerFragment() {
     private val model by lazy {
         ViewModelProviders.of(this, modelFactory).get(PlacesSearchViewModel::class.java).apply {
             val args = PlacesSearchFragmentArgs.fromBundle(arguments)
-            setUp(args.currency, args.location)
+            setUp(args.location)
         }
     }
 

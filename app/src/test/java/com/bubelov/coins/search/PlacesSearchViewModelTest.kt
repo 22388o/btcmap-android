@@ -71,7 +71,7 @@ class PlacesSearchViewModelTest {
             Dispatchers.Default
         )
 
-        model.setUp("BTC", null)
+        model.setUp(null)
 
         runBlocking {
             whenever(placesRepository.findBySearchQuery(anyString()))

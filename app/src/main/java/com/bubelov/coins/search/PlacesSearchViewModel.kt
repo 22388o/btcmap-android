@@ -59,14 +59,12 @@ class PlacesSearchViewModel @Inject constructor(
     private var searchJob: Job? = null
     private val uiScope = CoroutineScope(coroutineContext + mainJob)
 
-    private lateinit var currency: String
     private var location: Location? = null
 
     private val _rows = MutableLiveData<List<PlacesSearchRow>>()
     val rows: LiveData<List<PlacesSearchRow>> = _rows
 
-    fun setUp(currency: String, location: Location?) {
-        this.currency = currency
+    fun setUp(location: Location?) {
         this.location = location
     }
 
@@ -85,7 +83,6 @@ class PlacesSearchViewModel @Inject constructor(
 
         searchJob = uiScope.launch {
             var places = placesRepository.findBySearchQuery(query)
-                .filter { it.currencies.contains(currency) }
 
             val location = location
 

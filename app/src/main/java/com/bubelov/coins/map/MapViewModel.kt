@@ -40,12 +40,10 @@ import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.ConsumableValue
 import com.bubelov.coins.util.LocationLiveData
-import com.bubelov.coins.util.SelectedCurrencyLiveData
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -55,7 +53,6 @@ class MapViewModel @Inject constructor(
     private val placeIconsRepository: PlaceIconsRepository,
     private val location: LocationLiveData,
     val userRepository: UserRepository,
-    val selectedCurrency: SelectedCurrencyLiveData,
     coroutineContext: CoroutineContext
 ) : ViewModel() {
     private val job = Job()
@@ -74,16 +71,14 @@ class MapViewModel @Inject constructor(
         Transformations.switchMap(mapBounds) { placesRepository.getPlaces(it) }
 
     val placeMarkers: LiveData<List<PlaceMarker>> = Transformations.switchMap(places) { places ->
-        Transformations.switchMap(selectedCurrency) { currency ->
-            MutableLiveData<List<PlaceMarker>>().apply {
-                value = places.filter { it.currencies.contains(currency) }.mapTo(ArrayList()) {
-                    PlaceMarker(
-                        placeId = it.id,
-                        icon = placeIconsRepository.getMarker(it.category),
-                        latitude = it.latitude,
-                        longitude = it.longitude
-                    )
-                }
+        MutableLiveData<List<PlaceMarker>>().apply {
+            value = places.map {
+                PlaceMarker(
+                    placeId = it.id,
+                    icon = placeIconsRepository.getMarker(it.category),
+                    latitude = it.latitude,
+                    longitude = it.longitude
+                )
             }
         }
     }

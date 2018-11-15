@@ -33,7 +33,6 @@ import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.LocationLiveData
-import com.bubelov.coins.util.SelectedCurrencyLiveData
 import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -55,7 +54,6 @@ class MapViewModelTest {
     @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
     @Mock private lateinit var location: LocationLiveData
     @Mock private lateinit var userRepository: UserRepository
-    @Mock private lateinit var selectedCurrency: SelectedCurrencyLiveData
     private lateinit var model: MapViewModel
 
     @Before
@@ -68,7 +66,6 @@ class MapViewModelTest {
             placeIconsRepository,
             location,
             userRepository,
-            selectedCurrency,
             Dispatchers.Default
         )
     }

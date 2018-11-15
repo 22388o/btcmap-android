@@ -102,9 +102,6 @@
         android:name="com.bubelov.coins.search.PlacesSearchFragment"
         android:label="PlacesSearchFragment">
         <argument
-            android:name="currency"
-            app:argType="string" />
-        <argument
             android:name="location"
             app:argType="com.bubelov.coins.model.Location"
             app:nullable="true" />

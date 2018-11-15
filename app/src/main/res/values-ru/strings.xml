@@ -65,10 +65,9 @@
     <string name="place_has_been_added">Место добавлено</string>
     <string name="your_edits_have_been_submitted">Правки приняты</string>
     <string name="uploading_changes">Загрузка правок</string>
-    <string name="s_map">%1$s карта</string>
+    <string name="places">Places</string>
     <string name="something_went_wrong">Упс, что то пошло не так…</string>
     <string name="currency">Валюта</string>
-    <string name="pref_currency">Валюта</string>
     <string name="new_place_notifications">Новые места в зоне уведомлений</string>
     <string name="menu_item_chat">Чат (ENG)</string>
 

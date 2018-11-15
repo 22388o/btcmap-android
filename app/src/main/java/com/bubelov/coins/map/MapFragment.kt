@@ -161,13 +161,6 @@ class MapFragment :
             true
         }
 
-        model.selectedCurrency.observe(viewLifecycleOwner, Observer {
-            toolbar.title = getString(R.string.s_map, it!!.currencyCodeToName())
-            toolbar.menu.findItem(R.id.action_add).isVisible = it == "BTC"
-            navigation_view.menu.findItem(R.id.action_exchange_rates)
-                .isVisible = it == "BTC"
-        })
-
         drawerToggle = ActionBarDrawerToggle(
             requireActivity(),
             drawerLayout,
@@ -290,7 +283,6 @@ class MapFragment :
 
             R.id.action_search -> {
                 val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
-                    model.selectedCurrency.value ?: throw IllegalStateException(),
                     model.userLocation.value
                 )
 
