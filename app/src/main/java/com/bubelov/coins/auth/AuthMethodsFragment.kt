@@ -81,7 +81,7 @@ class AuthMethodsFragment : DaggerFragment() {
         }
 
         signInWithEmail.setOnClickListener {
-            // TODO
+            findNavController().navigate(R.id.action_authMethodsFragment_to_emailAuthFragment)
         }
 
         model.showProgress.observe(this, Observer { show ->

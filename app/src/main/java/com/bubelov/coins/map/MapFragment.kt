@@ -204,7 +204,7 @@ class MapFragment :
         model.shouldOpenSignInScreen.observe(viewLifecycleOwner, Observer { consumable ->
             consumable?.consume { value ->
                 if (value) {
-                    findNavController().navigate(R.id.action_mapFragment_to_authorizationOptionsFragment)
+                    findNavController().navigate(R.id.action_mapFragment_to_authMethodsFragment)
                 }
             }
         })

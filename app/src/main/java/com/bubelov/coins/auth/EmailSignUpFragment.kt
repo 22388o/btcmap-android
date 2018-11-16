@@ -30,7 +30,6 @@ package com.bubelov.coins.auth
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -41,11 +40,12 @@ import android.widget.TextView
 
 import com.bubelov.coins.R
 import com.bubelov.coins.util.viewModelProvider
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_email_sign_up.*
 
 import javax.inject.Inject
 
-class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
+class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
     private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
 

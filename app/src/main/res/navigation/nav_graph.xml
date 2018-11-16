@@ -51,8 +51,8 @@
             android:id="@+id/action_mapFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <action
-            android:id="@+id/action_mapFragment_to_authorizationOptionsFragment"
-            app:destination="@id/authorizationOptionsFragment" />
+            android:id="@+id/action_mapFragment_to_authMethodsFragment"
+            app:destination="@id/authMethodsFragment" />
         <action
             android:id="@+id/action_mapFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -78,9 +78,13 @@
         android:name="com.bubelov.coins.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
-        android:id="@+id/authorizationOptionsFragment"
+        android:id="@+id/authMethodsFragment"
         android:name="com.bubelov.coins.auth.AuthMethodsFragment"
-        android:label="AuthorizationOptionsFragment" />
+        android:label="AuthMethodsFragment">
+        <action
+            android:id="@+id/action_authMethodsFragment_to_emailAuthFragment"
+            app:destination="@id/emailAuthFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.bubelov.coins.profile.ProfileFragment"
@@ -114,5 +118,9 @@
         android:id="@+id/notificationAreaFragment"
         android:name="com.bubelov.coins.notificationarea.NotificationAreaFragment"
         android:label="NotificationAreaFragment" />
+    <fragment
+        android:id="@+id/emailAuthFragment"
+        android:name="com.bubelov.coins.auth.EmailAuthFragment"
+        android:label="EmailAuthFragment" />
 
 </navigation>
