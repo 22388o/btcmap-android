@@ -93,7 +93,7 @@ class PlacesSearchViewModelTest {
         model.setQuery("bar")
         val rows = model.rows.blockingObserve()
         verify(placesRepository).findBySearchQuery("bar")
-        Assert.assertEquals(2, rows.size)
+        Assert.assertEquals(3, rows.size)
         Assert.assertTrue(rows.all { it.name.contains("bar", ignoreCase = true) })
     }
 

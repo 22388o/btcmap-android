@@ -38,8 +38,9 @@ import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.ConsumableValue
+import com.bubelov.coins.util.LiveEvent
 import com.bubelov.coins.util.LocationLiveData
+import com.bubelov.coins.util.toSingleEvent
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -95,25 +96,20 @@ class MapViewModel @Inject constructor(
         location
     }
 
-    private val _shouldOpenSignInScreen = MutableLiveData<Boolean>()
-    val shouldOpenSignInScreen: LiveData<ConsumableValue<Boolean>> =
-        Transformations.map(_shouldOpenSignInScreen) { ConsumableValue(it) }
+    private val _openSignInScreen = LiveEvent<Void>()
+    val openSignInScreen = _openSignInScreen.toSingleEvent()
 
-    private val _shouldOpenAddPlaceScreen = MutableLiveData<Boolean>()
-    val shouldOpenAddPlaceScreen: LiveData<ConsumableValue<Boolean>> =
-        Transformations.map(_shouldOpenAddPlaceScreen) { ConsumableValue(it) }
+    private val _openAddPlaceScreen = LiveEvent<Void>()
+    val openAddPlaceScreen = _openAddPlaceScreen.toSingleEvent()
 
-    private val _shouldOpenEditPlaceScreen = MutableLiveData<Boolean>()
-    val shouldOpenEditPlaceScreen: LiveData<ConsumableValue<Boolean>> =
-        Transformations.map(_shouldOpenEditPlaceScreen) { ConsumableValue(it) }
+    private val _openEditPlaceScreen = LiveEvent<Void>()
+    val openEditPlaceScreen = _openEditPlaceScreen.toSingleEvent()
 
-    private val _shouldMoveMapToLocation = MutableLiveData<Location>()
-    val shouldMoveMapToLocation: LiveData<ConsumableValue<Location>> =
-        Transformations.map(_shouldMoveMapToLocation) { ConsumableValue(it) }
+    private val _moveMapToLocation = LiveEvent<Location>()
+    val moveMapToLocation = _moveMapToLocation.toSingleEvent()
 
-    private val _shouldRequestLocationPermissions = MutableLiveData<Boolean>()
-    val shouldRequestLocationPermissions: LiveData<ConsumableValue<Boolean>> =
-        Transformations.map(_shouldRequestLocationPermissions) { ConsumableValue(it) }
+    private val _requestLocationPermissions = LiveEvent<Void>()
+    val requestLocationPermissions = _requestLocationPermissions.toSingleEvent()
 
     var initializedLocation = false
 
@@ -131,17 +127,17 @@ class MapViewModel @Inject constructor(
 
     fun onAddPlaceClick() {
         if (userRepository.signedIn()) {
-            _shouldOpenAddPlaceScreen.value = true
+            _openAddPlaceScreen.call()
         } else {
-            _shouldOpenSignInScreen.value = true
+            _openSignInScreen.call()
         }
     }
 
     fun onEditPlaceClick() {
         if (userRepository.signedIn()) {
-            _shouldOpenEditPlaceScreen.value = true
+            _openEditPlaceScreen.call()
         } else {
-            _shouldOpenSignInScreen.value = true
+            _openSignInScreen.call()
         }
     }
 
@@ -149,33 +145,33 @@ class MapViewModel @Inject constructor(
         if (userRepository.signedIn()) {
             callback?.showUserProfile()
         } else {
-            _shouldOpenSignInScreen.value = true
+            _openSignInScreen.call()
         }
     }
 
     fun onLocationButtonClick() {
         if (!location.isLocationPermissionGranted()) {
-            _shouldRequestLocationPermissions.value = true
+            _requestLocationPermissions.call()
             return
         }
 
-        location.value?.let { _shouldMoveMapToLocation.value = it }
+        location.value?.let { _moveMapToLocation.value = it }
     }
 
     fun onReturnFromLocationSettings() {
         if (!location.isLocationPermissionGranted()) {
-            _shouldRequestLocationPermissions.value = true
+            _requestLocationPermissions.call()
         }
     }
 
     fun onLocationPermissionGranted() {
         location.onLocationPermissionGranted()
-        location.value?.let { _shouldMoveMapToLocation.value = it }
+        location.value?.let { _moveMapToLocation.value = it }
     }
 
     fun onMapReady() {
         if (!location.isLocationPermissionGranted()) {
-            _shouldRequestLocationPermissions.value = true
+            _requestLocationPermissions.call()
             return
         }
 
@@ -184,7 +180,7 @@ class MapViewModel @Inject constructor(
         }
 
         if (selectedPlace.value == null) {
-            location.value?.let { _shouldMoveMapToLocation.value = it }
+            location.value?.let { _moveMapToLocation.value = it }
             initializedLocation = true
         }
     }

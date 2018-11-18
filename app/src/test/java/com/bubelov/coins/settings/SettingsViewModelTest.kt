@@ -84,7 +84,7 @@ class SettingsViewModelTest {
         val logs = listOf(SyncLogEntry(0, 10))
         whenever(syncLogsRepository.all()).thenReturn(logs)
         model.showSyncLogs().join()
-        assertEquals(1, model.syncLogs.blockingObserve().data.size)
+        assertEquals(1, model.syncLogs.blockingObserve().size)
         verify(syncLogsRepository).all()
         verifyNoMoreInteractions(syncLogsRepository)
     }

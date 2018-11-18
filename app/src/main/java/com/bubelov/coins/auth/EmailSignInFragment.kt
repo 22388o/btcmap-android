@@ -81,7 +81,7 @@ class EmailSignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
         })
 
         model.errorMessage.observe(this, Observer {
-            it?.consume { message ->
+            it?.let { message ->
                 AlertDialog.Builder(requireContext())
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok, null)

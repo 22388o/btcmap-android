@@ -27,16 +27,11 @@
 
 package com.bubelov.coins.settings
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.sync.DatabaseSync
-import com.bubelov.coins.util.ConsumableValue
-import com.bubelov.coins.util.DistanceUnitsLiveData
-import com.bubelov.coins.util.PlaceNotificationManager
+import com.bubelov.coins.util.*
 import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
@@ -55,9 +50,8 @@ class SettingsViewModel @Inject constructor(
 
     val distanceUnits = distanceUnitsLiveData
 
-    private val _syncLogs = MutableLiveData<List<String>>()
-    val syncLogs: LiveData<ConsumableValue<List<String>>> =
-        Transformations.map(_syncLogs) { ConsumableValue(it) }
+    private val _syncLogs = LiveEvent<List<String>>()
+    val syncLogs = _syncLogs.toSingleEvent()
 
     fun syncDatabase() = uiScope.launch {
         databaseSync.sync()

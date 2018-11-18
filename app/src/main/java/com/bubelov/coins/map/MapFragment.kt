@@ -201,34 +201,20 @@ class MapFragment :
             model.selectPlace(id ?: 0)
         })
 
-        model.shouldOpenSignInScreen.observe(viewLifecycleOwner, Observer { consumable ->
-            consumable?.consume { value ->
-                if (value) {
-                    findNavController().navigate(R.id.action_mapFragment_to_authMethodsFragment)
-                }
-            }
+        model.openSignInScreen.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(R.id.action_mapFragment_to_authMethodsFragment)
         })
 
-        model.shouldOpenAddPlaceScreen.observe(viewLifecycleOwner, Observer { consumable ->
-            consumable?.consume { value ->
-                if (value) {
-                    findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
-                }
-            }
+        model.openAddPlaceScreen.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
         })
 
-        model.shouldOpenEditPlaceScreen.observe(viewLifecycleOwner, Observer { consumable ->
-            consumable?.consume { value ->
-                if (value) {
-                    findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
-                }
-            }
+        model.openEditPlaceScreen.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
         })
 
-        model.shouldRequestLocationPermissions.observe(viewLifecycleOwner, Observer {
-            it?.consume {
-                requestLocationPermissions()
-            }
+        model.requestLocationPermissions.observe(viewLifecycleOwner, Observer {
+            requestLocationPermissions()
         })
     }
 
@@ -337,8 +323,8 @@ class MapFragment :
             }
         })
 
-        model.shouldMoveMapToLocation.observe(viewLifecycleOwner, Observer {
-            it?.consume { location ->
+        model.moveMapToLocation.observe(viewLifecycleOwner, Observer {
+            it?.let { location ->
                 map.isMyLocationEnabled = true
 
                 map.animateCamera(

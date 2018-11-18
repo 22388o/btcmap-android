@@ -84,8 +84,8 @@ class SettingsFragment : DaggerFragment() {
             model.showSyncLogs()
         }
 
-        model.syncLogs.observe(viewLifecycleOwner, Observer { value ->
-            value?.consume { logs ->
+        model.syncLogs.observe(viewLifecycleOwner, Observer {
+            it?.let { logs ->
                 AlertDialog.Builder(requireContext())
                     .setItems(logs.toTypedArray(), null)
                     .show()

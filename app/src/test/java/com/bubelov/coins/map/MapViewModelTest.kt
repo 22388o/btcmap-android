@@ -38,7 +38,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -74,7 +73,7 @@ class MapViewModelTest {
     fun redirectsToAuthOnAddPlaceIfUnauthorized() = runBlocking<Unit> {
         whenever(userRepository.signedIn()).thenReturn(false)
         model.onAddPlaceClick()
-        assertTrue(model.shouldOpenSignInScreen.blockingObserve().data)
+        model.openSignInScreen.blockingObserve()
         verify(userRepository).signedIn()
     }
 
@@ -82,7 +81,7 @@ class MapViewModelTest {
     fun redirectsToAuthOnEditPlaceIfUnauthorized() = runBlocking<Unit> {
         whenever(userRepository.signedIn()).thenReturn(false)
         model.onEditPlaceClick()
-        assertTrue(model.shouldOpenSignInScreen.blockingObserve().data)
+        model.openSignInScreen.blockingObserve()
         verify(userRepository).signedIn()
     }
 
@@ -90,7 +89,7 @@ class MapViewModelTest {
     fun opensAddPlaceScreen() = runBlocking<Unit> {
         whenever(userRepository.signedIn()).thenReturn(true)
         model.onAddPlaceClick()
-        assertTrue(model.shouldOpenAddPlaceScreen.blockingObserve().data)
+        model.openAddPlaceScreen.blockingObserve()
         verify(userRepository).signedIn()
     }
 
@@ -98,7 +97,7 @@ class MapViewModelTest {
     fun opensEditPlaceScreen() = runBlocking<Unit> {
         whenever(userRepository.signedIn()).thenReturn(true)
         model.onEditPlaceClick()
-        assertTrue(model.shouldOpenEditPlaceScreen.blockingObserve().data)
+        model.openEditPlaceScreen.blockingObserve()
         verify(userRepository).signedIn()
     }
 }

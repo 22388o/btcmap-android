@@ -29,10 +29,10 @@ package com.bubelov.coins.auth
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.ConsumableValue
+import com.bubelov.coins.util.LiveEvent
+import com.bubelov.coins.util.toSingleEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -53,9 +53,8 @@ class AuthViewModel @Inject constructor(
     private val _authorized = MutableLiveData<Boolean>()
     val authorized: LiveData<Boolean> = _authorized
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<ConsumableValue<String>> =
-        Transformations.map(_errorMessage) { ConsumableValue(it) }
+    private val _errorMessage = LiveEvent<String>()
+    val errorMessage = _errorMessage.toSingleEvent()
 
     override fun onCleared() {
         super.onCleared()
