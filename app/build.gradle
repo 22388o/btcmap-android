@@ -85,8 +85,8 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$roomVersion"
 
     // Navigation
-    implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
 
     // Scheduling
     implementation "android.arch.work:work-runtime-ktx:$workVersion"
@@ -122,7 +122,6 @@ dependencies {
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "com.android.support.test:runner:$runnerVersion"
     androidTestImplementation "com.android.support.test:rules:$runnerVersion"
-    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$navigationVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

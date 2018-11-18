@@ -19,7 +19,7 @@ buildscript {
         gradleVersion = '3.2.0'
         gsonVersion = '2.8.2'
         junitVersion = '4.12'
-        kotlinVersion = '1.3.0-rc-190'
+        kotlinVersion = '1.3.10'
         ktxVersion = '0.3'
         lifecycleVersion = '1.1.1'
         loggingInterceptorVersion = '3.10.0'
@@ -34,8 +34,8 @@ buildscript {
         runnerVersion = '1.0.1'
         supportLibraryVersion = '28.0.0'
         timberVersion = '4.6.1'
-        navigationVersion = '1.0.0-alpha06'
-        safeArgsVersion = '1.0.0-alpha05'
+        navigationVersion = '1.0.0-alpha07'
+        safeArgsVersion = '1.0.0-alpha07'
         workVersion = '1.0.0-alpha10'
     }
 

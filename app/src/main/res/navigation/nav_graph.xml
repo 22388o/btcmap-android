@@ -1,32 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-  ~ This is free and unencumbered software released into the public domain.
-  ~
-  ~ Anyone is free to copy, modify, publish, use, compile, sell, or
-  ~ distribute this software, either in source code form or as a compiled
-  ~ binary, for any purpose, commercial or non-commercial, and by any
-  ~ means.
-  ~
-  ~ In jurisdictions that recognize copyright laws, the author or authors
-  ~ of this software dedicate any and all copyright interest in the
-  ~ software to the public domain. We make this dedication for the benefit
-  ~ of the public at large and to the detriment of our heirs and
-  ~ successors. We intend this dedication to be an overt act of
-  ~ relinquishment in perpetuity of all present and future rights to this
-  ~ software under copyright law.
-  ~
-  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  ~ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  ~ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  ~ IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-  ~ OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-  ~ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-  ~ OTHER DEALINGS IN THE SOFTWARE.
-  ~
-  ~ For more information, please refer to <https://unlicense.org>
-  -->
-
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
@@ -38,7 +11,11 @@
         android:label="CheckPlayServicesFragment">
         <action
             android:id="@+id/action_checkPlayServicesFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -46,28 +23,60 @@
         android:label="MapFragment">
         <action
             android:id="@+id/action_mapFragment_to_supportProjectFragment"
-            app:destination="@id/supportProjectFragment" />
+            app:destination="@id/supportProjectFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_mapFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_mapFragment_to_authMethodsFragment"
-            app:destination="@id/authMethodsFragment" />
+            app:destination="@id/authMethodsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_mapFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_mapFragment_to_editPlaceFragment"
-            app:destination="@id/editPlaceFragment" />
+            app:destination="@id/editPlaceFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_mapFragment_to_placesSearchFragment"
-            app:destination="@id/placesSearchFragment" />
+            app:destination="@id/placesSearchFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_mapFragment_to_exchangeRatesFragment"
-            app:destination="@id/exchangeRatesFragment" />
+            app:destination="@id/exchangeRatesFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_mapFragment_to_notificationAreaFragment"
-            app:destination="@id/notificationAreaFragment" />
+            app:destination="@id/notificationAreaFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/supportProjectFragment"
@@ -83,7 +92,11 @@
         android:label="AuthMethodsFragment">
         <action
             android:id="@+id/action_authMethodsFragment_to_emailAuthFragment"
-            app:destination="@id/emailAuthFragment" />
+            app:destination="@id/emailAuthFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -95,7 +108,11 @@
         android:label="EditPlaceFragment">
         <action
             android:id="@+id/action_editPlaceFragment_to_pickLocationFragment"
-            app:destination="@id/pickLocationFragment" />
+            app:destination="@id/pickLocationFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/pickLocationFragment"
