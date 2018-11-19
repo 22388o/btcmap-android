@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.repository.user
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 
 import com.bubelov.coins.api.coins.CoinsApi
@@ -36,7 +36,6 @@ import com.bubelov.coins.model.User
 import com.bubelov.coins.util.AsyncResult
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 import javax.inject.Inject

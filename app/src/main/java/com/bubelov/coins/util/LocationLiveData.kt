@@ -29,7 +29,7 @@ package com.bubelov.coins.util
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.location.LocationListener

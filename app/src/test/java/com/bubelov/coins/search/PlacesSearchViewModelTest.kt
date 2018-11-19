@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.search
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import android.content.res.Resources
 import com.bubelov.coins.model.Place

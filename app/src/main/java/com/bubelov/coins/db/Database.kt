@@ -27,11 +27,11 @@
 
 package com.bubelov.coins.db
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
-import android.arch.persistence.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.util.transaction

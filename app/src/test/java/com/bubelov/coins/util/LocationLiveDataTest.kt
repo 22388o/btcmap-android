@@ -28,7 +28,7 @@
 package com.bubelov.coins.util
 
 import android.Manifest
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.location.Location
 import android.location.LocationListener

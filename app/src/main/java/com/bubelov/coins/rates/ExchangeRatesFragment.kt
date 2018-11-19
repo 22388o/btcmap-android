@@ -27,11 +27,11 @@
 
 package com.bubelov.coins.rates
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,7 +80,7 @@ class ExchangeRatesFragment : DaggerFragment() {
             }
         }
 
-        ratesView.layoutManager = LinearLayoutManager(requireContext())
+        ratesView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
         model.currencyPair.observe(this, Observer { pair ->
             toolbar.menu.findItem(R.id.currency).title = pair.toString()

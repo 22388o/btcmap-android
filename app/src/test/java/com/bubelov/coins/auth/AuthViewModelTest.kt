@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.auth
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.blockingObserve
 import kotlinx.coroutines.Dispatchers

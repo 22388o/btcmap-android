@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.settings
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.sync.DatabaseSync

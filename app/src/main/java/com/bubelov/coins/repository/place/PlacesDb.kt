@@ -27,8 +27,8 @@
 
 package com.bubelov.coins.repository.place
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.*
 
 import com.bubelov.coins.model.Place
 import java.util.*

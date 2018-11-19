@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.util
 
-import android.arch.persistence.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
  * Run [body] in a transaction marking it as successful if it completes without exception.

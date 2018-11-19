@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.search
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.row_places_search_result.view.*
 
 class PlacesSearchResultsAdapter(
     private val itemClick: (PlacesSearchRow) -> Unit
-) : RecyclerView.Adapter<PlacesSearchResultsAdapter.ViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<PlacesSearchResultsAdapter.ViewHolder>() {
 
     private val items = mutableListOf<PlacesSearchRow>()
 
@@ -72,5 +72,5 @@ class PlacesSearchResultsAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
 }

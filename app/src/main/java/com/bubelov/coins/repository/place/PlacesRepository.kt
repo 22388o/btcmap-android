@@ -27,15 +27,14 @@
 
 package com.bubelov.coins.repository.place
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import java.util.*
 

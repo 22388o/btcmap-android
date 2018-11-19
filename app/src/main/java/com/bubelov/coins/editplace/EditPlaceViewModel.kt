@@ -27,8 +27,8 @@
 
 package com.bubelov.coins.editplace
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
 import kotlinx.coroutines.CoroutineScope

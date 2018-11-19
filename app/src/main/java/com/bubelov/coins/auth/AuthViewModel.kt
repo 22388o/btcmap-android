@@ -27,9 +27,9 @@
 
 package com.bubelov.coins.auth
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.LiveEvent
 import com.bubelov.coins.util.toSingleEvent

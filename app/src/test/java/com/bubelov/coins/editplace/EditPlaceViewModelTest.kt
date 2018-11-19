@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.editplace
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.util.blockingObserve

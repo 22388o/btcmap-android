@@ -28,10 +28,10 @@
 package com.bubelov.coins.auth
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.util.Pair
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.core.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,13 +55,13 @@ class EmailAuthFragment : DaggerFragment() {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
     }
 
-    private inner class TabsAdapter internal constructor(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        private val pages = listOf<Pair<Fragment, String>>(
+    private inner class TabsAdapter internal constructor(fm: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {
+        private val pages = listOf<Pair<androidx.fragment.app.Fragment, String>>(
             Pair(EmailSignInFragment(), getString(R.string.sign_in)),
             Pair(EmailSignUpFragment(), getString(R.string.sign_up))
         )
 
-        override fun getItem(position: Int): Fragment {
+        override fun getItem(position: Int): androidx.fragment.app.Fragment {
             return pages[position].first!!
         }
 

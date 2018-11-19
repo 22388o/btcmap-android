@@ -27,9 +27,9 @@
 
 package com.bubelov.coins.search
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import android.content.SharedPreferences
 import android.content.res.Resources
 import com.bubelov.coins.R

@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.util
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 
 open class StringPreferenceLiveData(

@@ -27,8 +27,8 @@
 
 package com.bubelov.coins.repository
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MutableLiveData
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.repository.place.PlacesApi
 import com.bubelov.coins.repository.place.PlacesAssetsCache

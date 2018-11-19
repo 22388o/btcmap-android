@@ -27,8 +27,8 @@
 
 package com.bubelov.coins.sync
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Constraints
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -41,8 +41,8 @@ class DatabaseSyncScheduler @Inject constructor() {
     fun schedule() {
         val lifecycleOwner = ProcessLifecycleOwner.get()
 
-        WorkManager.getInstance().getStatusesByTagLiveData(TAG).observe(lifecycleOwner, Observer { statuses ->
-            if (statuses.isNullOrEmpty()) {
+        WorkManager.getInstance().getWorkInfosByTagLiveData(TAG).observe(lifecycleOwner, Observer { info ->
+            if (info.isNullOrEmpty()) {
                 val constraints = Constraints.Builder()
                     .setRequiresBatteryNotLow(true)
                     .build()

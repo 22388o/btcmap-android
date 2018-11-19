@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.notificationarea
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository

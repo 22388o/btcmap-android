@@ -27,15 +27,14 @@
 
 package com.bubelov.coins.rates
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
 import com.bubelov.coins.repository.rate.ExchangeRatesSource
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.Main
 import java.text.NumberFormat
 import javax.inject.Inject
 
@@ -44,7 +43,7 @@ class ExchangeRatesViewModel @Inject constructor(
 ) : ViewModel() {
     private val mainJob = Job()
     private var fetchRatesJob = Job()
-    private val uiScope = CoroutineScope(kotlinx.coroutines.Dispatchers.Main + mainJob)
+    private val uiScope = CoroutineScope(Dispatchers.Main + mainJob)
 
     private val _currencyPair = MutableLiveData<CurrencyPair>()
     val currencyPair: LiveData<CurrencyPair> = _currencyPair

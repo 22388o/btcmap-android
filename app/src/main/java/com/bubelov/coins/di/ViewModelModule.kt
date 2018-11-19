@@ -27,8 +27,8 @@
 
 package com.bubelov.coins.di
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.bubelov.coins.auth.AuthViewModel
 import com.bubelov.coins.editplace.EditPlaceViewModel
 import com.bubelov.coins.map.MapViewModel

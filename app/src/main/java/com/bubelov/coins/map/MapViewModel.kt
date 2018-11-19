@@ -27,10 +27,10 @@
 
 package com.bubelov.coins.map
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.model.Place

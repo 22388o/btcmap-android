@@ -27,7 +27,7 @@
 
 package com.bubelov.coins.settings
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.model.SyncLogEntry
 import com.bubelov.coins.repository.place.PlacesRepository
