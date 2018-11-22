@@ -74,7 +74,7 @@ class PlacesSearchFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        list.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+        list.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = PlacesSearchResultsAdapter {
             resultsModel.pickedPlaceId.value = it.placeId

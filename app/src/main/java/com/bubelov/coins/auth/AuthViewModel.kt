@@ -83,7 +83,13 @@ class AuthViewModel @Inject constructor(
         return uiScope.launch {
             try {
                 _showProgress.value = true
-                block()
+
+                try {
+                    block()
+                    _authorized.value = true
+                } catch (error: Throwable) {
+                    _errorMessage.value = error.message
+                }
             } catch (error: Exception) {
                 _errorMessage.value = error.message
             } finally {

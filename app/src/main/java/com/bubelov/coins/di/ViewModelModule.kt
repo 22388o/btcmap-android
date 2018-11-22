@@ -29,6 +29,7 @@ package com.bubelov.coins.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.auth.AuthViewModel
 import com.bubelov.coins.editplace.EditPlaceViewModel
 import com.bubelov.coins.map.MapViewModel
@@ -82,6 +83,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AuthViewModel::class)
     internal abstract fun bindAuthViewModel(authViewModel: AuthViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AuthResultViewModel::class)
+    internal abstract fun bindAuthResultViewModel(authResultViewModel: AuthResultViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

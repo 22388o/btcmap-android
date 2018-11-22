@@ -46,6 +46,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
+import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.search.PlacesSearchResultsViewModel
 import com.bubelov.coins.util.*
@@ -74,8 +75,12 @@ class MapFragment :
         viewModelProvider(modelFactory) as MapViewModel
     }
 
-    private val placesSearchResultsModel by lazy {
+    private val placesSearchResultModel by lazy {
         activityViewModelProvider(modelFactory) as PlacesSearchResultsViewModel
+    }
+
+    private val authResultModel by lazy {
+        activityViewModelProvider(modelFactory) as AuthResultViewModel
     }
 
     private lateinit var drawerHeader: View
@@ -196,9 +201,13 @@ class MapFragment :
             }
         })
 
-        placesSearchResultsModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
+        placesSearchResultModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
             model.navigateToNextSelectedPlace = true
             model.selectPlace(id ?: 0)
+        })
+
+        authResultModel.authorized.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(requireContext(), "Authorized", Toast.LENGTH_SHORT).show()
         })
 
         model.openSignInScreen.observe(viewLifecycleOwner, Observer {

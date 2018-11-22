@@ -39,6 +39,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
+import com.bubelov.coins.util.activityViewModelProvider
 import com.bubelov.coins.util.viewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -48,7 +49,14 @@ import javax.inject.Inject
 
 class AuthMethodsFragment : DaggerFragment() {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
-    val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
+
+    private val model by lazy {
+        viewModelProvider(modelFactory) as AuthViewModel
+    }
+
+    private val resultModel by lazy {
+        activityViewModelProvider(modelFactory) as AuthResultViewModel
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,20 +92,21 @@ class AuthMethodsFragment : DaggerFragment() {
             findNavController().navigate(R.id.action_authMethodsFragment_to_emailAuthFragment)
         }
 
-        model.showProgress.observe(this, Observer { show ->
+        model.showProgress.observe(viewLifecycleOwner, Observer { show ->
             viewSwitcher.displayedChild = when (show) {
                 true -> 1
                 else -> 0
             }
         })
 
-        model.authorized.observe(this, Observer { authorized ->
+        model.authorized.observe(viewLifecycleOwner, Observer { authorized ->
             if (authorized == true) {
+                resultModel.onAuthSuccess()
                 findNavController().popBackStack()
             }
         })
 
-        model.errorMessage.observe(this, Observer {
+        model.errorMessage.observe(viewLifecycleOwner, Observer {
             it?.let { message ->
                 AlertDialog.Builder(requireContext())
                     .setMessage(message)
