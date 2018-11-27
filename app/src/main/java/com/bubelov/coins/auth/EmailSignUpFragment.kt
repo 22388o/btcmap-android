@@ -37,8 +37,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 
 import com.bubelov.coins.R
+import com.bubelov.coins.util.activityViewModelProvider
 import com.bubelov.coins.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_email_sign_up.*
@@ -47,7 +49,14 @@ import javax.inject.Inject
 
 class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
-    private val model by lazy { viewModelProvider(modelFactory) as AuthViewModel }
+
+    private val model by lazy {
+        viewModelProvider(modelFactory) as AuthViewModel
+    }
+
+    private val resultModel by lazy {
+        activityViewModelProvider(modelFactory) as AuthResultViewModel
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +86,14 @@ class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
         })
 
         model.authorized.observe(this, Observer { authorized ->
-            // TODO
+            if (authorized == true) {
+                resultModel.onAuthSuccess()
+
+                findNavController().popBackStack(
+                    R.id.mapFragment,
+                    true
+                )
+            }
         })
 
         model.errorMessage.observe(this, Observer {

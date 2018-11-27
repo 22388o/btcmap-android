@@ -55,13 +55,15 @@ class EmailAuthFragment : DaggerFragment() {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
     }
 
-    private inner class TabsAdapter internal constructor(fm: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {
-        private val pages = listOf<Pair<androidx.fragment.app.Fragment, String>>(
+    private inner class TabsAdapter internal constructor(fragmentManager: FragmentManager) :
+        FragmentPagerAdapter(fragmentManager) {
+
+        private val pages = listOf<Pair<Fragment, String>>(
             Pair(EmailSignInFragment(), getString(R.string.sign_in)),
             Pair(EmailSignUpFragment(), getString(R.string.sign_up))
         )
 
-        override fun getItem(position: Int): androidx.fragment.app.Fragment {
+        override fun getItem(position: Int): Fragment {
             return pages[position].first!!
         }
 

@@ -207,7 +207,7 @@ class MapFragment :
         })
 
         authResultModel.authorized.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(requireContext(), "Authorized", Toast.LENGTH_SHORT).show()
+            updateDrawerHeader()
         })
 
         model.openSignInScreen.observe(viewLifecycleOwner, Observer {
@@ -248,10 +248,6 @@ class MapFragment :
                 R.string.your_edits_have_been_submitted,
                 Toast.LENGTH_LONG
             ).show()
-        }
-
-        if (requestCode == REQUEST_SIGN_IN && resultCode == Activity.RESULT_OK) {
-            updateDrawerHeader()
         }
 
         super.onActivityResult(requestCode, resultCode, data)
@@ -433,7 +429,6 @@ class MapFragment :
         private const val REQUEST_ACCESS_LOCATION = 20
         private const val REQUEST_ADD_PLACE = 40
         private const val REQUEST_EDIT_PLACE = 50
-        private const val REQUEST_SIGN_IN = 60
 
         private const val DEFAULT_MAP_ZOOM = 15f
     }
