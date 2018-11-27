@@ -11,6 +11,7 @@
         android:label="CheckPlayServicesFragment">
         <action
             android:id="@+id/action_checkPlayServicesFragment_to_mapFragment"
+            app:clearTask="true"
             app:destination="@id/mapFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
