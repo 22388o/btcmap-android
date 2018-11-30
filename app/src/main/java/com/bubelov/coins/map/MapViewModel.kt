@@ -113,6 +113,8 @@ class MapViewModel @Inject constructor(
 
     var initializedLocation = false
 
+    private var postAuthAction = PostAuthAction.DO_NOTHING
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
@@ -129,12 +131,14 @@ class MapViewModel @Inject constructor(
         if (userRepository.signedIn()) {
             _openAddPlaceScreen.call()
         } else {
+            postAuthAction = PostAuthAction.ADD_PLACE
             _openSignInScreen.call()
         }
     }
 
     fun onEditPlaceClick() {
         if (userRepository.signedIn()) {
+            postAuthAction = PostAuthAction.EDIT_SELECTED_PLACE
             _openEditPlaceScreen.call()
         } else {
             _openSignInScreen.call()
@@ -145,6 +149,7 @@ class MapViewModel @Inject constructor(
         if (userRepository.signedIn()) {
             callback?.showUserProfile()
         } else {
+            postAuthAction = PostAuthAction.DO_NOTHING
             _openSignInScreen.call()
         }
     }
@@ -186,6 +191,22 @@ class MapViewModel @Inject constructor(
         if (selectedPlace.value == null) {
             location.value?.let { _moveMapToLocation.value = it }
             initializedLocation = true
+        }
+    }
+
+    fun onAuthSuccess() {
+        when (postAuthAction) {
+            PostAuthAction.DO_NOTHING -> {
+                // Do nothing :)
+            }
+
+            PostAuthAction.ADD_PLACE -> {
+                _openAddPlaceScreen.call()
+            }
+
+            PostAuthAction.EDIT_SELECTED_PLACE -> {
+                _openEditPlaceScreen.call()
+            }
         }
     }
 

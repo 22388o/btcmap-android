@@ -41,6 +41,7 @@ import androidx.navigation.fragment.findNavController
 
 import com.bubelov.coins.R
 import com.bubelov.coins.util.activityViewModelProvider
+import com.bubelov.coins.util.hideKeyboard
 import com.bubelov.coins.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_email_sign_up.*
@@ -70,6 +71,8 @@ class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
         last_name.setOnEditorActionListener(this)
 
         sign_up.setOnClickListener {
+            requireContext().hideKeyboard(it)
+
             signUp(
                 email.text.toString(),
                 password.text.toString(),
@@ -89,10 +92,10 @@ class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
             if (authorized == true) {
                 resultModel.onAuthSuccess()
 
-                findNavController().popBackStack(
-                    R.id.mapFragment,
-                    true
-                )
+                findNavController().apply {
+                    popBackStack()
+                    popBackStack()
+                }
             }
         })
 

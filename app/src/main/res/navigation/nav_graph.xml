@@ -139,6 +139,15 @@
     <fragment
         android:id="@+id/emailAuthFragment"
         android:name="com.bubelov.coins.auth.EmailAuthFragment"
-        android:label="EmailAuthFragment" />
+        android:label="EmailAuthFragment">
+        <action
+            android:id="@+id/action_emailAuthFragment_to_mapFragment"
+            app:clearTask="true"
+            app:destination="@id/mapFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
 
 </navigation>

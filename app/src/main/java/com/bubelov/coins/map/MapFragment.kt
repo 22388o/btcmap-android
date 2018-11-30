@@ -208,6 +208,7 @@ class MapFragment :
 
         authResultModel.authorized.observe(viewLifecycleOwner, Observer {
             updateDrawerHeader()
+            model.onAuthSuccess()
         })
 
         model.openSignInScreen.observe(viewLifecycleOwner, Observer {
