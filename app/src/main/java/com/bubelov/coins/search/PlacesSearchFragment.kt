@@ -77,7 +77,7 @@ class PlacesSearchFragment : DaggerFragment() {
         list.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = PlacesSearchResultsAdapter {
-            resultsModel.pickedPlaceId.value = it.placeId
+            resultsModel.pickPlace(it.placeId)
             findNavController().popBackStack()
         }
 

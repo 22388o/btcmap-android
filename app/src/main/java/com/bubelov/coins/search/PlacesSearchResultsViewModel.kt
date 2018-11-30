@@ -27,10 +27,16 @@
 
 package com.bubelov.coins.search
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bubelov.coins.util.LiveEvent
+import com.bubelov.coins.util.toSingleEvent
 import javax.inject.Inject
 
 class PlacesSearchResultsViewModel @Inject constructor() : ViewModel() {
-    val pickedPlaceId = MutableLiveData<Long>()
+    private val _pickedPlaceId = LiveEvent<Long>()
+    val pickedPlaceId = _pickedPlaceId.toSingleEvent()
+
+    fun pickPlace(id: Long) {
+        _pickedPlaceId.value = id
+    }
 }
