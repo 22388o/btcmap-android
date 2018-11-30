@@ -72,7 +72,7 @@ class MapFragment :
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
 
     private val model by lazy {
-        viewModelProvider(modelFactory) as MapViewModel
+        activityViewModelProvider(modelFactory) as MapViewModel
     }
 
     private val placesSearchResultModel by lazy {

@@ -101,6 +101,10 @@ class LocationLiveData @Inject constructor(
     }
 
     fun onLocationPermissionGranted() {
+        if (value != null) {
+            return
+        }
+
         val lastKnownLocation = getLastKnownLocation()
 
         if (lastKnownLocation != null) {

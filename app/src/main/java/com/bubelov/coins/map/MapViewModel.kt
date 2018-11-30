@@ -166,7 +166,11 @@ class MapViewModel @Inject constructor(
 
     fun onLocationPermissionGranted() {
         location.onLocationPermissionGranted()
-        location.value?.let { _moveMapToLocation.value = it }
+
+        if (!initializedLocation) {
+            location.value?.let { _moveMapToLocation.value = it }
+            initializedLocation = true
+        }
     }
 
     fun onMapReady() {
