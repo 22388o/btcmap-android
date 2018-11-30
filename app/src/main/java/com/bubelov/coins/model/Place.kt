@@ -27,11 +27,13 @@
 
 package com.bubelov.coins.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 @Entity
 data class Place(
     @PrimaryKey
@@ -49,4 +51,4 @@ data class Place(
     val openingHours: String,
     val visible: Boolean,
     val updatedAt: Date
-) : Serializable
+) : Parcelable

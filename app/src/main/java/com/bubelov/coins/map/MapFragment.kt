@@ -216,11 +216,14 @@ class MapFragment :
         })
 
         model.openAddPlaceScreen.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
+            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(null)
+            findNavController().navigate(action)
         })
 
         model.openEditPlaceScreen.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.action_mapFragment_to_editPlaceFragment)
+            val selectedPlace = model.selectedPlace.value ?: return@Observer
+            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(selectedPlace)
+            findNavController().navigate(action)
         })
 
         model.requestLocationPermissions.observe(viewLifecycleOwner, Observer {

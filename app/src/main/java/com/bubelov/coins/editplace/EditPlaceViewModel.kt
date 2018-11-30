@@ -27,10 +27,13 @@
 
 package com.bubelov.coins.editplace
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.util.LiveEvent
+import com.bubelov.coins.util.toSingleEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -45,39 +48,39 @@ class EditPlaceViewModel @Inject constructor(
     private val job = Job()
     private val uiScope = CoroutineScope(coroutineContext + job)
 
-    lateinit var place: Place
+    private val _showProgress = MutableLiveData<Boolean>()
+    val showProgress: LiveData<Boolean> = _showProgress
 
-    val showProgress = MutableLiveData<Boolean>()
+    private val _changesSubmitted = LiveEvent<Unit>()
+    val changesSubmitted = _changesSubmitted.toSingleEvent()
 
-    val changesSubmitted = MutableLiveData<Boolean>()
-
-    val errorMessage = MutableLiveData<String>()
-
-    fun setUp(place: Place) {
-        this.place = place
-    }
+    private val _error = LiveEvent<String>()
+    val error = _error.toSingleEvent()
 
     override fun onCleared() {
         super.onCleared()
         job.cancel()
     }
 
-    fun submitChanges() {
+    fun submitChanges(
+        originalPlace: Place?,
+        updatedPlace: Place
+    ) {
         uiScope.launch {
-            showProgress.value = true
+            _showProgress.value = true
 
             try {
-                if (place.id == 0L) {
-                    placesRepository.addPlace(place)
+                if (originalPlace == null) {
+                    placesRepository.addPlace(updatedPlace)
                 } else {
-                    placesRepository.updatePlace(place)
+                    placesRepository.updatePlace(updatedPlace)
                 }
 
-                changesSubmitted.value = true
+                _changesSubmitted.call()
             } catch (error: Exception) {
-                errorMessage.value = error.message
+                _error.value = error.message
             } finally {
-                showProgress.value = false
+                _showProgress.value = false
             }
         }
     }

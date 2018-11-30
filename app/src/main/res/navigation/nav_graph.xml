@@ -107,6 +107,10 @@
         android:id="@+id/editPlaceFragment"
         android:name="com.bubelov.coins.editplace.EditPlaceFragment"
         android:label="EditPlaceFragment">
+        <argument
+            android:name="place"
+            app:argType="com.bubelov.coins.model.Place"
+            app:nullable="true" />
         <action
             android:id="@+id/action_editPlaceFragment_to_pickLocationFragment"
             app:destination="@id/pickLocationFragment"

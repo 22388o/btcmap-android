@@ -38,7 +38,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -71,37 +70,35 @@ class EditPlaceViewModelTest {
 
         whenever(placesRepository.addPlace(place)).thenReturn(place)
 
-        model.setUp(place)
-        model.submitChanges()
+        model.submitChanges(null, place)
+        model.changesSubmitted.blockingObserve()
 
-        assertTrue(model.changesSubmitted.blockingObserve())
         verify(placesRepository).addPlace(place)
         verify(placesRepository, never()).updatePlace(place)
     }
 
     @Test
     fun updateExistingPlace() = runBlocking<Unit> {
-        val place = emptyPlace().copy(
+        val originalPlace = emptyPlace().copy(
             id = 50,
             name = "Crypto Library"
         )
 
-        whenever(placesRepository.updatePlace(place)).thenReturn(place)
+        val updatedPlace = originalPlace.copy(name = "Crypto Exchange")
 
-        model.setUp(place)
-        model.submitChanges()
+        whenever(placesRepository.updatePlace(updatedPlace)).thenReturn(updatedPlace)
 
-        assertTrue(model.changesSubmitted.blockingObserve())
-        verify(placesRepository).updatePlace(place)
-        verify(placesRepository, never()).addPlace(place)
+        model.submitChanges(originalPlace, updatedPlace)
+        model.changesSubmitted.blockingObserve()
+
+        verify(placesRepository).updatePlace(updatedPlace)
+        verify(placesRepository, never()).addPlace(any())
     }
 
     @Test
     fun handleFailure() = runBlocking {
         whenever(placesRepository.addPlace(any())).thenThrow(IllegalStateException("Test"))
-
-        model.setUp(emptyPlace())
-        model.submitChanges()
-        Assert.assertNotNull(model.errorMessage.blockingObserve())
+        model.submitChanges(null, emptyPlace())
+        Assert.assertNotNull(model.error.blockingObserve())
     }
 }

@@ -39,18 +39,20 @@ import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
+import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.toLatLng
 import com.bubelov.coins.util.toLocation
 import com.bubelov.coins.util.viewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit_place.*
+import java.util.*
 import javax.inject.Inject
 
 class EditPlaceFragment : DaggerFragment() {
@@ -80,9 +82,9 @@ class EditPlaceFragment : DaggerFragment() {
             true
         }
 
-        val place = model.place
+        val place = EditPlaceFragmentArgs.fromBundle(arguments).place
 
-        if (place.id == 0L) {
+        if (place == null) {
             toolbar.setTitle(R.string.action_add_place)
             closed_switch.visibility = View.GONE
         } else {
@@ -93,7 +95,7 @@ class EditPlaceFragment : DaggerFragment() {
             opening_hours.setText(place.openingHours)
         }
 
-        (childFragmentManager.findFragmentById(R.id.map) as MapFragment).getMapAsync {
+        (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync {
             map.value = it
         }
 
@@ -119,23 +121,21 @@ class EditPlaceFragment : DaggerFragment() {
 
             map.uiSettings.setAllGesturesEnabled(false)
 
-            setMarker(map, LatLng(place.latitude, place.longitude).toLocation())
+            setMarker(map, LatLng(place?.latitude ?: 0.0, place?.longitude ?: 0.0).toLocation())
 
             map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
-                    LatLng(place.latitude, place.longitude),
+                    LatLng(place?.latitude ?: 0.0, place?.longitude ?: 0.0),
                     15f
                 )
             )
         })
 
-        model.changesSubmitted.observe(this, Observer { success ->
-            if (success == true) {
-                findNavController().popBackStack()
-            }
+        model.changesSubmitted.observe(this, Observer {
+            findNavController().popBackStack()
         })
 
-        model.errorMessage.observe(this, Observer { message ->
+        model.error.observe(this, Observer { message ->
             AlertDialog.Builder(requireContext())
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
@@ -155,8 +155,6 @@ class EditPlaceFragment : DaggerFragment() {
     }
 
     private fun submit() {
-        syncUIWithModel()
-
         if (name.length() == 0) {
             AlertDialog.Builder(requireContext())
                 .setMessage(R.string.name_is_not_specified)
@@ -166,19 +164,25 @@ class EditPlaceFragment : DaggerFragment() {
             return
         }
 
-        model.submitChanges()
+        model.submitChanges(EditPlaceFragmentArgs.fromBundle(arguments).place, getUpdatedPlace())
     }
 
-    private fun syncUIWithModel() {
-        model.place = model.place.copy(
-            visible = !closed_switch.isChecked,
+    private fun getUpdatedPlace(): Place {
+        return Place(
+            id = EditPlaceFragmentArgs.fromBundle(arguments).place?.id ?: 0L,
             name = name.text.toString(),
-            description = description.text.toString(),
             latitude = map.value?.cameraPosition?.target?.latitude ?: 0.0,
             longitude = map.value?.cameraPosition?.target?.longitude ?: 0.0,
             phone = phone.text.toString(),
             website = website.text.toString(),
-            openingHours = opening_hours.text.toString()
+            category = "TODO", // TODO
+            description = description.text.toString(),
+            currencies = arrayListOf("BTC"),
+            openedClaims = 0, // TODO
+            closedClaims = 0, // TODO
+            openingHours = opening_hours.text.toString(),
+            visible = !closed_switch.isChecked,
+            updatedAt = Date()
         )
     }
 }
