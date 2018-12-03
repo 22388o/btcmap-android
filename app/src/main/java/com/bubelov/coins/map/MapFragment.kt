@@ -271,9 +271,7 @@ class MapFragment :
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        when (id) {
+        when (item.itemId) {
             R.id.action_add -> model.onAddPlaceClick()
 
             R.id.action_search -> {

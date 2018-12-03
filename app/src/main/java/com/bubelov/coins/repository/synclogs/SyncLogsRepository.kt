@@ -35,13 +35,11 @@ import javax.inject.Singleton
 
 @Singleton
 class SyncLogsRepository @Inject constructor(
-        private val preferences: SharedPreferences,
-        private val gson: Gson
+    private val preferences: SharedPreferences,
+    private val gson: Gson
 ) {
     fun all(): List<SyncLogEntry> {
-        val json = preferences.getString(SYNC_LOGS_KEY, "")
-
-        return when (json) {
+        return when (val json = preferences.getString(SYNC_LOGS_KEY, "")) {
             "" -> emptyList()
             else -> gson.fromJson(json, SyncLog::class.java).entries
         }
