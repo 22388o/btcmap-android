@@ -314,10 +314,12 @@ class MapFragment :
 
         this.map = map
 
-        map.uiSettings.isMyLocationButtonEnabled = false
-        map.uiSettings.isZoomControlsEnabled = false
-        map.uiSettings.isCompassEnabled = false
-        map.uiSettings.isMapToolbarEnabled = false
+        map.uiSettings.apply {
+            isMyLocationButtonEnabled = false
+            isZoomControlsEnabled = false
+            isCompassEnabled = false
+            isMapToolbarEnabled = false
+        }
 
         initClustering(map)
 
