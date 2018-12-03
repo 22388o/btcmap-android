@@ -55,7 +55,7 @@ abstract class FragmentBuilder {
     abstract fun contributeMapFragmentInjector(): MapFragment
 
     @ContributesAndroidInjector(modules = [AuthModule::class])
-    abstract fun contributeAuthMethodsFragmentInjector(): AuthMethodsFragment
+    abstract fun contributeAuthFragmentInjector(): AuthFragment
 
     @ContributesAndroidInjector(modules = [AuthModule::class])
     abstract fun contributeEmailAuthFragmentInjector(): EmailAuthFragment

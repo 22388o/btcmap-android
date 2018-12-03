@@ -212,7 +212,7 @@ class MapFragment :
         })
 
         model.openSignInScreen.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.action_mapFragment_to_authMethodsFragment)
+            findNavController().navigate(R.id.action_mapFragment_to_authFragment)
         })
 
         model.openAddPlaceScreen.observe(viewLifecycleOwner, Observer {

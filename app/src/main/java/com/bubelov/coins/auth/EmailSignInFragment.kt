@@ -37,6 +37,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 
 import com.bubelov.coins.R
@@ -70,21 +71,14 @@ class EmailSignInFragment : DaggerFragment(), TextView.OnEditorActionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         password.setOnEditorActionListener(this)
 
-        sign_in.setOnClickListener {
+        signIn.setOnClickListener {
             requireContext().hideKeyboard(it)
             signIn()
         }
 
-        model.showProgress.observe(this, Observer { show ->
-            sign_in_panel.visibility = when (show) {
-                true -> View.GONE
-                else -> View.VISIBLE
-            }
-
-            progress.visibility = when (show) {
-                true -> View.VISIBLE
-                else -> View.GONE
-            }
+        model.showProgress.observe(this, Observer { showProgress ->
+            progress.isVisible = showProgress
+            signInForm.isVisible = !showProgress
         })
 
         model.authorized.observe(this, Observer { authorized ->

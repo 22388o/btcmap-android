@@ -37,8 +37,8 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
         <action
-            android:id="@+id/action_mapFragment_to_authMethodsFragment"
-            app:destination="@id/authMethodsFragment"
+            android:id="@+id/action_mapFragment_to_authFragment"
+            app:destination="@id/authFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -88,11 +88,11 @@
         android:name="com.bubelov.coins.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
-        android:id="@+id/authMethodsFragment"
-        android:name="com.bubelov.coins.auth.AuthMethodsFragment"
-        android:label="AuthMethodsFragment">
+        android:id="@+id/authFragment"
+        android:name="com.bubelov.coins.auth.AuthFragment"
+        android:label="AuthFragment">
         <action
-            android:id="@+id/action_authMethodsFragment_to_emailAuthFragment"
+            android:id="@+id/action_authFragment_to_emailAuthFragment"
             app:destination="@id/emailAuthFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"

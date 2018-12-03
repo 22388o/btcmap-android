@@ -51,7 +51,7 @@ class EmailAuthFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pager.adapter = TabsAdapter(childFragmentManager)
-        tab_layout.setupWithViewPager(pager)
+        tabLayout.setupWithViewPager(pager)
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
     }
 
@@ -71,8 +71,6 @@ class EmailAuthFragment : DaggerFragment() {
             return pages[position].second!!
         }
 
-        override fun getCount(): Int {
-            return pages.size
-        }
+        override fun getCount() = pages.size
     }
 }

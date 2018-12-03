@@ -36,6 +36,7 @@ import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
@@ -44,10 +45,10 @@ import com.bubelov.coins.util.viewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_auth_methods.*
+import kotlinx.android.synthetic.main.fragment_auth.*
 import javax.inject.Inject
 
-class AuthMethodsFragment : DaggerFragment() {
+class AuthFragment : DaggerFragment() {
     @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
 
     private val model by lazy {
@@ -63,44 +64,42 @@ class AuthMethodsFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_auth_methods, container, false)
+        return inflater.inflate(R.layout.fragment_auth, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        signInWithGoogle.setOnClickListener {
+        googleAuth.setOnClickListener {
             if (BuildConfig.MOCK_API) {
                 model.signIn("GOOGLE")
                 return@setOnClickListener
             }
 
-            val googleSingInOptions =
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
-                    .requestEmail()
-                    .build()
+            val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
+                .requestEmail()
+                .build()
 
-            val googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSingInOptions)
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), signInOptions)
+
             startActivityForResult(
                 googleSignInClient.signInIntent,
                 GOOGLE_SIGN_IN_REQUEST
             )
         }
 
-        signInWithEmail.setOnClickListener {
-            findNavController().navigate(R.id.action_authMethodsFragment_to_emailAuthFragment)
+        emailAuth.setOnClickListener {
+            findNavController().navigate(R.id.action_authFragment_to_emailAuthFragment)
         }
 
-        model.showProgress.observe(viewLifecycleOwner, Observer { show ->
-            viewSwitcher.displayedChild = when (show) {
-                true -> 1
-                else -> 0
-            }
+        model.showProgress.observe(viewLifecycleOwner, Observer { showProgress ->
+            progress.isVisible = showProgress
+            signInForm.isVisible = !showProgress
         })
 
         model.authorized.observe(viewLifecycleOwner, Observer { authorized ->
-            if (authorized == true) {
+            if (authorized) {
                 resultModel.onAuthSuccess()
                 findNavController().popBackStack()
             }
@@ -120,7 +119,8 @@ class AuthMethodsFragment : DaggerFragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST && resultCode == Activity.RESULT_OK) {
-            model.signIn(GoogleSignIn.getSignedInAccountFromIntent(data).result.idToken ?: "")
+            val token = GoogleSignIn.getSignedInAccountFromIntent(data).result.idToken
+            model.signIn(token ?: "")
         }
     }
 

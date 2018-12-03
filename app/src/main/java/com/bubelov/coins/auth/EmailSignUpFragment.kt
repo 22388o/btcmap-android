@@ -37,6 +37,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 
 import com.bubelov.coins.R
@@ -68,7 +69,7 @@ class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        last_name.setOnEditorActionListener(this)
+        lastName.setOnEditorActionListener(this)
 
         sign_up.setOnClickListener {
             requireContext().hideKeyboard(it)
@@ -76,20 +77,18 @@ class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
             signUp(
                 email.text.toString(),
                 password.text.toString(),
-                first_name.text.toString(),
-                last_name.text.toString()
+                firstName.text.toString(),
+                lastName.text.toString()
             )
         }
 
-        model.showProgress.observe(this, Observer { show ->
-            state_switcher.displayedChild = when (show) {
-                true -> 1
-                else -> 0
-            }
+        model.showProgress.observe(this, Observer { showProgress ->
+            progress.isVisible = showProgress
+            signUpForm.isVisible = !showProgress
         })
 
         model.authorized.observe(this, Observer { authorized ->
-            if (authorized == true) {
+            if (authorized) {
                 resultModel.onAuthSuccess()
 
                 findNavController().apply {
@@ -114,8 +113,8 @@ class EmailSignUpFragment : DaggerFragment(), TextView.OnEditorActionListener {
             signUp(
                 email.text.toString(),
                 password.text.toString(),
-                first_name.text.toString(),
-                last_name.text.toString()
+                firstName.text.toString(),
+                lastName.text.toString()
             )
 
             return true
