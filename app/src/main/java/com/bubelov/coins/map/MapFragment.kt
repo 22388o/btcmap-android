@@ -308,6 +308,10 @@ class MapFragment :
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
+        if (view == null) {
+            return
+        }
+
         this.map = map
 
         map.uiSettings.isMyLocationButtonEnabled = false
