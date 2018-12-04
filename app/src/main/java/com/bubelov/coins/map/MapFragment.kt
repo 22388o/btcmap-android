@@ -231,6 +231,11 @@ class MapFragment :
         })
     }
 
+    override fun onDestroyView() {
+        map?.clear()
+        super.onDestroyView()
+    }
+
     override fun onResume() {
         super.onResume()
         drawerToggle.syncState()

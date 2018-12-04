@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -111,7 +112,7 @@ class MapViewModel @Inject constructor(
     private val _requestLocationPermissions = LiveEvent<Void>()
     val requestLocationPermissions = _requestLocationPermissions.toSingleEvent()
 
-    var initializedLocation = false
+    private var initializedLocation = false
 
     private var postAuthAction = PostAuthAction.DO_NOTHING
 
@@ -121,8 +122,12 @@ class MapViewModel @Inject constructor(
     }
 
     fun selectPlace(id: Long) {
+        Timber.d("Selecting place with id = $id")
+
         uiScope.launch {
             val place = placesRepository.find(id)
+            Timber.d("Loaded place by id, result: $place")
+            Timber.d("Previously selected place: ${_selectedPlace.value}")
             _selectedPlace.value = place
         }
     }
