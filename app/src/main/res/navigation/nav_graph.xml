@@ -111,6 +111,10 @@
             android:name="place"
             app:argType="com.bubelov.coins.model.Place"
             app:nullable="true" />
+        <argument
+            android:name="mapLocation"
+            app:argType="com.bubelov.coins.model.Location"
+            app:nullable="false" />
         <action
             android:id="@+id/action_editPlaceFragment_to_pickLocationFragment"
             app:destination="@id/pickLocationFragment"

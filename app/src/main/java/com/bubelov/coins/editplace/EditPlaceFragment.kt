@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit_place.*
+import java.lang.IllegalStateException
 import java.util.*
 import javax.inject.Inject
 
@@ -63,8 +64,12 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
         viewModelProvider(modelFactory) as EditPlaceViewModel
     }
 
-    val place by lazy {
+    private val place by lazy {
         EditPlaceFragmentArgs.fromBundle(arguments).place
+    }
+
+    private val passedLocation by lazy {
+        EditPlaceFragmentArgs.fromBundle(arguments).mapLocation
     }
 
     private var map: GoogleMap? = null
@@ -137,11 +142,19 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
 
         map.uiSettings.setAllGesturesEnabled(false)
 
-        setMarker(map, LatLng(place?.latitude ?: 0.0, place?.longitude ?: 0.0).toLocation())
+        val place = place
+
+        val mapLocation = if (place == null) {
+            passedLocation
+        } else {
+            LatLng(place.latitude, place.longitude).toLocation()
+        }
+
+        setMarker(map, mapLocation)
 
         map.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
-                LatLng(place?.latitude ?: 0.0, place?.longitude ?: 0.0),
+                LatLng(mapLocation.latitude, mapLocation.longitude),
                 15f
             )
         )
@@ -172,18 +185,20 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     private fun getUpdatedPlace(): Place {
+        val map = map ?: throw IllegalStateException("Map is not initialized")
+
         return Place(
             id = place?.id ?: 0L,
             name = name.text.toString(),
-            latitude = map?.cameraPosition?.target?.latitude ?: 0.0,
-            longitude = map?.cameraPosition?.target?.longitude ?: 0.0,
+            latitude = map.cameraPosition.target.latitude,
+            longitude = map.cameraPosition.target.longitude,
             phone = phone.text.toString(),
             website = website.text.toString(),
-            category = "TODO", // TODO
+            category = "",
             description = description.text.toString(),
-            currencies = arrayListOf("BTC"),
-            openedClaims = 0, // TODO
-            closedClaims = 0, // TODO
+            currencies = arrayListOf(),
+            openedClaims = 0,
+            closedClaims = 0,
             openingHours = openingHours.text.toString(),
             visible = !closedSwitch.isChecked,
             updatedAt = Date()

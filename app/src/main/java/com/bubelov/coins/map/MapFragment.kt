@@ -47,6 +47,7 @@ import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
+import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.search.PlacesSearchResultsViewModel
 import com.bubelov.coins.util.*
@@ -216,13 +217,22 @@ class MapFragment :
         })
 
         model.openAddPlaceScreen.observe(viewLifecycleOwner, Observer {
-            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(null)
+            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
+                null,
+                map.getLocation()
+            )
+
             findNavController().navigate(action)
         })
 
         model.openEditPlaceScreen.observe(viewLifecycleOwner, Observer {
             val selectedPlace = model.selectedPlace.value ?: return@Observer
-            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(selectedPlace)
+
+            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
+                selectedPlace,
+                map.getLocation()
+            )
+
             findNavController().navigate(action)
         })
 
@@ -410,6 +420,13 @@ class MapFragment :
             placesManager.addItems(markers)
             placesManager.cluster()
         })
+    }
+
+    private fun GoogleMap?.getLocation(): Location {
+        return Location(
+            latitude = this?.cameraPosition?.target?.latitude ?: 0.0,
+            longitude = this?.cameraPosition?.target?.longitude ?: 0.0
+        )
     }
 
     private inner class PlacesRenderer internal constructor(
