@@ -106,12 +106,10 @@ class AuthFragment : DaggerFragment() {
         })
 
         model.errorMessage.observe(viewLifecycleOwner, Observer {
-            it?.let { message ->
-                AlertDialog.Builder(requireContext())
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show()
-            }
+            AlertDialog.Builder(requireContext())
+                .setMessage(it)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
         })
     }
 
