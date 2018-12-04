@@ -35,6 +35,8 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
@@ -52,7 +54,11 @@ class PlacesRepository @Inject constructor(
     init {
         db.count().observeForever { count ->
             if (count == 0) {
-                db.insert(assetsCache.getPlaces())
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO) {
+                        db.insert(assetsCache.getPlaces())
+                    }
+                }
             }
         }
     }

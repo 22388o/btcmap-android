@@ -45,9 +45,9 @@ abstract class Database : RoomDatabase() {
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.transaction {
-                    database.execSQL("DROP TABLE IF EXISTS places")
+                    execSQL("DROP TABLE IF EXISTS places")
 
-                    database.execSQL(
+                    execSQL(
                         "CREATE TABLE `Place` (" +
                                 "`id` INTEGER NOT NULL, " +
                                 "`name` TEXT NOT NULL, " +

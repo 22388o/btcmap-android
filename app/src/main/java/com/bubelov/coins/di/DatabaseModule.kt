@@ -41,6 +41,5 @@ class DatabaseModule {
     fun provideDatabase(context: Context) =
         Room.databaseBuilder(context, Database::class.java, "db.sqlite3").apply {
             addMigrations(Database.MIGRATION_1_2)
-            allowMainThreadQueries()
         }.build()
 }
