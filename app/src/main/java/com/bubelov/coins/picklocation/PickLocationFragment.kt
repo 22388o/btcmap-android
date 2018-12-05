@@ -27,8 +27,6 @@
 
 package com.bubelov.coins.picklocation
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,18 +35,12 @@ import androidx.navigation.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.util.toLatLng
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.*
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_pick_location.*
 
-class PickLocationFragment : DaggerFragment() {
-    private val map = MutableLiveData<GoogleMap>()
-
+class PickLocationFragment : DaggerFragment(), OnMapReadyCallback {
     private val initialLocation = Location(0.0, 0.0)
-
-    private val initialZoom = 15f
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,19 +56,30 @@ class PickLocationFragment : DaggerFragment() {
             inflateMenu(R.menu.pick_location)
 
             setOnMenuItemClickListener { item ->
-                if (item.itemId == R.id.action_done) {
-                    // TODO
-                    return@setOnMenuItemClickListener true
+                when (item.itemId) {
+                    R.id.action_done -> {
+                        findNavController().popBackStack()
+                        true
+                    }
+                    else -> false
                 }
-
-                false
             }
         }
 
-        (childFragmentManager.findFragmentById(R.id.map) as MapFragment).getMapAsync { map.value = it }
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
 
-        map.observe(this, Observer { map ->
-            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation.toLatLng(), initialZoom))
-        })
+    override fun onMapReady(map: GoogleMap) {
+        map.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                initialLocation.toLatLng(),
+                INITIAL_ZOOM
+            )
+        )
+    }
+
+    companion object {
+        const val INITIAL_ZOOM = 15f
     }
 }

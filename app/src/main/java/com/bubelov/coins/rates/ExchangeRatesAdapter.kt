@@ -37,11 +37,15 @@ import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.row_exchange_rate.view.*
 
 class ExchangeRatesAdapter(private val items: List<ExchangeRateRow>) :
-    androidx.recyclerview.widget.RecyclerView.Adapter<ExchangeRatesAdapter.ViewHolder>() {
+    RecyclerView.Adapter<ExchangeRatesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.row_exchange_rate, parent, false)
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.row_exchange_rate,
+                parent,
+                false
+            )
         )
     }
 
@@ -49,7 +53,7 @@ class ExchangeRatesAdapter(private val items: List<ExchangeRateRow>) :
 
     override fun getItemCount() = items.size
 
-    class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: ExchangeRateRow) {
             itemView.apply {
                 icon_text.text = item.iconText

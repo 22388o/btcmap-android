@@ -30,7 +30,6 @@ package com.bubelov.coins.repository.place
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -74,8 +73,6 @@ class PlacesRepository @Inject constructor(
             db.findBySearchQuery(searchQuery)
         }
     }
-
-    fun countByCurrency(currency: Currency) = db.countByCurrencyCode(currency.code)
 
     fun findRandom() = db.findRandom()
 

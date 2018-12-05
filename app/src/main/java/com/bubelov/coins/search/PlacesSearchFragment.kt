@@ -29,7 +29,6 @@ package com.bubelov.coins.search
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,10 +40,7 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import com.bubelov.coins.util.TextWatcherAdapter
-import com.bubelov.coins.util.activityViewModelProvider
-import com.bubelov.coins.util.hideKeyboard
-import com.bubelov.coins.util.showKeyboard
+import com.bubelov.coins.util.*
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_places_search.*
 import javax.inject.Inject
@@ -53,7 +49,7 @@ class PlacesSearchFragment : DaggerFragment() {
     @Inject lateinit var modelFactory: ViewModelProvider.Factory
 
     private val model by lazy {
-        ViewModelProviders.of(this, modelFactory).get(PlacesSearchViewModel::class.java).apply {
+        (viewModelProvider(modelFactory) as PlacesSearchViewModel).apply {
             val args = PlacesSearchFragmentArgs.fromBundle(arguments)
             setUp(args.location)
         }

@@ -36,6 +36,8 @@ import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,12 +61,14 @@ class PlacesRepositoryTest {
     }
 
     @Test
-    fun usesAssetsCacheWhenEmpty() {
+    fun usesAssetsCacheWhenEmpty() = runBlocking {
         whenever(placesDb.count()).thenReturn(MutableLiveData<Int>().apply { value = 0 })
         val places = listOf(emptyPlace().copy(id = 1, name = "Cafe"))
         whenever(placesAssetsCache.getPlaces()).thenReturn(places)
 
         PlacesRepository(placesApi, placesDb, placesAssetsCache)
+
+        delay(100)
 
         verify(placesAssetsCache).getPlaces()
         verify(placesDb).insert(places)

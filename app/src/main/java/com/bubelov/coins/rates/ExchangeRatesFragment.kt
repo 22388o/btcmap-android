@@ -45,7 +45,10 @@ import javax.inject.Inject
 
 class ExchangeRatesFragment : DaggerFragment() {
     @Inject lateinit var modelFactory: ViewModelProvider.Factory
-    private val model by lazy { viewModelProvider(modelFactory) as ExchangeRatesViewModel }
+
+    private val model by lazy {
+        viewModelProvider(modelFactory) as ExchangeRatesViewModel
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,14 +76,15 @@ class ExchangeRatesFragment : DaggerFragment() {
                                 model.selectCurrencyPair(items[index])
                             }
                             .show()
-                    }
-                }
 
-                true
+                        true
+                    }
+                    else -> false
+                }
             }
         }
 
-        ratesView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+        ratesView.layoutManager = LinearLayoutManager(requireContext())
 
         model.currencyPair.observe(this, Observer { pair ->
             toolbar.menu.findItem(R.id.currency).title = pair.toString()

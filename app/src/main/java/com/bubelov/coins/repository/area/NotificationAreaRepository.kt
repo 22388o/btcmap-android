@@ -55,7 +55,7 @@ class NotificationAreaRepository @Inject constructor(
         }
 
     companion object {
-        private const val NOTIFICATION_AREA_KEY = "notification_area"
+        private const val NOTIFICATION_AREA_KEY = "notificationArea"
         const val DEFAULT_RADIUS_METERS = 50000.0
     }
 }

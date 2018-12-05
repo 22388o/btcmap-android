@@ -55,9 +55,12 @@ import javax.inject.Inject
 
 class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
     @Inject lateinit var modelFactory: ViewModelProvider.Factory
-    private val model by lazy { viewModelProvider(modelFactory) as NotificationAreaViewModel }
 
-    private lateinit var map: GoogleMap
+    private val model by lazy {
+        viewModelProvider(modelFactory) as NotificationAreaViewModel
+    }
+
+    private var map: GoogleMap? = null
 
     private var marker: Marker? = null
     private var areaCircle: Circle? = null
@@ -77,23 +80,29 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
         }
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-
         mapFragment.getMapAsync(this)
 
-        radiusSeekBar.progressDrawable.setColorFilter(
-            ContextCompat.getColor(requireContext(), R.color.accent),
-            PorterDuff.Mode.SRC_IN
-        )
+        radiusSeekBar.apply {
+            progressDrawable.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.accent),
+                PorterDuff.Mode.SRC_IN
+            )
 
-        radiusSeekBar.thumb.setColorFilter(ContextCompat.getColor(requireContext(), R.color.accent), PorterDuff.Mode.SRC_IN)
+            thumb.setColorFilter(
+                ContextCompat.getColor(requireContext(), R.color.accent),
+                PorterDuff.Mode.SRC_IN
+            )
+        }
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
+    override fun onMapReady(map: GoogleMap) {
+        this.map = map
 
-        map.uiSettings.isMyLocationButtonEnabled = false
-        map.uiSettings.isZoomControlsEnabled = false
-        map.uiSettings.isCompassEnabled = false
+        map.apply {
+            uiSettings.isMyLocationButtonEnabled = false
+            uiSettings.isZoomControlsEnabled = false
+            uiSettings.isCompassEnabled = false
+        }
 
         map.setOnMarkerDragListener(OnMarkerDragListener())
 
@@ -109,10 +118,13 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     private fun showArea(area: NotificationArea) {
+        val map = map ?: return
+
         marker?.remove()
         areaCircle?.remove()
 
-        val markerDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_location)
+        val markerDescriptor =
+            BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_location)
 
         marker = map.addMarker(
             MarkerOptions()
@@ -131,9 +143,11 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
 
         areaCircle = map.addCircle(circleOptions)
 
-        radiusSeekBar.max = 500000
-        radiusSeekBar.progress = area.radius.toInt()
-        radiusSeekBar.setOnSeekBarChangeListener(SeekBarChangeListener())
+        radiusSeekBar.apply {
+            max = 500000
+            progress = area.radius.toInt()
+            setOnSeekBarChangeListener(SeekBarChangeListener())
+        }
 
         val areaCenter = LatLng(area.latitude, area.longitude)
 
@@ -164,6 +178,7 @@ class NotificationAreaFragment : DaggerFragment(), OnMapReadyCallback {
         }
 
         override fun onMarkerDrag(marker: Marker) {
+            val map = map ?: return
             val circle = areaCircle ?: return
             circle.center = marker.position
             map.animateCamera(CameraUpdateFactory.newLatLng(marker.position))

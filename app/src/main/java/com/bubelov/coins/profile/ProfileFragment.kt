@@ -56,9 +56,11 @@ class ProfileFragment : DaggerFragment(), Toolbar.OnMenuItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        toolbar.inflateMenu(R.menu.profile)
-        toolbar.setOnMenuItemClickListener(this)
+        toolbar.apply {
+            setNavigationOnClickListener { findNavController().popBackStack() }
+            inflateMenu(R.menu.profile)
+            setOnMenuItemClickListener(this@ProfileFragment)
+        }
 
         val user = userRepository.user!!
 
@@ -93,8 +95,10 @@ class ProfileFragment : DaggerFragment(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun googleSignOut() {
-        val googleSignInClient =
-            GoogleSignIn.getClient(requireContext(), GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val googleSignInClient = GoogleSignIn.getClient(
+            requireContext(),
+            GoogleSignInOptions.DEFAULT_SIGN_IN
+        )
 
         googleSignInClient.signOut().addOnCompleteListener {
             onSignOut()

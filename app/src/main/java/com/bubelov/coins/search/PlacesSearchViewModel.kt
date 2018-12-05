@@ -111,9 +111,12 @@ class PlacesSearchViewModel @Inject constructor(
         if (userLocation != null) {
             val placeLocation = Location(latitude, longitude)
             val distance = userLocation.distanceTo(placeLocation, getDistanceUnits())
-            distanceStringBuilder.append(DISTANCE_FORMAT.format(distance))
-            distanceStringBuilder.append(" ")
-            distanceStringBuilder.append(getDistanceUnits().getShortName())
+
+            distanceStringBuilder.apply {
+                append(DISTANCE_FORMAT.format(distance))
+                append(" ")
+                append(getDistanceUnits().getShortName())
+            }
         }
 
         return PlacesSearchRow(
