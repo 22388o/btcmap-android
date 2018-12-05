@@ -40,6 +40,9 @@ import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.picklocation.PickLocationResultViewModel
+import com.bubelov.coins.util.activityViewModelProvider
+import com.bubelov.coins.util.extention.getLocation
 import com.bubelov.coins.util.toLatLng
 import com.bubelov.coins.util.toLocation
 import com.bubelov.coins.util.viewModelProvider
@@ -64,6 +67,10 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
         viewModelProvider(modelFactory) as EditPlaceViewModel
     }
 
+    private val locationResultModel by lazy {
+        activityViewModelProvider(modelFactory) as PickLocationResultViewModel
+    }
+
     private val place by lazy {
         EditPlaceFragmentArgs.fromBundle(arguments).place
     }
@@ -75,6 +82,8 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
     private var map: GoogleMap? = null
 
     private var placeLocationMarker: Marker? = null
+
+    private var pickedLocation: Location? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -120,6 +129,14 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
             openingHours.isEnabled = !checked
         }
 
+        changeLocation.setOnClickListener {
+            val action = EditPlaceFragmentDirections.actionEditPlaceFragmentToPickLocationFragment(
+                map.getLocation()
+            )
+
+            findNavController().navigate(action)
+        }
+
         model.showProgress.observe(viewLifecycleOwner, Observer { showProgress ->
             content.isVisible = !showProgress
             progress.isVisible = showProgress
@@ -135,6 +152,19 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
         })
+
+        locationResultModel.pickedLocation.observe(viewLifecycleOwner, Observer {
+            it.let { location ->
+                pickedLocation = location
+
+                map?.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(location.latitude, location.longitude),
+                        MAP_ZOOM
+                    )
+                )
+            }
+        })
     }
 
     override fun onMapReady(map: GoogleMap) {
@@ -142,22 +172,37 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
 
         map.uiSettings.setAllGesturesEnabled(false)
 
-        val place = place
+        val pickedLocation = pickedLocation
 
-        val mapLocation = if (place == null) {
-            passedLocation
-        } else {
-            LatLng(place.latitude, place.longitude).toLocation()
-        }
+        if (pickedLocation != null) {
+            setMarker(map, pickedLocation)
 
-        setMarker(map, mapLocation)
-
-        map.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(mapLocation.latitude, mapLocation.longitude),
-                15f
+            map.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(pickedLocation.latitude, pickedLocation.longitude),
+                    MAP_ZOOM
+                )
             )
-        )
+        } else {
+            val place = place
+
+            val initialLocation = if (place == null) {
+                passedLocation
+            } else {
+                LatLng(place.latitude, place.longitude).toLocation()
+            }
+
+            setMarker(map, initialLocation)
+
+            map.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(initialLocation.latitude, initialLocation.longitude),
+                    MAP_ZOOM
+                )
+            )
+
+            this.pickedLocation = initialLocation
+        }
     }
 
     private fun setMarker(map: GoogleMap, location: Location) {
@@ -203,5 +248,9 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
             visible = !closedSwitch.isChecked,
             updatedAt = Date()
         )
+    }
+
+    companion object {
+        const val MAP_ZOOM = 15f
     }
 }

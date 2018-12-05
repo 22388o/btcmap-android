@@ -126,7 +126,12 @@
     <fragment
         android:id="@+id/pickLocationFragment"
         android:name="com.bubelov.coins.picklocation.PickLocationFragment"
-        android:label="PickLocationFragment" />
+        android:label="PickLocationFragment">
+        <argument
+            android:name="initialLocation"
+            app:argType="com.bubelov.coins.model.Location"
+            app:nullable="false" />
+    </fragment>
     <fragment
         android:id="@+id/placesSearchFragment"
         android:name="com.bubelov.coins.search.PlacesSearchFragment"

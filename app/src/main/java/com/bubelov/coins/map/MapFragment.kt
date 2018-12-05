@@ -49,6 +49,7 @@ import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
+import com.bubelov.coins.util.extention.getLocation
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -400,13 +401,6 @@ class MapFragment :
             placesManager.addItems(markers)
             placesManager.cluster()
         })
-    }
-
-    private fun GoogleMap?.getLocation(): Location {
-        return Location(
-            latitude = this?.cameraPosition?.target?.latitude ?: 0.0,
-            longitude = this?.cameraPosition?.target?.longitude ?: 0.0
-        )
     }
 
     private inner class PlacesRenderer internal constructor(

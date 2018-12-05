@@ -31,16 +31,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
+import com.bubelov.coins.util.activityViewModelProvider
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.*
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_pick_location.*
+import javax.inject.Inject
 
 class PickLocationFragment : DaggerFragment(), OnMapReadyCallback {
-    private val initialLocation = Location(0.0, 0.0)
+    @Inject lateinit var modelFactory: ViewModelProvider.Factory
+
+    private val resultModel by lazy {
+        activityViewModelProvider(modelFactory) as PickLocationResultViewModel
+    }
+
+    private val initialLocation by lazy {
+        PickLocationFragmentArgs.fromBundle(arguments).initialLocation
+    }
+
+    private var map: GoogleMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +71,13 @@ class PickLocationFragment : DaggerFragment(), OnMapReadyCallback {
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_done -> {
+                        val map = map ?: return@setOnMenuItemClickListener true
+
+                        resultModel.pickLocation(Location(
+                            map.cameraPosition.target.latitude,
+                            map.cameraPosition.target.longitude
+                        ))
+
                         findNavController().popBackStack()
                         true
                     }
@@ -71,6 +91,8 @@ class PickLocationFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(map: GoogleMap) {
+        this.map = map
+
         map.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 initialLocation.toLatLng(),

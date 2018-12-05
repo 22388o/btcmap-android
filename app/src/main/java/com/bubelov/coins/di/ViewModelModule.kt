@@ -34,6 +34,7 @@ import com.bubelov.coins.auth.AuthViewModel
 import com.bubelov.coins.editplace.EditPlaceViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.notificationarea.NotificationAreaViewModel
+import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.search.PlacesSearchViewModel
@@ -88,6 +89,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AuthResultViewModel::class)
     internal abstract fun bindAuthResultViewModel(authResultViewModel: AuthResultViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PickLocationResultViewModel::class)
+    internal abstract fun bindPickLocationResultViewModel(pickLocationResultViewModel: PickLocationResultViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

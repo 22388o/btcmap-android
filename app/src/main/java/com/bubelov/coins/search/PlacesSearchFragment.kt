@@ -55,7 +55,7 @@ class PlacesSearchFragment : DaggerFragment() {
         }
     }
 
-    private val resultsModel by lazy {
+    private val resultModel by lazy {
         activityViewModelProvider(modelFactory) as PlacesSearchResultViewModel
     }
 
@@ -73,7 +73,7 @@ class PlacesSearchFragment : DaggerFragment() {
         list.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = PlacesSearchResultsAdapter {
-            resultsModel.pickPlace(it.placeId)
+            resultModel.pickPlace(it.placeId)
             findNavController().popBackStack()
         }
 
