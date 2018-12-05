@@ -31,21 +31,14 @@ import android.graphics.Bitmap
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem
 
-data class PlaceMarker internal constructor(
+data class PlaceMarker(
     val placeId: Long,
     val icon: Bitmap,
-    val latitude: Double,
-    val longitude: Double
+    val latLng: LatLng
 ) : ClusterItem {
-    override fun getPosition(): LatLng {
-        return LatLng(latitude, longitude)
-    }
+    override fun getPosition() = latLng
 
-    override fun getTitle(): String {
-        return ""
-    }
+    override fun getTitle() = ""
 
-    override fun getSnippet(): String {
-        return ""
-    }
+    override fun getSnippet() = ""
 }

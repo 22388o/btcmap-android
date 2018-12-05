@@ -18,11 +18,12 @@
         tools:background="#ff0000" />
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="16dp"
         android:textColor="#ffffff"
         android:textSize="14sp"
         tools:text="Guest" />

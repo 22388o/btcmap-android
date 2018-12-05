@@ -9,14 +9,14 @@
     android:orientation="vertical">
 
     <View
-        android:id="@+id/map_header_shadow"
+        android:id="@+id/mapHeaderShadow"
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:alpha="0.5"
         android:background="@drawable/shape_place_details_shadow" />
 
     <LinearLayout
-        android:id="@+id/map_header"
+        android:id="@+id/mapHeader"
         android:layout_width="match_parent"
         android:layout_height="@dimen/map_header_height"
         android:background="@color/white"
@@ -29,14 +29,14 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingEnd="8dp"
             android:paddingStart="24dp"
+            android:paddingEnd="8dp"
             android:textColor="@color/text_primary"
             android:textSize="20sp"
             tools:text="Place name" />
 
         <ImageView
-            android:id="@+id/check_mark"
+            android:id="@+id/checkMark"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginTop="2dp"
@@ -54,7 +54,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/place_summary_toolbar"
+        android:id="@+id/placeSummaryToolbar"
         style="@style/Toolbar"
         android:layout_width="match_parent"
         app:navigationIcon="?homeAsUpIndicator" />
@@ -70,25 +70,27 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/opened_claims"
+                android:id="@+id/openedClaims"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/green_700"
-                android:paddingBottom="8dp"
-                android:paddingLeft="24dp"
+                android:paddingStart="24dp"
                 android:paddingTop="8dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="8dp"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:text="Confirmed by 1 user" />
 
             <TextView
-                android:id="@+id/closed_claims"
+                android:id="@+id/closedClaims"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/red_500"
-                android:paddingBottom="8dp"
-                android:paddingLeft="24dp"
+                android:paddingStart="24dp"
                 android:paddingTop="8dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="8dp"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:text="Marked as closed by 1 user" />
@@ -124,7 +126,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:autoLink="phone"
-                        android:paddingRight="16dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/not_provided"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
@@ -163,7 +166,8 @@
                         android:id="@+id/website"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="16dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/not_provided"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
@@ -202,7 +206,8 @@
                         android:id="@+id/description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="16dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/not_provided"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
@@ -238,10 +243,11 @@
                         android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/opening_hours"
+                        android:id="@+id/openingHours"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="16dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/not_provided"
                         android:textColor="@color/black"
                         android:textSize="18sp" />

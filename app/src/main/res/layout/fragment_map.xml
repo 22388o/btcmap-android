@@ -8,13 +8,18 @@
     android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar"
+                app:title="@string/places" />
 
             <fragment
                 android:id="@+id/map"
@@ -22,15 +27,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                style="@style/Toolbar"
-                app:title="@string/places" />
-
-        </FrameLayout>
+        </LinearLayout>
 
         <com.bubelov.coins.map.PlaceDetailsView
-            android:id="@+id/place_details"
+            android:id="@+id/placeDetails"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:behavior_hideable="true"
@@ -62,7 +62,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
+        android:id="@+id/navigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

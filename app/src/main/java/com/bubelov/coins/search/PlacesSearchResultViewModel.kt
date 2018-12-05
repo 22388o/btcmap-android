@@ -32,7 +32,7 @@ import com.bubelov.coins.util.LiveEvent
 import com.bubelov.coins.util.toSingleEvent
 import javax.inject.Inject
 
-class PlacesSearchResultsViewModel @Inject constructor() : ViewModel() {
+class PlacesSearchResultViewModel @Inject constructor() : ViewModel() {
     private val _pickedPlaceId = LiveEvent<Long>()
     val pickedPlaceId = _pickedPlaceId.toSingleEvent()
 

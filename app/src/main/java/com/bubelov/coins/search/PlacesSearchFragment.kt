@@ -60,7 +60,7 @@ class PlacesSearchFragment : DaggerFragment() {
     }
 
     private val resultsModel by lazy {
-        activityViewModelProvider(modelFactory) as PlacesSearchResultsViewModel
+        activityViewModelProvider(modelFactory) as PlacesSearchResultViewModel
     }
 
     override fun onCreateView(

@@ -35,7 +35,7 @@ import com.bubelov.coins.editplace.EditPlaceViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.notificationarea.NotificationAreaViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
-import com.bubelov.coins.search.PlacesSearchResultsViewModel
+import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.search.PlacesSearchViewModel
 import com.bubelov.coins.settings.SettingsViewModel
 import dagger.Binds
@@ -71,8 +71,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(PlacesSearchResultsViewModel::class)
-    internal abstract fun bindPlacesSearchSesultsViewModel(placesSearchResultsViewModel: PlacesSearchResultsViewModel): ViewModel
+    @ViewModelKey(PlacesSearchResultViewModel::class)
+    internal abstract fun bindPlacesSearchResultViewModel(placesSearchResultViewModel: PlacesSearchResultViewModel): ViewModel
 
     @Binds
     @IntoMap

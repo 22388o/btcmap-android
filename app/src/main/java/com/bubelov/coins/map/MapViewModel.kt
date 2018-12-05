@@ -41,6 +41,7 @@ import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.LiveEvent
 import com.bubelov.coins.util.LocationLiveData
 import com.bubelov.coins.util.toSingleEvent
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -78,8 +79,7 @@ class MapViewModel @Inject constructor(
                 PlaceMarker(
                     placeId = it.id,
                     icon = placeIconsRepository.getMarker(it.category),
-                    latitude = it.latitude,
-                    longitude = it.longitude
+                    latLng = LatLng(it.latitude, it.longitude)
                 )
             }
         }
