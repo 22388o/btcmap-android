@@ -38,7 +38,7 @@
             app:layout_insetEdge="bottom" />
 
         <FrameLayout
-            android:id="@+id/fab"
+            android:id="@+id/locationFab"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="end|bottom"
@@ -56,6 +56,28 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_my_location"
                 android:tint="@color/primary_dark" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/editPlaceFab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:background="@drawable/shape_oval_primary"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:visibility="gone"
+            tools:targetApi="lollipop">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_edit"
+                android:tint="@color/white" />
 
         </FrameLayout>
 

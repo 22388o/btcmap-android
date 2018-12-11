@@ -45,8 +45,6 @@ import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
-import com.bubelov.coins.model.Location
-import com.bubelov.coins.model.Place
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
 import com.bubelov.coins.util.extention.getLocation
@@ -114,27 +112,23 @@ class MapFragment :
                 BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     placeDetails.fullScreen = newState == BottomSheetBehavior.STATE_EXPANDED
+                    editPlaceFab.isVisible = placeDetails.fullScreen
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    fab.isVisible = slideOffset < 0.5f
+                    locationFab.isVisible = slideOffset < 0.5f
                 }
             })
 
             peekHeight = resources.getDimensionPixelSize(R.dimen.map_header_height)
         }
 
-        placeDetails.callback = object : PlaceDetailsView.Callback {
-            override fun onEditPlaceClick(place: Place) {
-                model.onEditPlaceClick()
-            }
+        editPlaceFab.setOnClickListener {
+            model.onEditPlaceClick()
+        }
 
-            override fun onDismissed() {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
-
-            override fun onShared(place: Place) {
-            }
+        placeDetails.onDismissed = {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         toolbar.apply {
@@ -199,7 +193,7 @@ class MapFragment :
         })
 
         model.userLocation.observe(viewLifecycleOwner, Observer {
-            fab.setOnClickListener {
+            locationFab.setOnClickListener {
                 model.onLocationButtonClick()
             }
         })

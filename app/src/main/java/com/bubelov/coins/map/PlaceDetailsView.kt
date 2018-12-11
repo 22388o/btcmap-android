@@ -56,13 +56,13 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
             placeSummaryToolbar.isVisible = fullScreen
         }
 
-    var callback: Callback? = null
+    var onDismissed: (() -> Unit)? = null
 
     init {
         View.inflate(context, R.layout.widget_place_details, this)
 
         placeSummaryToolbar.apply {
-            setNavigationOnClickListener { callback?.onDismissed() }
+            setNavigationOnClickListener { onDismissed?.invoke() }
             inflateMenu(R.menu.place_details)
 
             setOnMenuItemClickListener { item ->
@@ -89,17 +89,11 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
 
                         context.startActivity(Intent.createChooser(intent, "Share"))
 
-                        callback?.onShared(place)
                         true
                     }
                     else -> false
                 }
             }
-        }
-
-        edit.setOnClickListener {
-            val place = place ?: return@setOnClickListener
-            callback?.onEditPlaceClick(place)
         }
     }
 
@@ -186,11 +180,5 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
         } else {
             openingHours.text = place.openingHours
         }
-    }
-
-    interface Callback {
-        fun onEditPlaceClick(place: Place)
-        fun onDismissed()
-        fun onShared(place: Place)
     }
 }
