@@ -53,7 +53,7 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
             field = fullScreen
             mapHeaderShadow.isVisible = !fullScreen
             mapHeader.isVisible = !fullScreen
-            placeSummaryToolbar.isVisible = fullScreen
+            placeToolbar.isVisible = fullScreen
         }
 
     var onDismissed: (() -> Unit)? = null
@@ -61,7 +61,7 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
     init {
         View.inflate(context, R.layout.widget_place_details, this)
 
-        placeSummaryToolbar.apply {
+        placeToolbar.apply {
             setNavigationOnClickListener { onDismissed?.invoke() }
             inflateMenu(R.menu.place_details)
 
@@ -99,49 +99,26 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
 
     private fun showPlace(place: Place?) {
         if (place == null) {
+            onDismissed?.invoke()
             return
         }
 
-        if (place.openedClaims > 0 && place.closedClaims == 0) {
-            checkMark.visibility = VISIBLE
-        } else {
-            checkMark.visibility = GONE
-        }
-
-        if (place.closedClaims > 0) {
-            warning.visibility = VISIBLE
-        } else {
-            warning.visibility = GONE
-        }
-
-        if (place.openedClaims > 0) {
-            openedClaims.visibility = VISIBLE
-            openedClaims.text = resources.getQuantityString(
-                R.plurals.confirmed_by_d_users,
-                place.openedClaims,
-                place.openedClaims
-            )
-        } else {
-            openedClaims.visibility = GONE
-        }
-
-        if (place.closedClaims > 0) {
-            closedClaims.visibility = VISIBLE
-            closedClaims.text = resources.getQuantityString(
-                R.plurals.marked_as_closed_by_d_users,
-                place.closedClaims,
-                place.closedClaims
-            )
-        } else {
-            closedClaims.visibility = GONE
-        }
+        checkMark.isVisible = place.openedClaims > 0 && place.closedClaims == 0
+        warning.isVisible = place.closedClaims > 0
 
         if (TextUtils.isEmpty(place.name)) {
             name.setText(R.string.name_unknown)
-            placeSummaryToolbar.setTitle(R.string.name_unknown)
+            placeToolbar.setTitle(R.string.name_unknown)
         } else {
             name.text = place.name
-            placeSummaryToolbar.title = place.name
+            placeToolbar.title = place.name
+        }
+
+        if (TextUtils.isEmpty(place.description)) {
+            description.isVisible = false
+        } else {
+            description.isVisible = true
+            description.text = place.description
         }
 
         if (TextUtils.isEmpty(place.phone)) {
@@ -167,12 +144,6 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
                     }
                 }
             }
-        }
-
-        if (TextUtils.isEmpty(place.description)) {
-            description.setText(R.string.not_provided)
-        } else {
-            description.text = place.description
         }
 
         if (TextUtils.isEmpty(place.openingHours)) {

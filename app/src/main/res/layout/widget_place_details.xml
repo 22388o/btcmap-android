@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,7 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:alpha="0.5"
-        android:background="@drawable/shape_place_details_shadow" />
+        android:background="@drawable/shape_place_details_shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/mapHeader"
@@ -21,7 +25,10 @@
         android:layout_height="@dimen/map_header_height"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mapHeaderShadow">
 
         <TextView
             android:id="@+id/name"
@@ -54,210 +61,165 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/placeSummaryToolbar"
+        android:id="@+id/placeToolbar"
         style="@style/Toolbar"
-        android:layout_width="match_parent"
-        app:navigationIcon="?homeAsUpIndicator" />
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mapHeader"
+        app:navigationIcon="?homeAsUpIndicator"
+        tools:title="Place Name" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/placeToolbar">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/openedClaims"
-                android:layout_width="match_parent"
+                android:id="@+id/description"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/green_700"
-                android:paddingStart="24dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="24dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/white"
+                android:padding="24dp"
+                android:textColor="@color/text_primary"
                 android:textSize="16sp"
-                tools:text="Confirmed by 1 user" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Place description." />
+
+            <ImageView
+                android:id="@+id/phoneIcon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:contentDescription="@null"
+                android:padding="24dp"
+                android:src="@drawable/ic_phone"
+                android:tint="@color/text_secondary"
+                app:layout_constraintEnd_toStartOf="@id/phoneTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description" />
 
             <TextView
-                android:id="@+id/closedClaims"
-                android:layout_width="match_parent"
+                android:id="@+id/phoneTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/red_500"
-                android:paddingStart="24dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="24dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                tools:text="Marked as closed by 1 user" />
+                android:text="@string/phone"
+                android:textColor="@color/text_secondary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/phone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/phoneIcon"
+                app:layout_constraintTop_toTopOf="@id/phoneIcon"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp">
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:text="@string/not_provided"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/phoneIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/phoneTitle"
+                app:layout_constraintTop_toBottomOf="@id/phoneTitle"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_phone"
-                    android:tint="@color/text_secondary" />
+            <ImageView
+                android:id="@+id/websiteIcon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:contentDescription="@null"
+                android:padding="24dp"
+                android:src="@drawable/ic_globe"
+                android:tint="@color/text_secondary"
+                app:layout_constraintEnd_toStartOf="@id/websiteTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/phoneIcon" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/phone"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:autoLink="phone"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/not_provided"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/websiteTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp">
+                android:text="@string/website"
+                android:textColor="@color/text_secondary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/website"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/websiteIcon"
+                app:layout_constraintTop_toTopOf="@id/websiteIcon"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_globe"
-                    android:tint="@color/text_secondary" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/website"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/website"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/not_provided"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/website"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp">
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:text="@string/not_provided"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/websiteIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/websiteTitle"
+                app:layout_constraintTop_toBottomOf="@id/websiteTitle"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_description"
-                    android:tint="@color/text_secondary" />
+            <ImageView
+                android:id="@+id/openingHoursIcon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:contentDescription="@null"
+                android:padding="24dp"
+                android:src="@drawable/ic_access_time"
+                android:tint="@color/text_secondary"
+                app:layout_constraintEnd_toStartOf="@id/openingHoursTitle"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/websiteIcon" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/description"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/not_provided"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/openingHoursTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp">
+                android:text="@string/opening_hours"
+                android:textColor="@color/text_secondary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/openingHours"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/openingHoursIcon"
+                app:layout_constraintTop_toTopOf="@id/openingHoursIcon"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_access_time"
-                    android:tint="@color/text_secondary" />
+            <TextView
+                android:id="@+id/openingHours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:text="@string/not_provided"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/openingHoursIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/openingHoursTitle"
+                app:layout_constraintTop_toBottomOf="@id/openingHoursTitle"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/opening_hours"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/openingHours"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/not_provided"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
