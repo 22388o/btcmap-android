@@ -47,12 +47,14 @@ interface PlacesDb {
     @Query("SELECT * FROM Place WHERE id = :id LIMIT 1")
     fun find(id: Long): Place?
 
-    @Query("SELECT * FROM Place WHERE " +
-            "UPPER(name) LIKE '%' || UPPER(:query) || '%' " +
-            "OR UPPER(category) LIKE '%' || UPPER(:query) || '%' " +
-            "OR UPPER(description) LIKE '%' || UPPER(:query) || '%' " +
-            "OR UPPER(phone) LIKE '%' || UPPER(:query) || '%' " +
-            "OR UPPER(website) LIKE '%' || UPPER(:query) || '%'")
+    @Query(
+        "SELECT * FROM Place WHERE " +
+                "UPPER(name) LIKE '%' || UPPER(:query) || '%' " +
+                "OR UPPER(category) LIKE '%' || UPPER(:query) || '%' " +
+                "OR UPPER(description) LIKE '%' || UPPER(:query) || '%' " +
+                "OR UPPER(phone) LIKE '%' || UPPER(:query) || '%' " +
+                "OR UPPER(website) LIKE '%' || UPPER(:query) || '%'"
+    )
     fun findBySearchQuery(query: String): List<Place>
 
     @Query("SELECT * FROM Place ORDER BY RANDOM() LIMIT 1")

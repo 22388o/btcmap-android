@@ -33,10 +33,8 @@ import androidx.lifecycle.Transformations
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import timber.log.Timber
 import java.util.*
 
 import javax.inject.Inject
@@ -50,14 +48,19 @@ class PlacesRepository @Inject constructor(
 ) {
     private val allPlaces = db.allAsync()
 
+    private var cacheInitialized = false
+
     init {
         db.count().observeForever { count ->
             if (count == 0) {
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         db.insert(assetsCache.getPlaces())
+                        cacheInitialized = true
                     }
                 }
+            } else {
+                cacheInitialized = true
             }
         }
     }
@@ -85,6 +88,11 @@ class PlacesRepository @Inject constructor(
 
     suspend fun fetchNewPlaces(): List<Place> {
         return withContext(Dispatchers.IO) {
+            while(!cacheInitialized) {
+                Timber.d("Waiting fo asset cache to initialize...")
+                delay(100)
+            }
+
             val latestPlaceUpdatedAt = db.maxUpdatedAt() ?: Date(0)
             val response = api.getPlaces(Date(latestPlaceUpdatedAt.time + 1)).await()
             db.insert(response)
