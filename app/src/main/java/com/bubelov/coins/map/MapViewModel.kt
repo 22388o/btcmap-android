@@ -143,9 +143,9 @@ class MapViewModel @Inject constructor(
 
     fun onEditPlaceClick() {
         if (userRepository.signedIn()) {
-            postAuthAction = PostAuthAction.EDIT_SELECTED_PLACE
             _openEditPlaceScreen.call()
         } else {
+            postAuthAction = PostAuthAction.EDIT_SELECTED_PLACE
             _openSignInScreen.call()
         }
     }
