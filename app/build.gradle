@@ -31,7 +31,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "API_URL", API_URL
-        buildConfigField "Boolean", "MOCK_API", "true"
+        buildConfigField "Boolean", "MOCK_API", "false"
 
         def googleClientId = project.hasProperty('GOOGLE_CLIENT_ID') ? GOOGLE_CLIENT_ID : System.getenv('GOOGLE_CLIENT_ID')
         buildConfigField "String", "GOOGLE_CLIENT_ID", googleClientId != null ? googleClientId : ""
@@ -113,7 +113,6 @@ dependencies {
 
     // Images
     implementation "com.squareup.picasso:picasso:$picassoVersion"
-    implementation "de.hdodenhof:circleimageview:$circleImageViewVersion" // TODO Remove
 
     // Logging
     implementation "com.jakewharton.timber:timber:$timberVersion"

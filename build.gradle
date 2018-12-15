@@ -53,7 +53,6 @@ buildscript {
 
         // Images
         picassoVersion = '2.5.2'
-        circleImageViewVersion = '2.1.0' // TODO Remove
 
         // Logging
         timberVersion = '4.7.1'

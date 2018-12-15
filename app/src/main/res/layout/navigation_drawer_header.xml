@@ -10,11 +10,12 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/drawer_header_top_padding">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/avatar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:contentDescription="@null"
         tools:background="#ff0000" />
 
     <TextView

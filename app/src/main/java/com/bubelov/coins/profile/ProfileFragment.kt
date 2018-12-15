@@ -37,6 +37,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.repository.user.UserRepository
+import com.bubelov.coins.util.CircleTransformation
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.squareup.picasso.Picasso
@@ -65,7 +66,10 @@ class ProfileFragment : DaggerFragment(), Toolbar.OnMenuItemClickListener {
         val user = userRepository.user!!
 
         if (!TextUtils.isEmpty(user.avatarUrl)) {
-            Picasso.with(requireContext()).load(user.avatarUrl).into(avatar)
+            Picasso.with(requireContext())
+                .load(user.avatarUrl)
+                .transform(CircleTransformation())
+                .into(avatar)
         } else {
             avatar.setImageResource(R.drawable.ic_no_avatar)
         }

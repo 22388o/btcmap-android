@@ -345,7 +345,10 @@ class MapFragment :
 
         if (user != null) {
             if (!TextUtils.isEmpty(user.avatarUrl)) {
-                Picasso.with(requireContext()).load(user.avatarUrl).into(drawerHeader.avatar)
+                Picasso.with(requireContext())
+                    .load(user.avatarUrl)
+                    .transform(CircleTransformation())
+                    .into(drawerHeader.avatar)
             } else {
                 drawerHeader.avatar.setImageResource(R.drawable.ic_no_avatar)
             }
