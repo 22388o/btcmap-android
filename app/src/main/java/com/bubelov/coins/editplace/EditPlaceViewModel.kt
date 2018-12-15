@@ -37,6 +37,7 @@ import com.bubelov.coins.util.toSingleEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -66,6 +67,9 @@ class EditPlaceViewModel @Inject constructor(
         originalPlace: Place?,
         updatedPlace: Place
     ) {
+        Timber.d("Original place: $originalPlace")
+        Timber.d("Updated place: $updatedPlace")
+
         uiScope.launch {
             _showProgress.value = true
 

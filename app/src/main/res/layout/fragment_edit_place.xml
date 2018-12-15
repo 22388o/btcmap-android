@@ -70,18 +70,30 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:alpha="0.4"
+                    android:alpha="0.25"
                     android:background="@color/black" />
 
-                <Button
-                    android:id="@+id/changeLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="?selectableItemBackground"
-                    android:padding="16dp"
-                    android:text="@string/change_location"
-                    android:textColor="@color/white" />
+                <FrameLayout
+                    android:id="@+id/editLocationButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/shape_oval_white"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:focusable="true"
+                    tools:targetApi="lollipop">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_edit"
+                        android:tint="@color/primary_dark" />
+
+                </FrameLayout>
 
             </FrameLayout>
 

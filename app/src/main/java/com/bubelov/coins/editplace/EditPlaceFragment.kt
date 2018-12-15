@@ -94,15 +94,17 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        toolbar.inflateMenu(R.menu.edit_place)
+        toolbar.apply {
+            setNavigationOnClickListener { findNavController().popBackStack() }
+            inflateMenu(R.menu.edit_place)
 
-        toolbar.setOnMenuItemClickListener { item ->
-            if (item.itemId == R.id.action_send) {
-                submit()
+            setOnMenuItemClickListener { item ->
+                if (item.itemId == R.id.action_send) {
+                    submit()
+                }
+
+                true
             }
-
-            true
         }
 
         val place = place
@@ -122,14 +124,14 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
 
         closedSwitch.setOnCheckedChangeListener { _, checked ->
             name.isEnabled = !checked
-            changeLocation.isVisible = !checked
+            editLocationButton.isVisible = !checked
             phone.isEnabled = !checked
             website.isEnabled = !checked
             description.isEnabled = !checked
             openingHours.isEnabled = !checked
         }
 
-        changeLocation.setOnClickListener {
+        editLocationButton.setOnClickListener {
             val action = EditPlaceFragmentDirections.actionEditPlaceFragmentToPickLocationFragment(
                 map.getLocation()
             )
@@ -239,11 +241,11 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
             longitude = map.cameraPosition.target.longitude,
             phone = phone.text.toString(),
             website = website.text.toString(),
-            category = "",
+            category = place?.category ?: "",
             description = description.text.toString(),
-            currencies = arrayListOf(),
-            openedClaims = 0,
-            closedClaims = 0,
+            currencies = place?.currencies ?: arrayListOf(),
+            openedClaims = place?.openedClaims ?: 0,
+            closedClaims = place?.closedClaims ?: 0,
             openingHours = openingHours.text.toString(),
             visible = !closedSwitch.isChecked,
             updatedAt = Date()
