@@ -52,11 +52,11 @@ class UserRepository @Inject constructor(
         set(user) = preferences.edit().putString(USER_KEY, gson.toJson(user)).apply()
 
     var userAuthToken: String
-        get() = preferences.getString(API_AUTH_TOKEN_KEY, "")
+        get() = preferences.getString(API_AUTH_TOKEN_KEY, "")!!
         set(token) = preferences.edit().putString(API_AUTH_TOKEN_KEY, token).apply()
 
     var userAuthMethod: String
-        get() = preferences.getString(API_AUTH_METHOD_KEY, "")
+        get() = preferences.getString(API_AUTH_METHOD_KEY, "")!!
         set(method) = preferences.edit().putString(API_AUTH_METHOD_KEY, method).apply()
 
     suspend fun signIn(googleToken: String) {

@@ -77,9 +77,9 @@ class PlacesSearchViewModelTest {
             whenever(placesRepository.findBySearchQuery(anyString()))
                 .thenReturn(
                     listOf(
-                        generatePlace("Bar 1", "BTC"),
-                        generatePlace("Bar 2", "BTC"),
-                        generatePlace("Bar 3", "LTC")
+                        generatePlace("Bar 1"),
+                        generatePlace("Bar 2"),
+                        generatePlace("Bar 3")
                     )
                 )
 
@@ -113,7 +113,7 @@ class PlacesSearchViewModelTest {
         Assert.assertTrue(results.isEmpty())
     }
 
-    private fun generatePlace(name: String, currency: String): Place {
+    private fun generatePlace(name: String): Place {
         return Place(
             id = name.hashCode().toLong(),
             name = name,
@@ -121,7 +121,6 @@ class PlacesSearchViewModelTest {
             longitude = 0.0,
             description = "",
             category = "",
-            currencies = arrayListOf(currency),
             openedClaims = 0,
             closedClaims = 0,
             phone = "",

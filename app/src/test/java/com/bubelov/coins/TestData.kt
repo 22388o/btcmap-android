@@ -38,7 +38,6 @@ fun emptyPlace(): Place {
         longitude = 0.0,
         category = "",
         description = "",
-        currencies = arrayListOf("BTC"),
         openedClaims = 0,
         closedClaims = 0,
         phone = "",

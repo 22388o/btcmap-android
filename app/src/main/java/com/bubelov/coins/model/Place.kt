@@ -43,7 +43,6 @@ data class Place(
     val longitude: Double,
     val category: String,
     val description: String,
-    val currencies: ArrayList<String>,
     val openedClaims: Int,
     val closedClaims: Int,
     val phone: String,

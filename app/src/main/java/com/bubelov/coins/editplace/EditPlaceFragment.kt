@@ -243,7 +243,6 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
             website = website.text.toString(),
             category = place?.category ?: "",
             description = description.text.toString(),
-            currencies = place?.currencies ?: arrayListOf(),
             openedClaims = place?.openedClaims ?: 0,
             closedClaims = place?.closedClaims ?: 0,
             openingHours = openingHours.text.toString(),

@@ -28,7 +28,6 @@
 package com.bubelov.coins.db
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
 import java.util.*
 
 class Converters {
@@ -37,10 +36,4 @@ class Converters {
 
     @TypeConverter
     fun dateToLong(date: Date) = date.time
-
-    @TypeConverter
-    fun stringToArrayList(string: String) = Gson().fromJson(string, arrayListOf<String>().javaClass)!!
-
-    @TypeConverter
-    fun arrayListToString(arrayList: ArrayList<String>) = Gson().toJson(arrayList)!!
 }

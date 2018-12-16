@@ -63,9 +63,6 @@ interface PlacesDb {
     @Query("SELECT COUNT(*) FROM Place")
     fun count(): LiveData<Int>
 
-    @Query("SELECT COUNT(*) FROM Place WHERE UPPER(currencies) LIKE '%' || UPPER(:code) || '%'")
-    fun countByCurrencyCode(code: String): Int
-
     @Query("SELECT MAX(updatedAt) FROM Place")
     fun maxUpdatedAt(): Date?
 
