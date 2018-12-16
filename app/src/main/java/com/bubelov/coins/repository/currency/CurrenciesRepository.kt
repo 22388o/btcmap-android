@@ -25,37 +25,47 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.sync
+package com.bubelov.coins.repository.currency
 
-import com.bubelov.coins.model.SyncLogEntry
-import com.bubelov.coins.repository.currency.CurrenciesRepository
-
-import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
-import com.bubelov.coins.util.PlaceNotificationManager
-
+import com.bubelov.coins.api.coins.CoinsApi
+import kotlinx.coroutines.*
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DatabaseSync @Inject constructor(
-    private val currenciesRepository: CurrenciesRepository,
-    private val placesRepository: PlacesRepository,
-    private val placeNotificationManager: PlaceNotificationManager,
-    private val syncLogsRepository: SyncLogsRepository
+class CurrenciesRepository @Inject constructor(
+    private val api: CoinsApi,
+    private val db: CurrenciesDb,
+    private val assetsCache: CurrenciesAssetsCache
 ) {
-    suspend fun sync() {
-        currenciesRepository.syncWithApi()
+    private var assetCacheUploaded = false
 
-        val newPlaces = placesRepository.fetchNewPlaces()
+    init {
+        GlobalScope.launch {
+            if (db.count() == 0) {
+                Timber.d("Uploading asset cache")
+                db.insert(assetsCache.getCurrencies())
+                Timber.d("Asset cache uploaded. Size: ${db.count()}")
+            }
 
-        syncLogsRepository.insert(
-            SyncLogEntry(
-                System.currentTimeMillis(),
-                newPlaces.size
-            )
-        )
+            assetCacheUploaded = true
+        }
+    }
 
-        placeNotificationManager.issueNotificationsIfNecessary(newPlaces)
+    suspend fun syncWithApi() {
+        Timber.d("syncWithApi()")
+
+        return withContext(Dispatchers.IO) {
+            while(!assetCacheUploaded) {
+                Timber.d("Waiting fo asset cache to upload...")
+                delay(100)
+            }
+
+            val currencies = api.getCurrencies().await()
+            Timber.d("Got ${currencies.size} currencies from the API")
+            Timber.d(currencies.toString())
+            db.insert(currencies)
+        }
     }
 }

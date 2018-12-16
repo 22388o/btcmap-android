@@ -25,37 +25,21 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.sync
+package com.bubelov.coins.model
 
-import com.bubelov.coins.model.SyncLogEntry
-import com.bubelov.coins.repository.currency.CurrenciesRepository
+import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
+import java.util.*
 
-import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
-import com.bubelov.coins.util.PlaceNotificationManager
-
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class DatabaseSync @Inject constructor(
-    private val currenciesRepository: CurrenciesRepository,
-    private val placesRepository: PlacesRepository,
-    private val placeNotificationManager: PlaceNotificationManager,
-    private val syncLogsRepository: SyncLogsRepository
-) {
-    suspend fun sync() {
-        currenciesRepository.syncWithApi()
-
-        val newPlaces = placesRepository.fetchNewPlaces()
-
-        syncLogsRepository.insert(
-            SyncLogEntry(
-                System.currentTimeMillis(),
-                newPlaces.size
-            )
-        )
-
-        placeNotificationManager.issueNotificationsIfNecessary(newPlaces)
-    }
-}
+@Parcelize
+@Entity
+data class Currency(
+    @PrimaryKey
+    val id: Long,
+    val name: String,
+    val code: String,
+    val crypto: Boolean,
+    val updatedAt: Date
+) : Parcelable

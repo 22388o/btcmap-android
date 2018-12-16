@@ -27,6 +27,7 @@
 
 package com.bubelov.coins.api.coins
 
+import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.Json
 import kotlinx.coroutines.Deferred
@@ -48,6 +49,9 @@ interface CoinsApi {
     fun authWithGoogle(
         @Header("token") token: String
     ): Deferred<AuthResponse>
+
+    @GET("currencies")
+    fun getCurrencies(): Deferred<List<Currency>>
 
     @GET("places")
     fun getPlaces(

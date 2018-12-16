@@ -1,0 +1,133 @@
+[{
+  "id": 1,
+  "name": "Bitcoin",
+  "code": "BTC",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.872Z"
+}, {
+  "id": 2,
+  "name": "Litecoin",
+  "code": "LTC",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.877Z"
+}, {
+  "id": 3,
+  "name": "Peercoin",
+  "code": "PPC",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.878Z"
+}, {
+  "id": 4,
+  "name": "Ripple",
+  "code": "XRP",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.880Z"
+}, {
+  "id": 5,
+  "name": "Dogecoin",
+  "code": "DOGE",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.881Z"
+}, {
+  "id": 6,
+  "name": "Namecoin",
+  "code": "NMC",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.882Z"
+}, {
+  "id": 7,
+  "name": "Mastercoin",
+  "code": "MSC",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.884Z"
+}, {
+  "id": 8,
+  "name": "Darkcoin",
+  "code": "DRK",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.885Z"
+}, {
+  "id": 9,
+  "name": "Promecoin",
+  "code": "XPM",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.886Z"
+}, {
+  "id": 10,
+  "name": "Vertcoin",
+  "code": "VTC",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.888Z"
+}, {
+  "id": 11,
+  "name": "Auroracoin",
+  "code": "AUR",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.889Z"
+}, {
+  "id": 12,
+  "name": "MazaCoin",
+  "code": "MZC",
+  "crypto": true,
+  "updated_at": "2015-05-15T08:21:36.890Z"
+}, {
+  "id": 13,
+  "name": "United States dollar",
+  "code": "USD",
+  "crypto": false,
+  "updated_at": "2015-10-01T12:57:22.979Z"
+}, {
+  "id": 14,
+  "name": "Euro",
+  "code": "EUR",
+  "crypto": false,
+  "updated_at": "2017-04-22T06:08:59.168Z"
+}, {
+  "id": 15,
+  "name": "Japanese yen",
+  "code": "JPY",
+  "crypto": false,
+  "updated_at": "2017-04-22T06:09:54.765Z"
+}, {
+  "id": 16,
+  "name": "Pound sterling",
+  "code": "GBP",
+  "crypto": false,
+  "updated_at": "2017-04-22T06:10:27.540Z"
+}, {
+  "id": 17,
+  "name": "Australian dollar",
+  "code": "AUD",
+  "crypto": false,
+  "updated_at": "2017-04-22T06:10:55.377Z"
+}, {
+  "id": 18,
+  "name": "Ethereum",
+  "code": "ETH",
+  "crypto": true,
+  "updated_at": "2017-09-22T15:04:08.684Z"
+}, {
+  "id": 19,
+  "name": "Monero",
+  "code": "XMR",
+  "crypto": true,
+  "updated_at": "2017-09-22T15:04:08.687Z"
+}, {
+  "id": 20,
+  "name": "Zcash",
+  "code": "ZEC",
+  "crypto": true,
+  "updated_at": "2017-09-22T15:04:08.688Z"
+}, {
+  "id": 21,
+  "name": "Bitcoin Cash",
+  "code": "BCH",
+  "crypto": true,
+  "updated_at": "2017-12-26T05:29:09.949Z"
+}, {
+  "id": 22,
+  "name": "Bitcoin Gold",
+  "code": "BTG",
+  "crypto": true,
+  "updated_at": "2017-12-26T05:29:10.071Z"
+}]

@@ -25,37 +25,19 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.sync
+package com.bubelov.coins.repository.currency
 
-import com.bubelov.coins.model.SyncLogEntry
-import com.bubelov.coins.repository.currency.CurrenciesRepository
+import androidx.room.*
+import com.bubelov.coins.model.Currency
 
-import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
-import com.bubelov.coins.util.PlaceNotificationManager
+@Dao
+interface CurrenciesDb {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(places: List<Currency>)
 
-import javax.inject.Inject
-import javax.inject.Singleton
+    @Query("SELECT * FROM Currency")
+    fun all(): List<Currency>
 
-@Singleton
-class DatabaseSync @Inject constructor(
-    private val currenciesRepository: CurrenciesRepository,
-    private val placesRepository: PlacesRepository,
-    private val placeNotificationManager: PlaceNotificationManager,
-    private val syncLogsRepository: SyncLogsRepository
-) {
-    suspend fun sync() {
-        currenciesRepository.syncWithApi()
-
-        val newPlaces = placesRepository.fetchNewPlaces()
-
-        syncLogsRepository.insert(
-            SyncLogEntry(
-                System.currentTimeMillis(),
-                newPlaces.size
-            )
-        )
-
-        placeNotificationManager.issueNotificationsIfNecessary(newPlaces)
-    }
+    @Query("SELECT COUNT(*) FROM Currency")
+    fun count(): Int
 }

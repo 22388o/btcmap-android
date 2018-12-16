@@ -27,6 +27,7 @@
 
 package com.bubelov.coins.api.coins
 
+import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.place.PlacesAssetsCache
@@ -69,6 +70,10 @@ class MockCoinsApi(
         )
 
         return delegate.returningResponse(response).authWithGoogle(token)
+    }
+
+    override fun getCurrencies(): Deferred<List<Currency>> {
+        return delegate.returningResponse(emptyList<Currency>()).getCurrencies()
     }
 
     override fun getPlaces(since: String, limit: Int): Deferred<List<Place>> {

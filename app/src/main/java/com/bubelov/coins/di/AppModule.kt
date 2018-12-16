@@ -68,6 +68,10 @@ class AppModule {
     @Provides
     fun providePlacesDb(database: Database) = database.placesDb()
 
+
+    @Provides
+    fun provideCurrenciesDb(database: Database) = database.currenciesDb()
+
     @Provides
     fun providePreferences(context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)

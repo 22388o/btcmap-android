@@ -25,37 +25,24 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.sync
+package com.bubelov.coins.repository.currency
 
-import com.bubelov.coins.model.SyncLogEntry
-import com.bubelov.coins.repository.currency.CurrenciesRepository
-
-import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
-import com.bubelov.coins.util.PlaceNotificationManager
-
+import android.content.Context
+import com.bubelov.coins.model.Currency
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.InputStreamReader
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DatabaseSync @Inject constructor(
-    private val currenciesRepository: CurrenciesRepository,
-    private val placesRepository: PlacesRepository,
-    private val placeNotificationManager: PlaceNotificationManager,
-    private val syncLogsRepository: SyncLogsRepository
+class CurrenciesAssetsCache @Inject constructor(
+    private val context: Context,
+    val gson: Gson
 ) {
-    suspend fun sync() {
-        currenciesRepository.syncWithApi()
-
-        val newPlaces = placesRepository.fetchNewPlaces()
-
-        syncLogsRepository.insert(
-            SyncLogEntry(
-                System.currentTimeMillis(),
-                newPlaces.size
-            )
-        )
-
-        placeNotificationManager.issueNotificationsIfNecessary(newPlaces)
+    fun getCurrencies(): List<Currency> {
+        val input = context.assets.open("currencies.json")
+        val typeToken = object : TypeToken<List<Currency>>() {}
+        return gson.fromJson(InputStreamReader(input), typeToken.type)
     }
 }
