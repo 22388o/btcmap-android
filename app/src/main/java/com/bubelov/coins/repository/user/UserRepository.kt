@@ -87,12 +87,11 @@ class UserRepository @Inject constructor(
         lastName: String
     ) {
         val args = CreateUserArgs(
-            CreateUserArgs.User(
-                email = email,
-                password = password,
-                firstName = firstName,
-                lastName = lastName
-            )
+            email = email,
+            password = password,
+            passwordConfirmation = password,
+            firstName = firstName,
+            lastName = lastName
         )
 
         withContext(Dispatchers.IO) {

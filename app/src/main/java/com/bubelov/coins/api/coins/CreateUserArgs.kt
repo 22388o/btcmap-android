@@ -27,11 +27,10 @@
 
 package com.bubelov.coins.api.coins
 
-class CreateUserArgs(val user: User) {
-    data class User(
-        val email: String,
-        val password: String,
-        val firstName: String,
-        val lastName: String
-    )
-}
+data class CreateUserArgs(
+    val email: String,
+    val password: String,
+    val passwordConfirmation: String,
+    val firstName: String,
+    val lastName: String
+)

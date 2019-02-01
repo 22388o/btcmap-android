@@ -7,7 +7,7 @@ buildscript {
         minSdkVersion = 21
         targetSdkVersion = 28
 
-        gradleVersion = '3.2.1'
+        gradleVersion = '3.3.0'
         googleServicesVersion = '4.0.1'
         fabricVersion = '1.25.4'
 
@@ -17,7 +17,7 @@ buildscript {
         ktxVersion = '1.0.1'
 
         // Dependency injection
-        daggerVersion = '2.15'
+        daggerVersion = '2.16'
 
         // Network
         retrofitVersion = '2.3.0'

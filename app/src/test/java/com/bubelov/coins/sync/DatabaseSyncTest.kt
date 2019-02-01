@@ -28,6 +28,7 @@
 package com.bubelov.coins.sync
 
 import com.bubelov.coins.emptyPlace
+import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
@@ -43,6 +44,7 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
 class DatabaseSyncTest {
+    @Mock private lateinit var currenciesRepository: CurrenciesRepository
     @Mock private lateinit var placesRepository: PlacesRepository
     @Mock private lateinit var placeNotificationManager: PlaceNotificationManager
     @Mock private lateinit var syncLogsRepository: SyncLogsRepository
@@ -53,6 +55,7 @@ class DatabaseSyncTest {
         MockitoAnnotations.initMocks(this)
 
         databaseSync = DatabaseSync(
+            currenciesRepository,
             placesRepository,
             placeNotificationManager,
             syncLogsRepository

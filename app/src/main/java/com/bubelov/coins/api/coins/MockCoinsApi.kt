@@ -47,7 +47,7 @@ class MockCoinsApi(
 
     override fun createUser(args: CreateUserArgs): Deferred<AuthResponse> {
         val response = AuthResponse(
-            user = User(1L, args.user.email, args.user.firstName, args.user.lastName, ""),
+            user = User(1L, args.email, args.firstName, args.lastName, ""),
             token = UUID.randomUUID().toString()
         )
 

@@ -46,14 +46,4 @@ class DatabaseTypeConvertersTests {
     fun convertsDateToLong() {
         assertEquals(date.time, converters.dateToLong(date))
     }
-
-    @Test
-    fun convertsStringToArrayList() {
-        assertEquals(arrayListOf("1", "2"), converters.stringToArrayList("[\"1\",\"2\"]"))
-    }
-
-    @Test
-    fun convertsArrayListToString() {
-        assertEquals("[\"1\",\"2\"]", converters.arrayListToString(arrayListOf("1", "2")))
-    }
 }
