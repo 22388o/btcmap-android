@@ -36,6 +36,7 @@ import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.placecategories.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.LiveEvent
@@ -53,6 +54,7 @@ import kotlin.coroutines.CoroutineContext
 class MapViewModel @Inject constructor(
     private val notificationAreaRepository: NotificationAreaRepository,
     private val placesRepository: PlacesRepository,
+    private val placeCategoriesRepository: PlaceCategoriesRepository,
     private val placeIconsRepository: PlaceIconsRepository,
     private val location: LocationLiveData,
     val userRepository: UserRepository,
@@ -75,12 +77,16 @@ class MapViewModel @Inject constructor(
 
     val placeMarkers: LiveData<List<PlaceMarker>> = Transformations.switchMap(places) { places ->
         MutableLiveData<List<PlaceMarker>>().apply {
-            value = places.map {
-                PlaceMarker(
-                    placeId = it.id,
-                    icon = placeIconsRepository.getMarker(it.categoryId.toString()), // TODO add categories
-                    latLng = LatLng(it.latitude, it.longitude)
-                )
+            uiScope.launch {
+                value = places.map {
+                    PlaceMarker(
+                        placeId = it.id,
+                        icon = placeIconsRepository.getMarker(
+                            placeCategoriesRepository.findById(it.categoryId)?.name ?: ""
+                        ),
+                        latLng = LatLng(it.latitude, it.longitude)
+                    )
+                }
             }
         }
     }

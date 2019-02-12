@@ -1,0 +1,68 @@
+[
+  {
+    "id": 11,
+    "name": "Gas Station",
+    "createdAt": "2017-05-08T09:00:08.432Z",
+    "updatedAt": "2017-05-08T09:00:08.432Z"
+  },
+  {
+    "id": 10,
+    "name": "Taxi",
+    "createdAt": "2017-05-08T09:00:08.431Z",
+    "updatedAt": "2017-05-08T09:00:08.431Z"
+  },
+  {
+    "id": 9,
+    "name": "Pharmacy",
+    "createdAt": "2017-05-08T09:00:08.430Z",
+    "updatedAt": "2017-05-08T09:00:08.430Z"
+  },
+  {
+    "id": 8,
+    "name": "Hospital",
+    "createdAt": "2017-05-08T09:00:08.429Z",
+    "updatedAt": "2017-05-08T09:00:08.429Z"
+  },
+  {
+    "id": 7,
+    "name": "Fast food",
+    "createdAt": "2017-05-08T09:00:08.428Z",
+    "updatedAt": "2017-05-08T09:00:08.428Z"
+  },
+  {
+    "id": 6,
+    "name": "Pizza",
+    "createdAt": "2017-05-08T09:00:08.427Z",
+    "updatedAt": "2017-05-08T09:00:08.427Z"
+  },
+  {
+    "id": 5,
+    "name": "Hotel",
+    "createdAt": "2017-05-08T09:00:08.426Z",
+    "updatedAt": "2017-05-08T09:00:08.426Z"
+  },
+  {
+    "id": 4,
+    "name": "Bar",
+    "createdAt": "2017-05-08T09:00:08.425Z",
+    "updatedAt": "2017-05-08T09:00:08.425Z"
+  },
+  {
+    "id": 3,
+    "name": "Café",
+    "createdAt": "2017-05-08T09:00:08.424Z",
+    "updatedAt": "2017-05-08T09:00:08.424Z"
+  },
+  {
+    "id": 2,
+    "name": "Restaurant",
+    "createdAt": "2017-05-08T09:00:08.423Z",
+    "updatedAt": "2017-05-08T09:00:08.423Z"
+  },
+  {
+    "id": 1,
+    "name": "ATM",
+    "createdAt": "2017-05-08T09:00:08.422Z",
+    "updatedAt": "2017-05-08T09:00:08.422Z"
+  }
+]

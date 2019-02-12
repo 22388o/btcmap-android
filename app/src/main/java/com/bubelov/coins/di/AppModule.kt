@@ -66,6 +66,8 @@ class AppModule {
     @Provides
     fun providePlacesDb(database: Database) = database.placesDb()
 
+    @Provides
+    fun providePlaceCategoriesDb(database: Database) = database.placeCategoriesDb()
 
     @Provides
     fun provideCurrenciesDb(database: Database) = database.currenciesDb()

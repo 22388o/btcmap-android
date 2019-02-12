@@ -36,6 +36,7 @@ import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.placecategories.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.DistanceUnits
 import com.bubelov.coins.util.DistanceUtils
@@ -50,6 +51,7 @@ import kotlin.coroutines.CoroutineContext
 
 class PlacesSearchViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
+    private val placeCategoriesRepository: PlaceCategoriesRepository,
     private val placeIconsRepository: PlaceIconsRepository,
     private val preferences: SharedPreferences,
     private val resources: Resources,
@@ -105,7 +107,7 @@ class PlacesSearchViewModel @Inject constructor(
         }
     }
 
-    private fun Place.toRow(userLocation: Location?): PlacesSearchRow {
+    private suspend fun Place.toRow(userLocation: Location?): PlacesSearchRow {
         val distanceStringBuilder = StringBuilder()
 
         if (userLocation != null) {
@@ -123,7 +125,9 @@ class PlacesSearchViewModel @Inject constructor(
             placeId = id,
             name = name,
             distance = distanceStringBuilder.toString(),
-            icon = placeIconsRepository.getPlaceIcon(categoryId.toString()) // TODO add categories
+            icon = placeIconsRepository.getPlaceIcon(
+                placeCategoriesRepository.findById(categoryId)?.name ?: ""
+            )
         )
     }
 

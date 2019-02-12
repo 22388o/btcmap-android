@@ -34,14 +34,21 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.repository.currency.CurrenciesDb
 import com.bubelov.coins.repository.place.PlacesDb
+import com.bubelov.coins.repository.placecategories.PlaceCategoriesDb
 import com.bubelov.coins.util.transaction
 
-@Database(entities = [Place::class, Currency::class], version = 3, exportSchema = true)
+@Database(
+    entities = [Place::class, PlaceCategory::class, Currency::class],
+    version = 3,
+    exportSchema = true
+)
 @TypeConverters(Converters::class)
 abstract class Database : RoomDatabase() {
     abstract fun placesDb(): PlacesDb
+    abstract fun placeCategoriesDb(): PlaceCategoriesDb
     abstract fun currenciesDb(): CurrenciesDb
 
     companion object {
