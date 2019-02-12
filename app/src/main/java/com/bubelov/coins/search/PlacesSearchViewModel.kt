@@ -131,7 +131,7 @@ class PlacesSearchViewModel @Inject constructor(
         val distanceUnitsString = preferences.getString(
             resources.getString(R.string.pref_distance_units_key),
             resources.getString(R.string.pref_distance_units_automatic)
-        )
+        )!!
 
         return if (distanceUnitsString == resources.getString(R.string.pref_distance_units_automatic)) {
             DistanceUnits.default

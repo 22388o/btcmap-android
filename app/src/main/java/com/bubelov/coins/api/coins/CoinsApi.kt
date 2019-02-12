@@ -37,18 +37,18 @@ interface CoinsApi {
     @POST("users")
     fun createUser(
         @Json @Body args: CreateUserArgs
-    ): Deferred<AuthResponse>
+    ): Deferred<UserResponse>
 
-    @POST("auth/email")
-    fun authWithEmail(
-        @Query("email") email: String,
-        @Query("password") password: String
-    ): Deferred<AuthResponse>
+    @GET("users/{id}")
+    fun getUser(
+        @Path("id") id: Long,
+        @Header("Authorization") authorization: String
+    ): Deferred<UserResponse>
 
-    @POST("auth/google-token")
-    fun authWithGoogle(
-        @Header("token") token: String
-    ): Deferred<AuthResponse>
+    @POST("tokens")
+    fun createApiToken(
+        @Header("Authorization") authorization: String
+    ): Deferred<TokenResponse>
 
     @GET("currencies")
     fun getCurrencies(): Deferred<List<Currency>>
@@ -60,7 +60,7 @@ interface CoinsApi {
     ): Deferred<List<Place>>
 
     @POST("places")
-    fun addPlace(
+    fun createPlace(
         @Header("session") session: String,
         @Json @Body args: AddPlaceArgs
     ): Deferred<Place>

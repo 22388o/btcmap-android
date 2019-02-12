@@ -27,13 +27,13 @@
 
 package com.bubelov.coins.repository.user
 
-import androidx.lifecycle.MutableLiveData
 import android.content.SharedPreferences
+import android.util.Base64
 
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreateUserArgs
+import com.bubelov.coins.api.coins.UserResponse
 import com.bubelov.coins.model.User
-import com.bubelov.coins.util.AsyncResult
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -61,23 +61,29 @@ class UserRepository @Inject constructor(
 
     suspend fun signIn(googleToken: String) {
         withContext(Dispatchers.IO) {
-            val response = api.authWithGoogle(googleToken).await()
-            user = response.user
-            userAuthToken = response.token
+            val tokenResponse = api.createApiToken("GoogleToken $googleToken").await()
+            val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token).await()
+
+            user = userResponse.toUser()
+            userAuthToken = tokenResponse.token
             userAuthMethod = "google"
         }
     }
 
     suspend fun signIn(email: String, password: String) {
         withContext(Dispatchers.IO) {
-            val response = api.authWithEmail(email, password).await()
-            user = response.user
-            userAuthToken = response.token
+            val credentials = Base64.encodeToString(
+                "$email:$password".toByteArray(),
+                Base64.NO_WRAP
+            )
+
+            val tokenResponse = api.createApiToken("Basic $credentials").await()
+            val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token).await()
+
+            user = userResponse.toUser()
+            userAuthToken = tokenResponse.token
             userAuthMethod = "email"
         }
-
-        val result = MutableLiveData<AsyncResult<Any>>()
-        result.postValue(AsyncResult.Loading)
     }
 
     suspend fun signUp(
@@ -86,18 +92,24 @@ class UserRepository @Inject constructor(
         firstName: String,
         lastName: String
     ) {
-        val args = CreateUserArgs(
+        val createUserArgs = CreateUserArgs(
             email = email,
             password = password,
-            passwordConfirmation = password,
             firstName = firstName,
             lastName = lastName
         )
 
+        val authCredentials = Base64.encodeToString(
+            "$email:$password".toByteArray(),
+            Base64.NO_WRAP
+        )
+
         withContext(Dispatchers.IO) {
-            val response = api.createUser(args).await()
-            user = response.user
-            userAuthToken = response.token
+            val userResponse = api.createUser(createUserArgs).await()
+            val tokenResponse = api.createApiToken("Basic $authCredentials").await()
+
+            user = userResponse.toUser()
+            userAuthToken = tokenResponse.token
             userAuthMethod = "email"
         }
     }
@@ -109,6 +121,14 @@ class UserRepository @Inject constructor(
         userAuthToken = ""
         userAuthMethod = ""
     }
+
+    private fun UserResponse.toUser() = User (
+        id = id,
+        email = email,
+        firstName = firstName,
+        lastName = lastName,
+        avatarUrl = avatarUrl
+    )
 
     companion object {
         private const val USER_KEY = "user"

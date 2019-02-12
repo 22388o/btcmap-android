@@ -93,10 +93,10 @@ class PlacesRepository @Inject constructor(
                 delay(100)
             }
 
-            val latestPlaceUpdatedAt = db.maxUpdatedAt() ?: Date(0)
-            val response = api.getPlaces(Date(latestPlaceUpdatedAt.time + 1)).await()
-            db.insert(response)
-            response
+            //val latestPlaceUpdatedAt = db.maxUpdatedAt() ?: Date(0)
+            //val response = api.getPlaces(Date(latestPlaceUpdatedAt.time + 1)).await()
+            //db.insert(response)
+            emptyList<Place>() // TODO support new API
         }
     }
 

@@ -25,35 +25,14 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.repository.place
+package com.bubelov.coins.api.coins
 
-import com.bubelov.coins.api.coins.AddPlaceArgs
-import com.bubelov.coins.api.coins.CoinsApi
-import com.bubelov.coins.api.coins.UpdatePlaceArgs
-import com.bubelov.coins.model.Place
-import com.bubelov.coins.repository.user.UserRepository
-import com.google.gson.Gson
-import kotlinx.coroutines.Deferred
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PlacesApi @Inject
-internal constructor(
-    private val api: CoinsApi,
-    private val gson: Gson,
-    private val userRepository: UserRepository
-) {
-    fun getPlaces(updatedAfter: Date): Deferred<List<Place>> {
-        return api.getPlaces(gson.toJson(updatedAfter), Integer.MAX_VALUE)
-    }
-
-    fun addPlace(place: Place): Deferred<Place> {
-        return api.createPlace(userRepository.userAuthToken, AddPlaceArgs(place))
-    }
-
-    fun updatePlace(place: Place): Deferred<Place> {
-        return api.updatePlace(place.id, userRepository.userAuthToken, UpdatePlaceArgs(place))
-    }
-}
+data class TokenResponse(
+    val id: Long,
+    val userId: Long,
+    val token: String,
+    val createdAt: Date,
+    val updatedAt: Date
+)

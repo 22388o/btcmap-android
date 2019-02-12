@@ -30,7 +30,6 @@ package com.bubelov.coins.api.coins
 data class CreateUserArgs(
     val email: String,
     val password: String,
-    val passwordConfirmation: String,
     val firstName: String,
     val lastName: String
 )

@@ -27,9 +27,15 @@
 
 package com.bubelov.coins.api.coins
 
-import com.bubelov.coins.model.User
+import java.util.*
 
-data class AuthResponse(
-    val user: User,
-    val token: String
+data class UserResponse(
+    val id: Long,
+    val email: String,
+    val firstName: String,
+    val lastName: String,
+    val avatarUrl: String,
+    val god: Boolean,
+    val createdAt: Date,
+    val updatedAt: Date
 )

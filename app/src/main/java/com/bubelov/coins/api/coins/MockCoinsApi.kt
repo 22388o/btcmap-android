@@ -29,7 +29,6 @@ package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.place.PlacesAssetsCache
 import kotlinx.coroutines.Deferred
 import retrofit2.mock.BehaviorDelegate
@@ -45,31 +44,46 @@ class MockCoinsApi(
         places.addAll(assetsCache.getPlaces())
     }
 
-    override fun createUser(args: CreateUserArgs): Deferred<AuthResponse> {
-        val response = AuthResponse(
-            user = User(1L, args.email, args.firstName, args.lastName, ""),
-            token = UUID.randomUUID().toString()
+    override fun createUser(args: CreateUserArgs): Deferred<UserResponse> {
+        val response = UserResponse(
+            id = 1L,
+            email = args.email,
+            firstName = "Foo",
+            lastName = "Bar",
+            avatarUrl = "",
+            god = false,
+            createdAt = Date(),
+            updatedAt = Date()
         )
 
         return delegate.returningResponse(response).createUser(args)
     }
 
-    override fun authWithEmail(email: String, password: String): Deferred<AuthResponse> {
-        val response = AuthResponse(
-            user = User(1L, email, "Foo", "Bar", ""),
-            token = UUID.randomUUID().toString()
+    override fun getUser(id: Long, authorization: String): Deferred<UserResponse> {
+        val response = UserResponse(
+            id = 1L,
+            email = "foo@bar.com",
+            firstName = "Boo",
+            lastName = "Bar",
+            avatarUrl = "",
+            god = false,
+            createdAt = Date(),
+            updatedAt = Date()
         )
 
-        return delegate.returningResponse(response).authWithEmail(email, password)
+        return delegate.returningResponse(response).getUser(id, authorization)
     }
 
-    override fun authWithGoogle(token: String): Deferred<AuthResponse> {
-        val response = AuthResponse(
-            user = User(1L, "foo@bar.com", "Foo", "Bar", ""),
-            token = UUID.randomUUID().toString()
+    override fun createApiToken(authorization: String): Deferred<TokenResponse> {
+        val response = TokenResponse(
+            id = 1L,
+            userId = 1L,
+            token = UUID.randomUUID().toString(),
+            createdAt = Date(),
+            updatedAt = Date()
         )
 
-        return delegate.returningResponse(response).authWithGoogle(token)
+        return delegate.returningResponse(response).createApiToken(authorization)
     }
 
     override fun getCurrencies(): Deferred<List<Currency>> {
@@ -80,10 +94,10 @@ class MockCoinsApi(
         return delegate.returningResponse(emptyList<Place>()).getPlaces(since, limit)
     }
 
-    override fun addPlace(session: String, args: AddPlaceArgs): Deferred<Place> {
+    override fun createPlace(session: String, args: AddPlaceArgs): Deferred<Place> {
         val place = args.place.copy(id = UUID.randomUUID().toString().hashCode().toLong())
         places += place
-        return delegate.returningResponse(place).addPlace(session, args)
+        return delegate.returningResponse(place).createPlace(session, args)
     }
 
     override fun updatePlace(id: Long, session: String, args: UpdatePlaceArgs): Deferred<Place> {

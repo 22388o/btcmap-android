@@ -84,7 +84,6 @@ class AppModule {
     @Singleton
     fun provideGson(): Gson {
         return GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(Date::class.java, UtcDateTypeAdapter())
             .registerTypeAdapter(String::class.java, StringAdapter())
             .create()
@@ -102,7 +101,7 @@ class AppModule {
     }
 
     private fun createApi(gson: Gson): CoinsApi {
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
+        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
         val client = OkHttpClient.Builder()
             .connectTimeout(120, TimeUnit.SECONDS)
