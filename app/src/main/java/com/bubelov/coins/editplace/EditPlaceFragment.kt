@@ -235,18 +235,17 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
         val map = map ?: throw IllegalStateException("Map is not initialized")
 
         return Place(
-            id = place?.id ?: 0L,
+            id = place?.id ?: 0,
             name = name.text.toString(),
             latitude = map.cameraPosition.target.latitude,
             longitude = map.cameraPosition.target.longitude,
             phone = phone.text.toString(),
             website = website.text.toString(),
-            category = place?.category ?: "",
+            categoryId = place?.categoryId ?: 0,
             description = description.text.toString(),
-            openedClaims = place?.openedClaims ?: 0,
-            closedClaims = place?.closedClaims ?: 0,
             openingHours = openingHours.text.toString(),
             visible = !closedSwitch.isChecked,
+            createdAt = Date(),
             updatedAt = Date()
         )
     }

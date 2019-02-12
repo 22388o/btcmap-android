@@ -36,14 +36,13 @@ fun emptyPlace(): Place {
         name = "",
         latitude = 0.0,
         longitude = 0.0,
-        category = "",
+        categoryId = 0,
         description = "",
-        openedClaims = 0,
-        closedClaims = 0,
         phone = "",
         website = "",
         openingHours = "",
         visible = true,
-        updatedAt = Date(0)
+        createdAt = Date(),
+        updatedAt = Date()
     )
 }

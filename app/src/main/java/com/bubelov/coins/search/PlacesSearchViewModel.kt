@@ -123,7 +123,7 @@ class PlacesSearchViewModel @Inject constructor(
             placeId = id,
             name = name,
             distance = distanceStringBuilder.toString(),
-            icon = placeIconsRepository.getPlaceIcon(category)
+            icon = placeIconsRepository.getPlaceIcon(categoryId.toString()) // TODO add categories
         )
     }
 

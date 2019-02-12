@@ -78,7 +78,7 @@ class MapViewModel @Inject constructor(
             value = places.map {
                 PlaceMarker(
                     placeId = it.id,
-                    icon = placeIconsRepository.getMarker(it.category),
+                    icon = placeIconsRepository.getMarker(it.categoryId.toString()), // TODO add categories
                     latLng = LatLng(it.latitude, it.longitude)
                 )
             }

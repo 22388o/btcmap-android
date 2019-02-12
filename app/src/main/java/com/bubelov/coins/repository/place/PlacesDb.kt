@@ -50,7 +50,6 @@ interface PlacesDb {
     @Query(
         "SELECT * FROM Place WHERE " +
                 "UPPER(name) LIKE '%' || UPPER(:query) || '%' " +
-                "OR UPPER(category) LIKE '%' || UPPER(:query) || '%' " +
                 "OR UPPER(description) LIKE '%' || UPPER(:query) || '%' " +
                 "OR UPPER(phone) LIKE '%' || UPPER(:query) || '%' " +
                 "OR UPPER(website) LIKE '%' || UPPER(:query) || '%'"

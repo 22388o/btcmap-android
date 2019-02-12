@@ -41,13 +41,12 @@ data class Place(
     val name: String,
     val latitude: Double,
     val longitude: Double,
-    val category: String,
+    val categoryId: Long,
     val description: String,
-    val openedClaims: Int,
-    val closedClaims: Int,
     val phone: String,
     val website: String,
     val openingHours: String,
     val visible: Boolean,
+    val createdAt: Date,
     val updatedAt: Date
 ) : Parcelable

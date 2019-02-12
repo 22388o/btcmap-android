@@ -38,9 +38,7 @@ import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.db.Database
 import com.bubelov.coins.repository.place.PlacesAssetsCache
 import com.bubelov.coins.util.JsonStringConverterFactory
-import com.bubelov.coins.util.StringAdapter
 import com.bubelov.coins.util.UtcDateTypeAdapter
-import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -85,7 +83,6 @@ class AppModule {
     fun provideGson(): Gson {
         return GsonBuilder()
             .registerTypeAdapter(Date::class.java, UtcDateTypeAdapter())
-            .registerTypeAdapter(String::class.java, StringAdapter())
             .create()
     }
 

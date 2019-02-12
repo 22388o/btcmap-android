@@ -103,8 +103,8 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
             return
         }
 
-        checkMark.isVisible = place.openedClaims > 0 && place.closedClaims == 0
-        warning.isVisible = place.closedClaims > 0
+        //checkMark.isVisible = place.openedClaims > 0 && place.closedClaims == 0
+        //warning.isVisible = place.closedClaims > 0
 
         if (TextUtils.isEmpty(place.name)) {
             name.setText(R.string.name_unknown)

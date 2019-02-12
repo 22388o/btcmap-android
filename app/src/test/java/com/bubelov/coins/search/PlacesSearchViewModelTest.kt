@@ -120,14 +120,13 @@ class PlacesSearchViewModelTest {
             latitude = 0.0,
             longitude = 0.0,
             description = "",
-            category = "",
-            openedClaims = 0,
-            closedClaims = 0,
+            categoryId = 0,
             phone = "",
             website = "",
             visible = true,
             openingHours = "",
-            updatedAt = Date(0)
+            createdAt = Date(),
+            updatedAt = Date()
         )
     }
 }

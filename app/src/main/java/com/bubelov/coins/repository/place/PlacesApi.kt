@@ -32,8 +32,8 @@ import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.user.UserRepository
-import com.google.gson.Gson
 import kotlinx.coroutines.Deferred
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,11 +42,13 @@ import javax.inject.Singleton
 class PlacesApi @Inject
 internal constructor(
     private val api: CoinsApi,
-    private val gson: Gson,
     private val userRepository: UserRepository
 ) {
     fun getPlaces(updatedAfter: Date): Deferred<List<Place>> {
-        return api.getPlaces(gson.toJson(updatedAfter), Integer.MAX_VALUE)
+        return api.getPlaces(
+            SimpleDateFormat("yyyy-MM-dd", Locale.US).format(updatedAfter),
+            Integer.MAX_VALUE
+        )
     }
 
     fun addPlace(place: Place): Deferred<Place> {
