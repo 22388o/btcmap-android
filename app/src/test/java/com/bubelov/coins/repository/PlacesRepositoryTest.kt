@@ -28,15 +28,14 @@
 package com.bubelov.coins.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
+import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.emptyPlace
-import com.bubelov.coins.repository.place.PlacesApi
-import com.bubelov.coins.repository.place.PlacesAssetsCache
+import com.bubelov.coins.repository.place.BuiltInPlacesCache
 import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.user.UserRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -47,9 +46,10 @@ import org.mockito.MockitoAnnotations
 class PlacesRepositoryTest {
     @JvmField @Rule val instantExecutor = InstantTaskExecutorRule()
 
-    @Mock private lateinit var placesApi: PlacesApi
+    @Mock private lateinit var api: CoinsApi
     @Mock private lateinit var placesDb: PlacesDb
-    @Mock private lateinit var placesAssetsCache: PlacesAssetsCache
+    @Mock private lateinit var placesAssetsCache: BuiltInPlacesCache
+    @Mock private lateinit var userRepository: UserRepository
 
     init {
         MockitoAnnotations.initMocks(this)
@@ -62,13 +62,13 @@ class PlacesRepositoryTest {
 
     @Test
     fun usesAssetsCacheWhenEmpty() = runBlocking {
-        whenever(placesDb.count()).thenReturn(MutableLiveData<Int>().apply { value = 0 })
+        whenever(placesDb.count()).thenReturn(0)
         val places = listOf(emptyPlace().copy(id = 1, name = "Cafe"))
         whenever(placesAssetsCache.getPlaces()).thenReturn(places)
 
-        PlacesRepository(placesApi, placesDb, placesAssetsCache)
+        val repository = PlacesRepository(api, placesDb, placesAssetsCache, userRepository)
 
-        delay(100)
+        repository.find(1)
 
         verify(placesAssetsCache).getPlaces()
         verify(placesDb).insert(places)

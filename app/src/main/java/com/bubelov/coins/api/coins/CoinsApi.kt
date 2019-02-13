@@ -29,8 +29,10 @@ package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.util.Json
 import kotlinx.coroutines.Deferred
+import org.joda.time.DateTime
 import retrofit2.http.*
 
 interface CoinsApi {
@@ -51,24 +53,33 @@ interface CoinsApi {
     ): Deferred<TokenResponse>
 
     @GET("currencies")
-    fun getCurrencies(): Deferred<List<Currency>>
+    fun getCurrencies(
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
+        @Query("maxResults") maxResults: Int
+    ): Deferred<List<Currency>>
 
     @GET("places")
     fun getPlaces(
-        @Query("since") since: String,
-        @Query("limit") limit: Int
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
+        @Query("maxResults") maxResults: Int
     ): Deferred<List<Place>>
 
     @POST("places")
     fun createPlace(
-        @Header("session") session: String,
-        @Json @Body args: AddPlaceArgs
+        @Header("Authorization") authorization: String,
+        @Json @Body args: CreatePlaceArgs
     ): Deferred<Place>
 
     @PATCH("places/{id}")
     fun updatePlace(
         @Path("id") id: Long,
-        @Header("session") session: String,
+        @Header("Authorization") authorization: String,
         @Json @Body args: UpdatePlaceArgs
     ): Deferred<Place>
+
+    @GET("placeCategories")
+    fun getPlaceCategories(
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
+        @Query("maxResults") maxResults: Int
+    ): Deferred<List<PlaceCategory>>
 }

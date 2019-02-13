@@ -25,22 +25,8 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.repository.placecategories
+package com.bubelov.coins.api.coins
 
-import androidx.room.*
-import com.bubelov.coins.model.PlaceCategory
+import com.bubelov.coins.model.Place
 
-@Dao
-interface PlaceCategoriesDb {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(places: List<PlaceCategory>)
-
-    @Query("SELECT * FROM PlaceCategory")
-    fun all(): List<PlaceCategory>
-
-    @Query("SELECT * FROM PlaceCategory WHERE id = :id LIMIT 1")
-    fun findById(id: Long): PlaceCategory?
-
-    @Query("SELECT COUNT(*) FROM PlaceCategory")
-    fun count(): Int
-}
+data class CreatePlaceArgs(val place: Place)

@@ -29,19 +29,29 @@ package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.repository.place.PlacesAssetsCache
+import com.bubelov.coins.model.PlaceCategory
+import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
+import com.bubelov.coins.repository.place.BuiltInPlacesCache
+import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
 import kotlinx.coroutines.Deferred
+import org.joda.time.DateTime
 import retrofit2.mock.BehaviorDelegate
 import java.util.*
 
 class MockCoinsApi(
     private val delegate: BehaviorDelegate<CoinsApi>,
-    assetsCache: PlacesAssetsCache
+    currenciesCache: BuiltInCurrenciesCache,
+    placesCache: BuiltInPlacesCache,
+    placeCategoriesCache: BuiltInPlaceCategoriesCache
 ) : CoinsApi {
+    private val currencies = mutableListOf<Currency>()
     private val places = mutableListOf<Place>()
+    private val placeCategories = mutableListOf<PlaceCategory>()
 
     init {
-        places.addAll(assetsCache.getPlaces())
+        currencies.addAll(currenciesCache.getCurrencies())
+        places.addAll(placesCache.getPlaces())
+        placeCategories.addAll(placeCategoriesCache.getPlaceCategories())
     }
 
     override fun createUser(args: CreateUserArgs): Deferred<UserResponse> {
@@ -86,15 +96,27 @@ class MockCoinsApi(
         return delegate.returningResponse(response).createApiToken(authorization)
     }
 
-    override fun getCurrencies(): Deferred<List<Currency>> {
-        return delegate.returningResponse(emptyList<Currency>()).getCurrencies()
+    override fun getCurrencies(
+        createdOrUpdatedAfter: DateTime,
+        maxResults: Int
+    ): Deferred<List<Currency>> {
+        return delegate.returningResponse(emptyList<Currency>()).getCurrencies(
+            createdOrUpdatedAfter,
+            maxResults
+        )
     }
 
-    override fun getPlaces(since: String, limit: Int): Deferred<List<Place>> {
-        return delegate.returningResponse(emptyList<Place>()).getPlaces(since, limit)
+    override fun getPlaces(
+        createdOrUpdatedAfter: DateTime,
+        maxResults: Int
+    ): Deferred<List<Place>> {
+        return delegate.returningResponse(emptyList<Place>()).getPlaces(
+            createdOrUpdatedAfter,
+            maxResults
+        )
     }
 
-    override fun createPlace(session: String, args: AddPlaceArgs): Deferred<Place> {
+    override fun createPlace(session: String, args: CreatePlaceArgs): Deferred<Place> {
         val place = args.place.copy(id = UUID.randomUUID().toString().hashCode().toLong())
         places += place
         return delegate.returningResponse(place).createPlace(session, args)
@@ -105,5 +127,15 @@ class MockCoinsApi(
         places.remove(existingPlace)
         places += args.place
         return delegate.returningResponse(args.place).updatePlace(id, session, args)
+    }
+
+    override fun getPlaceCategories(
+        createdOrUpdatedAfter: DateTime,
+        maxResults: Int
+    ): Deferred<List<PlaceCategory>> {
+        return delegate.returningResponse(emptyList<Place>()).getPlaceCategories(
+            createdOrUpdatedAfter,
+            maxResults
+        )
     }
 }

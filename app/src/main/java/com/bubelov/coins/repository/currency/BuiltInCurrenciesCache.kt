@@ -25,36 +25,24 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.repository.placecategories
+package com.bubelov.coins.repository.currency
 
-import com.bubelov.coins.api.coins.CoinsApi
-import com.bubelov.coins.model.PlaceCategory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import android.content.Context
+import com.bubelov.coins.model.Currency
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.InputStreamReader
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PlaceCategoriesRepository @Inject constructor(
-    private val api: CoinsApi,
-    private val db: PlaceCategoriesDb,
-    private val assetsCache: PlaceCategoriesAssetsCache
+class BuiltInCurrenciesCache @Inject constructor(
+    private val context: Context,
+    val gson: Gson
 ) {
-    init {
-        GlobalScope.launch {
-            if (db.count() == 0) {
-                db.insert(assetsCache.getPlaceCategories())
-            }
-        }
+    fun getCurrencies(): List<Currency> {
+        val input = context.assets.open("currencies.json")
+        val typeToken = object : TypeToken<List<Currency>>() {}
+        return gson.fromJson(InputStreamReader(input), typeToken.type)
     }
-
-    suspend fun findById(id: Long): PlaceCategory? {
-        return withContext(Dispatchers.IO) {
-            db.findById(id)
-        }
-    }
-
-    // TODO implement sync
 }

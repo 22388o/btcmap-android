@@ -31,6 +31,7 @@ import com.bubelov.coins.model.SyncLogEntry
 import com.bubelov.coins.repository.currency.CurrenciesRepository
 
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.synclogs.SyncLogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
 
@@ -41,21 +42,22 @@ import javax.inject.Singleton
 class DatabaseSync @Inject constructor(
     private val currenciesRepository: CurrenciesRepository,
     private val placesRepository: PlacesRepository,
+    private val placeCategoriesRepository: PlaceCategoriesRepository,
     private val placeNotificationManager: PlaceNotificationManager,
     private val syncLogsRepository: SyncLogsRepository
 ) {
     suspend fun sync() {
-        currenciesRepository.syncWithApi()
-
-        val newPlaces = placesRepository.fetchNewPlaces()
+        val currenciesSyncResult = currenciesRepository.sync()
+        val placesSyncResult = placesRepository.sync()
+        val placeCategoriesSyncResutt = placeCategoriesRepository.sync()
 
         syncLogsRepository.insert(
             SyncLogEntry(
                 System.currentTimeMillis(),
-                newPlaces.size
+                placesSyncResult.affectedPlaces.size
             )
         )
 
-        placeNotificationManager.issueNotificationsIfNecessary(newPlaces)
+        placeNotificationManager.issueNotificationsIfNecessary(placesSyncResult.affectedPlaces)
     }
 }

@@ -36,7 +36,7 @@ import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategories.PlaceCategoriesRepository
+import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.LiveEvent

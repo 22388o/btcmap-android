@@ -30,7 +30,11 @@ package com.bubelov.coins.repository.place
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.bubelov.coins.api.coins.CoinsApi
+import com.bubelov.coins.api.coins.CreatePlaceArgs
+import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.*
@@ -42,36 +46,30 @@ import javax.inject.Singleton
 
 @Singleton
 class PlacesRepository @Inject constructor(
-    private val api: PlacesApi,
+    private val api: CoinsApi,
     private val db: PlacesDb,
-    private val assetsCache: PlacesAssetsCache
+    private val builtInCache: BuiltInPlacesCache,
+    private val userRepository: UserRepository
 ) {
     private val allPlaces = db.allAsync()
 
-    private var cacheInitialized = false
+    private var builtInCacheInitialized = false
 
     init {
-        db.count().observeForever { count ->
-            if (count == 0) {
-                GlobalScope.launch {
-                    withContext(Dispatchers.IO) {
-                        db.insert(assetsCache.getPlaces())
-                        cacheInitialized = true
-                    }
-                }
-            } else {
-                cacheInitialized = true
-            }
-        }
+        GlobalScope.launch { initBuiltInCache() }
     }
 
     suspend fun find(id: Long): Place? {
+        waitTillCacheIsReady()
+
         return withContext(Dispatchers.IO) {
             db.find(id)
         }
     }
 
     suspend fun findBySearchQuery(searchQuery: String): List<Place> {
+        waitTillCacheIsReady()
+
         return withContext(Dispatchers.IO) {
             db.findBySearchQuery(searchQuery)
         }
@@ -86,23 +84,46 @@ class PlacesRepository @Inject constructor(
             }
         }
 
-    suspend fun fetchNewPlaces(): List<Place> {
-        return withContext(Dispatchers.IO) {
-            while (!cacheInitialized) {
-                Timber.d("Waiting fo asset cache to initialize...")
-                delay(100)
-            }
+    suspend fun sync() = withContext(Dispatchers.IO) {
+        val syncStartDate = DateTime.now()
 
-            val latestPlaceUpdatedAt = db.maxUpdatedAt() ?: DateTime(0)
-            val response = api.getPlaces(latestPlaceUpdatedAt).await()
+        try {
+            waitTillCacheIsReady()
+
+            val request = api.getPlaces(
+                db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
+                Integer.MAX_VALUE
+            )
+
+            val response = request.await()
             db.insert(response)
-            response
+
+            PlacesSyncResult(
+                startDate = syncStartDate,
+                endDate = DateTime.now(),
+                success = true,
+                affectedPlaces = response
+            )
+        } catch (t: Throwable) {
+            Timber.e(t, "Couldn't sync places")
+
+            PlacesSyncResult(
+                startDate = syncStartDate,
+                endDate = DateTime.now(),
+                success = false,
+                affectedPlaces = emptyList()
+            )
         }
     }
 
     suspend fun addPlace(place: Place): Place {
         return withContext(Dispatchers.IO) {
-            val result = api.addPlace(place).await()
+            val request = api.createPlace(
+                authorization = userRepository.getAuthorization(),
+                args = CreatePlaceArgs(place)
+            )
+
+            val result = request.await()
             db.insert(listOf(result))
             result
         }
@@ -110,9 +131,38 @@ class PlacesRepository @Inject constructor(
 
     suspend fun updatePlace(place: Place): Place {
         return withContext(Dispatchers.IO) {
-            val result = api.updatePlace(place).await()
+            val request = api.updatePlace(
+                id = place.id,
+                authorization = userRepository.getAuthorization(),
+                args = UpdatePlaceArgs(place)
+            )
+
+            val result = request.await()
             db.update(result)
             result
         }
     }
+
+    private suspend fun initBuiltInCache() {
+        withContext(Dispatchers.IO) {
+            if (db.count() == 0) {
+                db.insert(builtInCache.getPlaces())
+            }
+
+            builtInCacheInitialized = true
+        }
+    }
+
+    private suspend fun waitTillCacheIsReady() {
+        while (!builtInCacheInitialized) {
+            delay(100)
+        }
+    }
+
+    data class PlacesSyncResult(
+        val startDate: DateTime,
+        val endDate: DateTime,
+        val success: Boolean,
+        val affectedPlaces: List<Place>
+    )
 }

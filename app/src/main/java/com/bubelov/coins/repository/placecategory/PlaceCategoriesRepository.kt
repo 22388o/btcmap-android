@@ -25,9 +25,10 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.repository.currency
+package com.bubelov.coins.repository.placecategory
 
 import com.bubelov.coins.api.coins.CoinsApi
+import com.bubelov.coins.model.PlaceCategory
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
 import timber.log.Timber
@@ -35,15 +36,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CurrenciesRepository @Inject constructor(
+class PlaceCategoriesRepository @Inject constructor(
     private val api: CoinsApi,
-    private val db: CurrenciesDb,
-    private val builtInCache: BuiltInCurrenciesCache
+    private val db: PlaceCategoriesDb,
+    private val builtInCache: BuildInPlaceCategoriesCache
 ) {
     private var builtInCacheInitialized = false
 
     init {
         GlobalScope.launch { initBuiltInCache() }
+    }
+
+    suspend fun findById(id: Long): PlaceCategory? {
+        return withContext(Dispatchers.IO) {
+            db.findById(id)
+        }
     }
 
     suspend fun sync() = withContext(Dispatchers.IO) {
@@ -52,7 +59,7 @@ class CurrenciesRepository @Inject constructor(
         try {
             waitTillCacheIsReady()
 
-            val request = api.getCurrencies(
+            val request = api.getPlaceCategories(
                 createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
                 maxResults = Int.MAX_VALUE
             )
@@ -60,20 +67,20 @@ class CurrenciesRepository @Inject constructor(
             val response = request.await()
             db.insert(response)
 
-            CurrenciesSyncResult(
+            PlaceCategoriesSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
                 success = true,
-                affectedCurrencies = response.size
+                affectedPlaceCategories = response.size
             )
         } catch (t: Throwable) {
-            Timber.e(t, "Couldn't sync currencies")
+            Timber.e(t, "Couldn't sync place categories")
 
-            CurrenciesSyncResult(
+            PlaceCategoriesSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
                 success = false,
-                affectedCurrencies = 0
+                affectedPlaceCategories = 0
             )
         }
     }
@@ -81,7 +88,7 @@ class CurrenciesRepository @Inject constructor(
     private suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
             if (db.count() == 0) {
-                db.insert(builtInCache.getCurrencies())
+                db.insert(builtInCache.getPlaceCategories())
             }
 
             builtInCacheInitialized = true
@@ -94,10 +101,10 @@ class CurrenciesRepository @Inject constructor(
         }
     }
 
-    data class CurrenciesSyncResult(
+    data class PlaceCategoriesSyncResult(
         val startDate: DateTime,
         val endDate: DateTime,
         val success: Boolean,
-        val affectedCurrencies: Int
+        val affectedPlaceCategories: Int
     )
 }

@@ -36,7 +36,9 @@ import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.db.Database
-import com.bubelov.coins.repository.place.PlacesAssetsCache
+import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
+import com.bubelov.coins.repository.place.BuiltInPlacesCache
+import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
 import com.bubelov.coins.util.DateTimeAdapter
 import com.bubelov.coins.util.JsonStringConverterFactory
 import com.google.gson.Gson
@@ -95,8 +97,21 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideApi(gson: Gson, placesAssetsCache: PlacesAssetsCache): CoinsApi {
-        return if (!BuildConfig.MOCK_API) createApi(gson) else createMockApi(placesAssetsCache)
+    fun provideApi(
+        gson: Gson,
+        currenciesCache: BuiltInCurrenciesCache,
+        placesCache: BuiltInPlacesCache,
+        placeCategoriesCache: BuiltInPlaceCategoriesCache
+    ): CoinsApi {
+        return if (!BuildConfig.MOCK_API) {
+            createApi(gson)
+        } else {
+            createMockApi(
+                currenciesCache,
+                placesCache,
+                placeCategoriesCache
+            )
+        }
     }
 
     private fun createApi(gson: Gson): CoinsApi {
@@ -119,7 +134,11 @@ class AppModule {
             .create(CoinsApi::class.java)
     }
 
-    private fun createMockApi(placesAssetsCache: PlacesAssetsCache): CoinsApi {
+    private fun createMockApi(
+        currenciesCache: BuiltInCurrenciesCache,
+        placesCache: BuiltInPlacesCache,
+        placeCategoriesCache: BuiltInPlaceCategoriesCache
+    ): CoinsApi {
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
@@ -133,6 +152,11 @@ class AppModule {
 
         val delegate = mockRetrofit.create(CoinsApi::class.java)
 
-        return MockCoinsApi(delegate, placesAssetsCache)
+        return MockCoinsApi(
+            delegate = delegate,
+            currenciesCache = currenciesCache,
+            placesCache = placesCache,
+            placeCategoriesCache = placeCategoriesCache
+        )
     }
 }

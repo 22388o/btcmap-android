@@ -61,7 +61,7 @@ interface PlacesDb {
     fun findRandom(): Place?
 
     @Query("SELECT COUNT(*) FROM Place")
-    fun count(): LiveData<Int>
+    fun count(): Int
 
     @Query("SELECT MAX(updatedAt) FROM Place")
     fun maxUpdatedAt(): DateTime?

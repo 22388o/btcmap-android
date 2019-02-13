@@ -32,7 +32,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategories.PlaceCategoriesRepository
+import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.mock

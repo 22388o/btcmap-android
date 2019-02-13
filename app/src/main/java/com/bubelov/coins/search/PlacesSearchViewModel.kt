@@ -36,7 +36,7 @@ import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategories.PlaceCategoriesRepository
+import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.DistanceUnits
 import com.bubelov.coins.util.DistanceUtils

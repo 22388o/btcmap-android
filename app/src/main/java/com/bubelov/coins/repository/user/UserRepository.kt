@@ -122,6 +122,10 @@ class UserRepository @Inject constructor(
         userAuthMethod = ""
     }
 
+    fun getAuthorization(): String {
+        return "Bearer $userAuthToken"
+    }
+
     private fun UserResponse.toUser() = User (
         id = id,
         email = email,

@@ -37,7 +37,7 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.repository.currency.CurrenciesDb
 import com.bubelov.coins.repository.place.PlacesDb
-import com.bubelov.coins.repository.placecategories.PlaceCategoriesDb
+import com.bubelov.coins.repository.placecategory.PlaceCategoriesDb
 import com.bubelov.coins.util.transaction
 
 @Database(
@@ -47,9 +47,9 @@ import com.bubelov.coins.util.transaction
 )
 @TypeConverters(Converters::class)
 abstract class Database : RoomDatabase() {
+    abstract fun currenciesDb(): CurrenciesDb
     abstract fun placesDb(): PlacesDb
     abstract fun placeCategoriesDb(): PlaceCategoriesDb
-    abstract fun currenciesDb(): CurrenciesDb
 
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
