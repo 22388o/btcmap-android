@@ -28,12 +28,12 @@
 package com.bubelov.coins.db
 
 import androidx.room.TypeConverter
-import java.util.*
+import org.joda.time.DateTime
 
 class Converters {
     @TypeConverter
-    fun longToDate(long: Long) = Date(long)
+    fun stringToDateTime(string: String) = DateTime.parse(string)
 
     @TypeConverter
-    fun dateToLong(date: Date) = date.time
+    fun dateTimeToString(dateTime: DateTime) = dateTime.toString()
 }

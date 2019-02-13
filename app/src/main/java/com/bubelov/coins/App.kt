@@ -35,6 +35,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.HasActivityInjector
 import dagger.android.HasServiceInjector
+import net.danlew.android.joda.JodaTimeAndroid
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,6 +45,8 @@ class App : DaggerApplication(), HasActivityInjector, HasServiceInjector {
 
     override fun onCreate() {
         super.onCreate()
+
+        JodaTimeAndroid.init(this)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

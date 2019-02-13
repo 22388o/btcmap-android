@@ -31,7 +31,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
-import java.util.*
+import org.joda.time.DateTime
 
 @Parcelize
 @Entity
@@ -39,6 +39,6 @@ data class PlaceCategory(
     @PrimaryKey
     val id: Long,
     val name: String,
-    val createdAt: Date,
-    val updatedAt: Date
+    val createdAt: DateTime,
+    val updatedAt: DateTime
 ) : Parcelable

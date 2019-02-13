@@ -56,6 +56,9 @@ buildscript {
         // Logging
         timberVersion = '4.7.1'
 
+        // Dates handling
+        jodaVersion = '2.10.1.1'
+
         // Crash reporting
         crashlyticsVersion = '2.8.0'
 

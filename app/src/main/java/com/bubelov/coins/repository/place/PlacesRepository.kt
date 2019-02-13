@@ -34,8 +34,8 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.*
+import org.joda.time.DateTime
 import timber.log.Timber
-import java.util.*
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -88,13 +88,13 @@ class PlacesRepository @Inject constructor(
 
     suspend fun fetchNewPlaces(): List<Place> {
         return withContext(Dispatchers.IO) {
-            while(!cacheInitialized) {
+            while (!cacheInitialized) {
                 Timber.d("Waiting fo asset cache to initialize...")
                 delay(100)
             }
 
-            val latestPlaceUpdatedAt = db.maxUpdatedAt() ?: Date(0)
-            val response = api.getPlaces(Date(latestPlaceUpdatedAt.time + 1)).await()
+            val latestPlaceUpdatedAt = db.maxUpdatedAt() ?: DateTime(0)
+            val response = api.getPlaces(latestPlaceUpdatedAt).await()
             db.insert(response)
             response
         }

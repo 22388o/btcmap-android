@@ -32,6 +32,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.placecategories.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.mock
@@ -40,6 +41,7 @@ import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -47,13 +49,13 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import java.util.*
 
 class PlacesSearchViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock private lateinit var placesRepository: PlacesRepository
+    @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
     @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
     @Mock private lateinit var preferences: SharedPreferences
     @Mock private lateinit var resources: Resources
@@ -65,6 +67,7 @@ class PlacesSearchViewModelTest {
 
         model = PlacesSearchViewModel(
             placesRepository,
+            placeCategoriesRepository,
             placeIconsRepository,
             preferences,
             resources,
@@ -125,8 +128,8 @@ class PlacesSearchViewModelTest {
             website = "",
             visible = true,
             openingHours = "",
-            createdAt = Date(),
-            updatedAt = Date()
+            createdAt = DateTime.now(),
+            updatedAt = DateTime.now()
         )
     }
 }

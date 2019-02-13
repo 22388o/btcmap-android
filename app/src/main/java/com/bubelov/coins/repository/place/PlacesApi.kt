@@ -33,8 +33,7 @@ import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.user.UserRepository
 import kotlinx.coroutines.Deferred
-import java.text.SimpleDateFormat
-import java.util.*
+import org.joda.time.DateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,9 +43,9 @@ internal constructor(
     private val api: CoinsApi,
     private val userRepository: UserRepository
 ) {
-    fun getPlaces(updatedAfter: Date): Deferred<List<Place>> {
+    fun getPlaces(updatedAfter: DateTime): Deferred<List<Place>> {
         return api.getPlaces(
-            SimpleDateFormat("yyyy-MM-dd", Locale.US).format(updatedAfter),
+            updatedAfter.toString(),
             Integer.MAX_VALUE
         )
     }

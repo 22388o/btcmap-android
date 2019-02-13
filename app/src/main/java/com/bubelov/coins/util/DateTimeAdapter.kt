@@ -25,27 +25,35 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins
+package com.bubelov.coins.util
 
-import com.bubelov.coins.util.UtcDateTypeAdapter
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Test
-import java.util.*
+import com.google.gson.JsonParseException
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
+import org.joda.time.DateTime
 
-class UtcDateTypeAdapterTest {
-    private val adapter = UtcDateTypeAdapter()
-
-    @Test
-    fun convertsDateToString() {
-        val date = Date(1504586827857)
-        assertEquals("2017-09-05T04:47:07.857Z", adapter.format(date))
+class DateTimeAdapter : TypeAdapter<DateTime>() {
+    override fun read(`in`: JsonReader): DateTime? {
+        return try {
+            when (`in`.peek()) {
+                JsonToken.NULL -> {
+                    `in`.nextNull()
+                    null
+                }
+                else -> DateTime.parse(`in`.nextString())
+            }
+        } catch (t: Throwable) {
+            throw JsonParseException(t)
+        }
     }
 
-    @Test
-    fun convertsStringToDate() {
-        val date = adapter.parse("2017-09-05T04:47:07.857Z")
-        assertNotNull(date)
-        assertEquals(Date(1504586827857), date)
+    override fun write(out: JsonWriter, value: DateTime?) {
+        if (value == null) {
+            out.nullValue()
+        } else {
+            out.value(value.toString())
+        }
     }
 }

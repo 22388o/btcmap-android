@@ -31,6 +31,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 import com.bubelov.coins.model.Place
+import org.joda.time.DateTime
 import java.util.*
 
 @Dao
@@ -63,7 +64,7 @@ interface PlacesDb {
     fun count(): LiveData<Int>
 
     @Query("SELECT MAX(updatedAt) FROM Place")
-    fun maxUpdatedAt(): Date?
+    fun maxUpdatedAt(): DateTime?
 
     @Update
     fun update(place: Place)

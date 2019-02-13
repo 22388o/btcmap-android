@@ -28,22 +28,22 @@
 package com.bubelov.coins
 
 import com.bubelov.coins.db.Converters
+import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.*
 
 class DatabaseTypeConvertersTests {
     private val converters = Converters()
 
-    private val date = Date()
+    private val dateTime = DateTime.now()
 
     @Test
-    fun convertsLongToDate() {
-        assertEquals(date, converters.longToDate(date.time))
+    fun convertsDateTimeToString() {
+        assertEquals(dateTime.toString(), converters.dateTimeToString(dateTime))
     }
 
     @Test
-    fun convertsDateToLong() {
-        assertEquals(date.time, converters.dateToLong(date))
+    fun convertsStringToDateTime() {
+        assertEquals(dateTime, converters.stringToDateTime(dateTime.toString()))
     }
 }

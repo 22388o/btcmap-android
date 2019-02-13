@@ -28,7 +28,7 @@
 package com.bubelov.coins
 
 import com.bubelov.coins.model.Place
-import java.util.*
+import org.joda.time.DateTime
 
 fun emptyPlace(): Place {
     return Place(
@@ -42,7 +42,7 @@ fun emptyPlace(): Place {
         website = "",
         openingHours = "",
         visible = true,
-        createdAt = Date(),
-        updatedAt = Date()
+        createdAt = DateTime.now(),
+        updatedAt = DateTime.now()
     )
 }

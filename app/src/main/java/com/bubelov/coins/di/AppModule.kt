@@ -37,8 +37,8 @@ import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.db.Database
 import com.bubelov.coins.repository.place.PlacesAssetsCache
+import com.bubelov.coins.util.DateTimeAdapter
 import com.bubelov.coins.util.JsonStringConverterFactory
-import com.bubelov.coins.util.UtcDateTypeAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -47,11 +47,11 @@ import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.joda.time.DateTime
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
@@ -84,7 +84,7 @@ class AppModule {
     @Singleton
     fun provideGson(): Gson {
         return GsonBuilder()
-            .registerTypeAdapter(Date::class.java, UtcDateTypeAdapter())
+            .registerTypeAdapter(DateTime::class.java, DateTimeAdapter())
             .create()
     }
 

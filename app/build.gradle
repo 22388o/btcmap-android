@@ -116,6 +116,9 @@ dependencies {
     // Logging
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
+    // Dates handling
+    implementation "net.danlew:android.joda:$jodaVersion"
+
     // Crash reporting
     implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion@aar") {
         transitive = true

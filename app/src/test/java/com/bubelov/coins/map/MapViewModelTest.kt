@@ -30,6 +30,7 @@ package com.bubelov.coins.map
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.placecategories.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.LocationLiveData
@@ -50,6 +51,7 @@ class MapViewModelTest {
 
     @Mock private lateinit var notificationAreaRepository: NotificationAreaRepository
     @Mock private lateinit var placesRepository: PlacesRepository
+    @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
     @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
     @Mock private lateinit var location: LocationLiveData
     @Mock private lateinit var userRepository: UserRepository
@@ -62,6 +64,7 @@ class MapViewModelTest {
         model = MapViewModel(
             notificationAreaRepository,
             placesRepository,
+            placeCategoriesRepository,
             placeIconsRepository,
             location,
             userRepository,

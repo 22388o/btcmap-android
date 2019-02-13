@@ -56,8 +56,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit_place.*
+import org.joda.time.DateTime
 import java.lang.IllegalStateException
-import java.util.*
 import javax.inject.Inject
 
 class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
@@ -245,8 +245,8 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
             description = description.text.toString(),
             openingHours = openingHours.text.toString(),
             visible = !closedSwitch.isChecked,
-            createdAt = Date(),
-            updatedAt = Date()
+            createdAt = DateTime.now(),
+            updatedAt = DateTime.now()
         )
     }
 
