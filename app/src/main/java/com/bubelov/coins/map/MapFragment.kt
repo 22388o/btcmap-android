@@ -40,11 +40,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
+import com.bubelov.coins.model.Location
+import com.bubelov.coins.model.Place
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
 import com.bubelov.coins.util.extention.getLocation
@@ -245,6 +248,13 @@ class MapFragment :
     override fun onResume() {
         super.onResume()
         drawerToggle.syncState()
+
+        val placeArg = arguments?.getParcelable(PLACE_ARG) as Place?
+
+        if (placeArg != null) {
+            model.selectPlace(placeArg.id)
+            model.moveToLocation(Location(placeArg.latitude, placeArg.longitude))
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -429,5 +439,11 @@ class MapFragment :
         private const val REQUEST_ACCESS_LOCATION = 10
 
         private const val DEFAULT_MAP_ZOOM = 15f
+
+        private const val PLACE_ARG = "place"
+
+        fun newOpenPlaceArguments(place: Place): Bundle {
+            return bundleOf(Pair(PLACE_ARG, place))
+        }
     }
 }

@@ -75,7 +75,10 @@ class PlacesRepository @Inject constructor(
         }
     }
 
-    fun findRandom() = db.findRandom()
+    suspend fun findRandom() = withContext(Dispatchers.IO) {
+        waitTillCacheIsReady()
+        db.findRandom()
+    }
 
     fun getPlaces(bounds: LatLngBounds): LiveData<List<Place>> =
         Transformations.switchMap(allPlaces) {

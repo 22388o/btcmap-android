@@ -138,6 +138,11 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun moveToLocation(location: Location) {
+        initializedLocation = true
+        _moveMapToLocation.value = location
+    }
+
     fun onAddPlaceClick() {
         if (userRepository.signedIn()) {
             _openAddPlaceScreen.call()

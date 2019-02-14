@@ -116,17 +116,17 @@ class MockCoinsApi(
         )
     }
 
-    override fun createPlace(session: String, args: CreatePlaceArgs): Deferred<Place> {
+    override fun createPlace(authorization: String, args: CreatePlaceArgs): Deferred<Place> {
         val place = args.place.copy(id = UUID.randomUUID().toString().hashCode().toLong())
         places += place
-        return delegate.returningResponse(place).createPlace(session, args)
+        return delegate.returningResponse(place).createPlace(authorization, args)
     }
 
-    override fun updatePlace(id: Long, session: String, args: UpdatePlaceArgs): Deferred<Place> {
+    override fun updatePlace(id: Long, authorization: String, args: UpdatePlaceArgs): Deferred<Place> {
         val existingPlace = places.find { it.id == id }
         places.remove(existingPlace)
         places += args.place
-        return delegate.returningResponse(args.place).updatePlace(id, session, args)
+        return delegate.returningResponse(args.place).updatePlace(id, authorization, args)
     }
 
     override fun getPlaceCategories(

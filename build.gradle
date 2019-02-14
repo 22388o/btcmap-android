@@ -24,7 +24,7 @@ buildscript {
         loggingInterceptorVersion = '3.10.0'
 
         // Cache
-        roomVersion = '2.1.0-alpha02'
+        roomVersion = '2.1.0-alpha04'
 
         // Navigation
         navigationVersion = '1.0.0-alpha07'

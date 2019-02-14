@@ -85,7 +85,7 @@ class DatabaseSyncTest {
 
         databaseSync.sync()
 
-        verify(placeNotificationManager).issueNotificationsIfNecessary(newPlaces)
+        verify(placeNotificationManager).issueNotificationsIfInArea(newPlaces)
         verify(syncLogsRepository).insert(any())
     }
 

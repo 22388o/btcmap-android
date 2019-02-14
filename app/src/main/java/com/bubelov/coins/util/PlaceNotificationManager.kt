@@ -31,7 +31,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.bubelov.coins.R
+import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.area.NotificationAreaRepository
@@ -45,23 +48,10 @@ internal constructor(
     private val notificationAreaRepository: NotificationAreaRepository
 ) {
     init {
-        if (Build.VERSION.SDK_INT >= 26) {
-            val channel = NotificationChannel(
-                NEW_PLACE_NOTIFICATIONS_CHANNEL,
-                context.getString(R.string.new_place_notifications),
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                lightColor = context.getColor(R.color.primary)
-                enableVibration(false)
-            }
-
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
+        registerNotificationChannel()
     }
 
-    fun issueNotificationsIfNecessary(newPlaces: Collection<Place>) {
+    fun issueNotificationsIfInArea(newPlaces: Collection<Place>) {
         newPlaces.forEach { place ->
             if (!place.visible) {
                 return
@@ -76,19 +66,40 @@ internal constructor(
     }
 
     fun issueNotification(place: Place) {
-// TODO
-//        val builder = NotificationCompat.Builder(context, NEW_PLACE_NOTIFICATIONS_CHANNEL)
-//            .setSmallIcon(R.drawable.ic_notification)
-//            .setContentTitle(context.getString(R.string.notification_new_place))
-//            .setContentText(place.name)
-//            .setAutoCancel(true)
-//
-//        val intent = MapActivity.newIntent(context, place.id)
-//        val pendingIntent = PendingIntent.getActivity(context, place.id.toInt(), intent, 0)
-//        builder.setContentIntent(pendingIntent)
-//
-//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        notificationManager.notify(place.id.toInt(), builder.build())
+        val builder = NotificationCompat.Builder(context, NEW_PLACE_NOTIFICATIONS_CHANNEL)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(context.getString(R.string.notification_new_place))
+            .setContentText(place.name)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+
+        val pendingIntent = NavDeepLinkBuilder(context)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.mapFragment)
+            .setArguments(MapFragment.newOpenPlaceArguments(place))
+            .createPendingIntent()
+
+        builder.setContentIntent(pendingIntent)
+
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.notify(place.id.toInt(), builder.build())
+    }
+
+    private fun registerNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = context.getString(R.string.new_place_notifications)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+
+            val channel = NotificationChannel(NEW_PLACE_NOTIFICATIONS_CHANNEL, name, importance)
+
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     private fun Place.inside(area: NotificationArea): Boolean {
@@ -101,6 +112,6 @@ internal constructor(
     }
 
     companion object {
-        private const val NEW_PLACE_NOTIFICATIONS_CHANNEL = "new_place_notifications"
+        private const val NEW_PLACE_NOTIFICATIONS_CHANNEL = "newPlaceNotifications"
     }
 }

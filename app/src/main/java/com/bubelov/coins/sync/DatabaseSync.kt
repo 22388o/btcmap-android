@@ -58,6 +58,6 @@ class DatabaseSync @Inject constructor(
             )
         )
 
-        placeNotificationManager.issueNotificationsIfNecessary(placesSyncResult.affectedPlaces)
+        placeNotificationManager.issueNotificationsIfInArea(placesSyncResult.affectedPlaces)
     }
 }
