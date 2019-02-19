@@ -44,7 +44,6 @@ import com.bubelov.coins.util.DateTimeAdapter
 import com.bubelov.coins.util.JsonStringConverterFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
@@ -132,7 +131,6 @@ class AppModule {
 
         return Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addConverterFactory(JsonStringConverterFactory(GsonConverterFactory.create()))
             .client(client)
@@ -148,7 +146,6 @@ class AppModule {
     ): CoinsApi {
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
         val behavior = NetworkBehavior.create()

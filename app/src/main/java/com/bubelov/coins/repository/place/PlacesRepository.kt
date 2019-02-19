@@ -94,12 +94,11 @@ class PlacesRepository @Inject constructor(
         try {
             waitTillCacheIsReady()
 
-            val request = api.getPlaces(
+            val response = api.getPlaces(
                 db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
                 Integer.MAX_VALUE
             )
 
-            val response = request.await()
             val newPlaces = response.filter { db.find(it.id) == null }
             db.insert(response)
 
@@ -127,28 +126,26 @@ class PlacesRepository @Inject constructor(
 
     suspend fun addPlace(place: Place): Place {
         return withContext(Dispatchers.IO) {
-            val request = api.createPlace(
+            val response = api.createPlace(
                 authorization = userRepository.getAuthorization(),
                 args = CreatePlaceArgs(place)
             )
 
-            val result = request.await()
-            db.insert(listOf(result))
-            result
+            db.insert(listOf(response))
+            response
         }
     }
 
     suspend fun updatePlace(place: Place): Place {
         return withContext(Dispatchers.IO) {
-            val request = api.updatePlace(
+            val response = api.updatePlace(
                 id = place.id,
                 authorization = userRepository.getAuthorization(),
                 args = UpdatePlaceArgs(place)
             )
 
-            val result = request.await()
-            db.update(result)
-            result
+            db.update(response)
+            response
         }
     }
 

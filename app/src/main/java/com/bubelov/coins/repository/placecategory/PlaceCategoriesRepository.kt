@@ -60,12 +60,11 @@ class PlaceCategoriesRepository @Inject constructor(
         try {
             waitTillCacheIsReady()
 
-            val request = api.getPlaceCategories(
+            val response = api.getPlaceCategories(
                 createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
                 maxResults = Int.MAX_VALUE
             )
 
-            val response = request.await()
             db.insert(response)
 
             TableSyncResult(

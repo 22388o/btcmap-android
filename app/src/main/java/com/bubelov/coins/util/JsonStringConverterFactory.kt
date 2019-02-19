@@ -62,7 +62,7 @@ class JsonStringConverterFactory(private val delegateFactory: Converter.Factory)
         @Throws(IOException::class)
         override fun convert(value: T): String {
             val buffer = Buffer()
-            delegate.convert(value).writeTo(buffer)
+            delegate.convert(value)?.writeTo(buffer)
             return buffer.readUtf8()
         }
     }

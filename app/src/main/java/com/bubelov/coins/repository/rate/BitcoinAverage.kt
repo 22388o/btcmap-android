@@ -31,7 +31,6 @@ import com.bubelov.coins.api.rates.BitcoinAverageApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.google.gson.Gson
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -43,7 +42,6 @@ class BitcoinAverage @Inject constructor(gson: Gson) : ExchangeRatesSource {
 
     val api: BitcoinAverageApi = Retrofit.Builder()
         .baseUrl("https://apiv2.bitcoinaverage.com/")
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
         .create(BitcoinAverageApi::class.java)
@@ -55,8 +53,8 @@ class BitcoinAverage @Inject constructor(gson: Gson) : ExchangeRatesSource {
     override suspend fun getExchangeRate(pair: CurrencyPair): Result<Double> {
         if (pair == CurrencyPair.BTC_USD) {
             return try {
-                val result = api.getUsdTicker().await()
-                Result.Success(result.btcUsd.last)
+                val response = api.getUsdTicker()
+                Result.Success(response.btcUsd.last)
             } catch (e: Exception) {
                 Result.Error(e)
             }

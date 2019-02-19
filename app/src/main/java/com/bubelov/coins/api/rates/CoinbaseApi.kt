@@ -27,12 +27,11 @@
 
 package com.bubelov.coins.api.rates
 
-import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 
 interface CoinbaseApi {
     @GET("exchange-rates?currency=BTC")
-    fun getExchangeRates(): Deferred<Response>
+    suspend fun getExchangeRates(): Response
 
     data class Response(val data: Data)
     data class Data(val currency: String, val rates: Map<String, Double>)

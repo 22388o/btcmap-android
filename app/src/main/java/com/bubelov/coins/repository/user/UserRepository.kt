@@ -61,8 +61,8 @@ class UserRepository @Inject constructor(
 
     suspend fun signIn(googleToken: String) {
         withContext(Dispatchers.IO) {
-            val tokenResponse = api.createApiToken("GoogleToken $googleToken").await()
-            val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token).await()
+            val tokenResponse = api.createApiToken("GoogleToken $googleToken")
+            val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token)
 
             user = userResponse.toUser()
             userAuthToken = tokenResponse.token
@@ -77,8 +77,8 @@ class UserRepository @Inject constructor(
                 Base64.NO_WRAP
             )
 
-            val tokenResponse = api.createApiToken("Basic $credentials").await()
-            val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token).await()
+            val tokenResponse = api.createApiToken("Basic $credentials")
+            val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token)
 
             user = userResponse.toUser()
             userAuthToken = tokenResponse.token
@@ -105,8 +105,8 @@ class UserRepository @Inject constructor(
         )
 
         withContext(Dispatchers.IO) {
-            val userResponse = api.createUser(createUserArgs).await()
-            val tokenResponse = api.createApiToken("Basic $authCredentials").await()
+            val userResponse = api.createUser(createUserArgs)
+            val tokenResponse = api.createApiToken("Basic $authCredentials")
 
             user = userResponse.toUser()
             userAuthToken = tokenResponse.token

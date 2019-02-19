@@ -28,12 +28,11 @@
 package com.bubelov.coins.api.rates
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 
 interface BitcoinAverageApi {
     @GET("indices/global/ticker/short?crypto=BTC&fiat=USD")
-    fun getUsdTicker(): Deferred<Response>
+    suspend fun getUsdTicker(): Response
 
     data class Response(@SerializedName("BTCUSD") val btcUsd: Data)
     data class Data(val last: Double)

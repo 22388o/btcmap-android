@@ -58,12 +58,11 @@ class CurrenciesPlacesRepository @Inject constructor(
         try {
             waitTillCacheIsReady()
 
-            val request = api.getCurrenciesPlaces(
+            val response = api.getCurrenciesPlaces(
                 createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
                 maxResults = Int.MAX_VALUE
             )
 
-            val response = request.await()
             db.insert(response)
 
             TableSyncResult(

@@ -31,8 +31,6 @@ import com.bubelov.coins.api.rates.BitstampApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.google.gson.Gson
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -44,7 +42,6 @@ class Bitstamp @Inject constructor(gson: Gson) : ExchangeRatesSource {
 
     val api: BitstampApi = Retrofit.Builder()
         .baseUrl("https://www.bitstamp.net/api/v2/")
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
         .create(BitstampApi::class.java)
@@ -54,19 +51,14 @@ class Bitstamp @Inject constructor(gson: Gson) : ExchangeRatesSource {
     }
 
     override suspend fun getExchangeRate(pair: CurrencyPair): Result<Double> {
-        return when (pair) {
-            CurrencyPair.BTC_USD -> fromTicker(api.getBtcUsdTicker())
-            CurrencyPair.BTC_EUR -> fromTicker(api.getBtcEurTicker())
-            else -> throw IllegalArgumentException()
-        }
-    }
-
-    private suspend fun fromTicker(call: Deferred<BitstampApi.BitstampTicker>): Result<Double> {
         return try {
-            val result = call.await()
-            Result.Success(result.last.toDouble())
-        } catch (e: Exception) {
-            Result.Error(e)
+            when (pair) {
+                CurrencyPair.BTC_USD -> Result.Success(api.getBtcUsdTicker().last.toDouble())
+                CurrencyPair.BTC_EUR -> Result.Success(api.getBtcEurTicker().last.toDouble())
+                else -> throw IllegalArgumentException()
+            }
+        } catch (t: Throwable) {
+            Result.Error(t)
         }
     }
 }

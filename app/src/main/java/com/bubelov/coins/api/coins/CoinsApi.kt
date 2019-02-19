@@ -32,61 +32,60 @@ import com.bubelov.coins.model.CurrencyPlace
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.util.Json
-import kotlinx.coroutines.Deferred
 import org.joda.time.DateTime
 import retrofit2.http.*
 
 interface CoinsApi {
     @POST("users")
-    fun createUser(
+    suspend fun createUser(
         @Json @Body args: CreateUserArgs
-    ): Deferred<UserResponse>
+    ): UserResponse
 
     @GET("users/{id}")
-    fun getUser(
+    suspend fun getUser(
         @Path("id") id: Long,
         @Header("Authorization") authorization: String
-    ): Deferred<UserResponse>
+    ): UserResponse
 
     @POST("tokens")
-    fun createApiToken(
+    suspend fun createApiToken(
         @Header("Authorization") authorization: String
-    ): Deferred<TokenResponse>
+    ): TokenResponse
 
     @GET("currencies")
-    fun getCurrencies(
+    suspend fun getCurrencies(
         @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
         @Query("maxResults") maxResults: Int
-    ): Deferred<List<Currency>>
+    ): List<Currency>
 
     @GET("currenciesPlaces")
-    fun getCurrenciesPlaces(
+    suspend fun getCurrenciesPlaces(
         @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
         @Query("maxResults") maxResults: Int
-    ): Deferred<List<CurrencyPlace>>
+    ): List<CurrencyPlace>
 
     @GET("places")
-    fun getPlaces(
+    suspend fun getPlaces(
         @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
         @Query("maxResults") maxResults: Int
-    ): Deferred<List<Place>>
+    ): List<Place>
 
     @POST("places")
-    fun createPlace(
+    suspend fun createPlace(
         @Header("Authorization") authorization: String,
         @Json @Body args: CreatePlaceArgs
-    ): Deferred<Place>
+    ): Place
 
     @PATCH("places/{id}")
-    fun updatePlace(
+    suspend fun updatePlace(
         @Path("id") id: Long,
         @Header("Authorization") authorization: String,
         @Json @Body args: UpdatePlaceArgs
-    ): Deferred<Place>
+    ): Place
 
     @GET("placeCategories")
-    fun getPlaceCategories(
+    suspend fun getPlaceCategories(
         @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
         @Query("maxResults") maxResults: Int
-    ): Deferred<List<PlaceCategory>>
+    ): List<PlaceCategory>
 }

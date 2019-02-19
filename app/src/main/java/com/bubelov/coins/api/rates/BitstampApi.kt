@@ -27,15 +27,14 @@
 
 package com.bubelov.coins.api.rates
 
-import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 
 interface BitstampApi {
     @GET("ticker/btcusd")
-    fun getBtcUsdTicker(): Deferred<BitstampTicker>
+    suspend fun getBtcUsdTicker(): BitstampTicker
 
     @GET("ticker/btceur")
-    fun getBtcEurTicker(): Deferred<BitstampTicker>
+    suspend fun getBtcEurTicker(): BitstampTicker
 
     data class BitstampTicker(val last: Float)
 }

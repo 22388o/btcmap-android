@@ -31,7 +31,6 @@ import com.bubelov.coins.api.rates.CoinbaseApi
 import com.bubelov.coins.model.CurrencyPair
 import com.bubelov.coins.repository.Result
 import com.google.gson.Gson
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -43,7 +42,6 @@ class Coinbase @Inject constructor(gson: Gson) : ExchangeRatesSource {
 
     val api: CoinbaseApi = Retrofit.Builder()
         .baseUrl("https://api.coinbase.com/v2/")
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
         .create(CoinbaseApi::class.java)
@@ -55,8 +53,8 @@ class Coinbase @Inject constructor(gson: Gson) : ExchangeRatesSource {
     override suspend fun getExchangeRate(pair: CurrencyPair): Result<Double> {
         if (pair == CurrencyPair.BTC_USD || pair == CurrencyPair.BTC_EUR || pair == CurrencyPair.BTC_GBP) {
             return try {
-                val result = api.getExchangeRates().await()
-                Result.Success(result.data.rates[pair.quoteCurrency]!!)
+                val result = api.getExchangeRates()
+                Result.Success(result.data.rates.getValue(pair.quoteCurrency))
             } catch (e: Exception) {
                 Result.Error(e)
             }
