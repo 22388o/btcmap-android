@@ -25,25 +25,26 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins
+package com.bubelov.coins.repository.currencyplace
 
-import com.bubelov.coins.db.Converters
+import androidx.room.*
+import com.bubelov.coins.model.CurrencyPlace
 import org.joda.time.DateTime
-import org.junit.Assert.assertEquals
-import org.junit.Test
 
-class DatabaseTypeConvertersTests {
-    private val converters = Converters()
+@Dao
+interface CurrenciesPlacesDb {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(items: List<CurrencyPlace>)
 
-    private val dateTime = DateTime.now()
+    @Query("SELECT * FROM CurrencyPlace")
+    fun all(): List<CurrencyPlace>
 
-    @Test
-    fun convertsDateTimeToString() {
-        assertEquals(dateTime.toString(), converters.dateTimeToString(dateTime))
-    }
+    @Query("SELECT * FROM CurrencyPlace WHERE placeId = :placeId")
+    fun findByPlaceId(placeId: Int): List<CurrencyPlace>
 
-    @Test
-    fun convertsStringToDateTime() {
-        assertEquals(dateTime.millis, converters.stringToDateTime(dateTime.toString()).millis)
-    }
+    @Query("SELECT COUNT(*) FROM CurrencyPlace")
+    fun count(): Int
+
+    @Query("SELECT MAX(updatedAt) FROM CurrencyPlace")
+    fun maxUpdatedAt(): DateTime?
 }

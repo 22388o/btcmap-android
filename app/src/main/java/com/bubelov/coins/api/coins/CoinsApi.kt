@@ -28,6 +28,7 @@
 package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.model.Currency
+import com.bubelov.coins.model.CurrencyPlace
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.util.Json
@@ -57,6 +58,12 @@ interface CoinsApi {
         @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
         @Query("maxResults") maxResults: Int
     ): Deferred<List<Currency>>
+
+    @GET("currenciesPlaces")
+    fun getCurrenciesPlaces(
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
+        @Query("maxResults") maxResults: Int
+    ): Deferred<List<CurrencyPlace>>
 
     @GET("places")
     fun getPlaces(

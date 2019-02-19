@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.repository.currency
+package com.bubelov.coins.repository.currencyplace
 
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.util.TableSyncResult
@@ -36,15 +36,20 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CurrenciesRepository @Inject constructor(
+class CurrenciesPlacesRepository @Inject constructor(
     private val api: CoinsApi,
-    private val db: CurrenciesDb,
-    private val builtInCache: BuiltInCurrenciesCache
+    private val db: CurrenciesPlacesDb,
+    private val builtInCache: BuiltInCurrenciesPlacesCache
 ) {
     private var builtInCacheInitialized = false
 
     init {
         GlobalScope.launch { initBuiltInCache() }
+    }
+
+    suspend fun findByPlaceId(placeId: Int) = withContext(Dispatchers.IO) {
+        waitTillCacheIsReady()
+        db.findByPlaceId(placeId)
     }
 
     suspend fun sync() = withContext(Dispatchers.IO) {
@@ -53,7 +58,7 @@ class CurrenciesRepository @Inject constructor(
         try {
             waitTillCacheIsReady()
 
-            val request = api.getCurrencies(
+            val request = api.getCurrenciesPlaces(
                 createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
                 maxResults = Int.MAX_VALUE
             )
@@ -68,7 +73,7 @@ class CurrenciesRepository @Inject constructor(
                 affectedRecords = response.size
             )
         } catch (t: Throwable) {
-            Timber.e(t, "Couldn't sync currencies")
+            Timber.e(t, "Couldn't sync currencies to places mapping")
 
             TableSyncResult(
                 startDate = syncStartDate,
@@ -82,7 +87,7 @@ class CurrenciesRepository @Inject constructor(
     private suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
             if (db.count() == 0) {
-                db.insert(builtInCache.getCurrencies())
+                db.insert(builtInCache.getCurrenciesPlaces())
             }
 
             builtInCacheInitialized = true

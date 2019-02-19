@@ -35,6 +35,7 @@ import com.bubelov.coins.api.coins.CreatePlaceArgs
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.user.UserRepository
+import com.bubelov.coins.util.TableSyncResult
 import com.bubelov.coins.util.toLatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.*
@@ -99,23 +100,28 @@ class PlacesRepository @Inject constructor(
             )
 
             val response = request.await()
+            val newPlaces = response.filter { db.find(it.id) == null }
             db.insert(response)
 
-            PlacesSyncResult(
+            val tableSyncResult = TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
                 success = true,
-                affectedPlaces = response
+                affectedRecords = response.size
             )
+
+            PlacesSyncResult(tableSyncResult, newPlaces)
         } catch (t: Throwable) {
             Timber.e(t, "Couldn't sync places")
 
-            PlacesSyncResult(
+            val tableSyncResult = TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
                 success = false,
-                affectedPlaces = emptyList()
+                affectedRecords = 0
             )
+
+            PlacesSyncResult(tableSyncResult, emptyList())
         }
     }
 
@@ -163,9 +169,7 @@ class PlacesRepository @Inject constructor(
     }
 
     data class PlacesSyncResult(
-        val startDate: DateTime,
-        val endDate: DateTime,
-        val success: Boolean,
-        val affectedPlaces: List<Place>
+        val tableSyncResult: TableSyncResult,
+        val newPlaces: List<Place>
     )
 }

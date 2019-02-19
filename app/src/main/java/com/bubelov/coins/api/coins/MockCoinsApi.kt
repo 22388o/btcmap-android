@@ -28,9 +28,11 @@
 package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.model.Currency
+import com.bubelov.coins.model.CurrencyPlace
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
+import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
 import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
 import kotlinx.coroutines.Deferred
@@ -42,15 +44,18 @@ class MockCoinsApi(
     private val delegate: BehaviorDelegate<CoinsApi>,
     currenciesCache: BuiltInCurrenciesCache,
     placesCache: BuiltInPlacesCache,
+    currenciesPlacesCache: BuiltInCurrenciesPlacesCache,
     placeCategoriesCache: BuiltInPlaceCategoriesCache
 ) : CoinsApi {
     private val currencies = mutableListOf<Currency>()
     private val places = mutableListOf<Place>()
+    private val currenciesPlaces = mutableListOf<CurrencyPlace>()
     private val placeCategories = mutableListOf<PlaceCategory>()
 
     init {
         currencies.addAll(currenciesCache.getCurrencies())
         places.addAll(placesCache.getPlaces())
+        currenciesPlaces.addAll(currenciesPlacesCache.getCurrenciesPlaces())
         placeCategories.addAll(placeCategoriesCache.getPlaceCategories())
     }
 
@@ -101,6 +106,16 @@ class MockCoinsApi(
         maxResults: Int
     ): Deferred<List<Currency>> {
         return delegate.returningResponse(emptyList<Currency>()).getCurrencies(
+            createdOrUpdatedAfter,
+            maxResults
+        )
+    }
+
+    override fun getCurrenciesPlaces(
+        createdOrUpdatedAfter: DateTime,
+        maxResults: Int
+    ): Deferred<List<CurrencyPlace>> {
+        return delegate.returningResponse(emptyList<CurrencyPlace>()).getCurrenciesPlaces(
             createdOrUpdatedAfter,
             maxResults
         )

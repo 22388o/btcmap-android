@@ -37,6 +37,7 @@ import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.db.Database
 import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
+import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
 import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
 import com.bubelov.coins.util.DateTimeAdapter
@@ -75,6 +76,9 @@ class AppModule {
     fun provideCurrenciesDb(database: Database) = database.currenciesDb()
 
     @Provides
+    fun provideCurrenciesPlacesDb(database: Database) = database.currenciesPlacesDb()
+
+    @Provides
     fun providePreferences(context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
@@ -101,6 +105,7 @@ class AppModule {
         gson: Gson,
         currenciesCache: BuiltInCurrenciesCache,
         placesCache: BuiltInPlacesCache,
+        currenciesPlacesCache: BuiltInCurrenciesPlacesCache,
         placeCategoriesCache: BuiltInPlaceCategoriesCache
     ): CoinsApi {
         return if (!BuildConfig.MOCK_API) {
@@ -109,6 +114,7 @@ class AppModule {
             createMockApi(
                 currenciesCache,
                 placesCache,
+                currenciesPlacesCache,
                 placeCategoriesCache
             )
         }
@@ -137,6 +143,7 @@ class AppModule {
     private fun createMockApi(
         currenciesCache: BuiltInCurrenciesCache,
         placesCache: BuiltInPlacesCache,
+        currenciesPlacesCache: BuiltInCurrenciesPlacesCache,
         placeCategoriesCache: BuiltInPlaceCategoriesCache
     ): CoinsApi {
         val retrofit = Retrofit.Builder()
@@ -156,6 +163,7 @@ class AppModule {
             delegate = delegate,
             currenciesCache = currenciesCache,
             placesCache = placesCache,
+            currenciesPlacesCache = currenciesPlacesCache,
             placeCategoriesCache = placeCategoriesCache
         )
     }

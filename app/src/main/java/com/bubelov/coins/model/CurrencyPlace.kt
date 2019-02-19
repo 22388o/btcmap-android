@@ -25,25 +25,20 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins
+package com.bubelov.coins.model
 
-import com.bubelov.coins.db.Converters
+import android.os.Parcelable
+import androidx.room.Entity
+import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
-import org.junit.Assert.assertEquals
-import org.junit.Test
 
-class DatabaseTypeConvertersTests {
-    private val converters = Converters()
-
-    private val dateTime = DateTime.now()
-
-    @Test
-    fun convertsDateTimeToString() {
-        assertEquals(dateTime.toString(), converters.dateTimeToString(dateTime))
-    }
-
-    @Test
-    fun convertsStringToDateTime() {
-        assertEquals(dateTime.millis, converters.stringToDateTime(dateTime.toString()).millis)
-    }
-}
+@Parcelize
+@Entity(
+    primaryKeys = ["currencyId", "placeId"]
+)
+data class CurrencyPlace(
+    val currencyId: Int,
+    val placeId: Int,
+    val createdAt: DateTime,
+    val updatedAt: DateTime
+) : Parcelable

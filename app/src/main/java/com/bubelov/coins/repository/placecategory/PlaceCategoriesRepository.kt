@@ -29,6 +29,7 @@ package com.bubelov.coins.repository.placecategory
 
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.model.PlaceCategory
+import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
 import timber.log.Timber
@@ -67,20 +68,20 @@ class PlaceCategoriesRepository @Inject constructor(
             val response = request.await()
             db.insert(response)
 
-            PlaceCategoriesSyncResult(
+            TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
                 success = true,
-                affectedPlaceCategories = response.size
+                affectedRecords = response.size
             )
         } catch (t: Throwable) {
             Timber.e(t, "Couldn't sync place categories")
 
-            PlaceCategoriesSyncResult(
+            TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
                 success = false,
-                affectedPlaceCategories = 0
+                affectedRecords = 0
             )
         }
     }
@@ -100,11 +101,4 @@ class PlaceCategoriesRepository @Inject constructor(
             delay(100)
         }
     }
-
-    data class PlaceCategoriesSyncResult(
-        val startDate: DateTime,
-        val endDate: DateTime,
-        val success: Boolean,
-        val affectedPlaceCategories: Int
-    )
 }

@@ -25,25 +25,13 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins
+package com.bubelov.coins.util
 
-import com.bubelov.coins.db.Converters
 import org.joda.time.DateTime
-import org.junit.Assert.assertEquals
-import org.junit.Test
 
-class DatabaseTypeConvertersTests {
-    private val converters = Converters()
-
-    private val dateTime = DateTime.now()
-
-    @Test
-    fun convertsDateTimeToString() {
-        assertEquals(dateTime.toString(), converters.dateTimeToString(dateTime))
-    }
-
-    @Test
-    fun convertsStringToDateTime() {
-        assertEquals(dateTime.millis, converters.stringToDateTime(dateTime.toString()).millis)
-    }
-}
+data class TableSyncResult(
+    val startDate: DateTime,
+    val endDate: DateTime,
+    val success: Boolean,
+    val affectedRecords: Int
+)

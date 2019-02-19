@@ -25,25 +25,24 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins
+package com.bubelov.coins.repository.currencyplace
 
-import com.bubelov.coins.db.Converters
-import org.joda.time.DateTime
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import android.content.Context
+import com.bubelov.coins.model.CurrencyPlace
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.InputStreamReader
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DatabaseTypeConvertersTests {
-    private val converters = Converters()
-
-    private val dateTime = DateTime.now()
-
-    @Test
-    fun convertsDateTimeToString() {
-        assertEquals(dateTime.toString(), converters.dateTimeToString(dateTime))
-    }
-
-    @Test
-    fun convertsStringToDateTime() {
-        assertEquals(dateTime.millis, converters.stringToDateTime(dateTime.toString()).millis)
+@Singleton
+class BuiltInCurrenciesPlacesCache @Inject constructor(
+    private val context: Context,
+    val gson: Gson
+) {
+    fun getCurrenciesPlaces(): List<CurrencyPlace> {
+        val input = context.assets.open("currencies_places.json")
+        val typeToken = object : TypeToken<List<CurrencyPlace>>() {}
+        return gson.fromJson(InputStreamReader(input), typeToken.type)
     }
 }
