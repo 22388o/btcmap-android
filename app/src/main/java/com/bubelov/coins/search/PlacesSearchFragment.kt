@@ -50,7 +50,7 @@ class PlacesSearchFragment : DaggerFragment() {
 
     private val model by lazy {
         (viewModelProvider(modelFactory) as PlacesSearchViewModel).apply {
-            val args = PlacesSearchFragmentArgs.fromBundle(arguments)
+            val args = PlacesSearchFragmentArgs.fromBundle(arguments!!)
             setUp(args.location)
         }
     }

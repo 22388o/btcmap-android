@@ -26,8 +26,8 @@ buildscript {
         roomVersion = '2.1.0-alpha04'
 
         // Navigation
-        navigationVersion = '1.0.0-alpha07'
-        safeArgsVersion = '1.0.0-alpha07'
+        navigationVersion = '1.0.0-beta02'
+        safeArgsVersion = '1.0.0-beta02'
 
         // Scheduling
         workVersion = '1.0.0-alpha11'

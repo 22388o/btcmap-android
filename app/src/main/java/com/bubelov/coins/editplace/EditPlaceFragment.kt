@@ -72,11 +72,11 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     private val place by lazy {
-        EditPlaceFragmentArgs.fromBundle(arguments).place
+        EditPlaceFragmentArgs.fromBundle(arguments!!).place
     }
 
     private val passedLocation by lazy {
-        EditPlaceFragmentArgs.fromBundle(arguments).mapLocation
+        EditPlaceFragmentArgs.fromBundle(arguments!!).mapLocation
     }
 
     private var map: GoogleMap? = null

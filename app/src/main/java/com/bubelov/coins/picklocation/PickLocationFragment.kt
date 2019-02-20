@@ -50,7 +50,7 @@ class PickLocationFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     private val initialLocation by lazy {
-        PickLocationFragmentArgs.fromBundle(arguments).initialLocation
+        PickLocationFragmentArgs.fromBundle(arguments!!).initialLocation
     }
 
     private var map: GoogleMap? = null
