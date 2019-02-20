@@ -32,6 +32,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Constraints
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,6 +43,8 @@ class DatabaseSyncScheduler @Inject constructor() {
         val lifecycleOwner = ProcessLifecycleOwner.get()
 
         WorkManager.getInstance().getWorkInfosByTagLiveData(TAG).observe(lifecycleOwner, Observer { info ->
+            Timber.d("Work info: $info")
+
             if (info.isNullOrEmpty()) {
                 val constraints = Constraints.Builder()
                     .setRequiresBatteryNotLow(true)

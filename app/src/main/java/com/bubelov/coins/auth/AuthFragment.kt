@@ -117,7 +117,7 @@ class AuthFragment : DaggerFragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST && resultCode == Activity.RESULT_OK) {
-            val token = GoogleSignIn.getSignedInAccountFromIntent(data).result.idToken
+            val token = GoogleSignIn.getSignedInAccountFromIntent(data).result!!.idToken
             model.signIn(token ?: "")
         }
     }

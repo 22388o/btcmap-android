@@ -43,6 +43,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 class EditPlaceViewModelTest {
     @get:Rule
@@ -64,7 +65,7 @@ class EditPlaceViewModelTest {
     @Test
     fun submitNewPlace() = runBlocking<Unit> {
         val place = emptyPlace().copy(
-            id = 0,
+            id = UUID.randomUUID().toString(),
             name = "Crypto Library"
         )
 
@@ -80,7 +81,7 @@ class EditPlaceViewModelTest {
     @Test
     fun updateExistingPlace() = runBlocking<Unit> {
         val originalPlace = emptyPlace().copy(
-            id = 50,
+            id = UUID.randomUUID().toString(),
             name = "Crypto Library"
         )
 

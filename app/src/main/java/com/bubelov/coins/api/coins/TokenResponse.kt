@@ -31,7 +31,7 @@ import java.util.*
 
 data class TokenResponse(
     val id: Long,
-    val userId: Long,
+    val userId: String,
     val token: String,
     val createdAt: Date,
     val updatedAt: Date

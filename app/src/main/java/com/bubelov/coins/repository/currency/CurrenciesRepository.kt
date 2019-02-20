@@ -54,8 +54,7 @@ class CurrenciesRepository @Inject constructor(
             waitTillCacheIsReady()
 
             val response = api.getCurrencies(
-                createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
-                maxResults = Int.MAX_VALUE
+                createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0)
             )
 
             db.insert(response)

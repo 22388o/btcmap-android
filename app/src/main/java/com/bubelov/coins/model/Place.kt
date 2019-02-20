@@ -37,11 +37,11 @@ import org.joda.time.DateTime
 @Entity
 data class Place(
     @PrimaryKey
-    val id: Long,
+    val id: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,
-    val categoryId: Long,
+    val categoryId: String,
     val description: String,
     val phone: String,
     val website: String,

@@ -37,8 +37,8 @@ import org.joda.time.DateTime
     primaryKeys = ["currencyId", "placeId"]
 )
 data class CurrencyPlace(
-    val currencyId: Int,
-    val placeId: Int,
+    val currencyId: String,
+    val placeId: String,
     val createdAt: DateTime,
     val updatedAt: DateTime
 ) : Parcelable

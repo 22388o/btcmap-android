@@ -46,6 +46,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 class DatabaseSyncTest {
     @Mock private lateinit var currenciesRepository: CurrenciesRepository
@@ -73,9 +74,9 @@ class DatabaseSyncTest {
     @Test
     fun handleSuccessfulSync() = runBlocking {
         val newPlaces = listOf(
-            emptyPlace().copy(id = 1),
-            emptyPlace().copy(id = 2),
-            emptyPlace().copy(id = 3)
+            emptyPlace().copy(id = UUID.randomUUID().toString()),
+            emptyPlace().copy(id = UUID.randomUUID().toString()),
+            emptyPlace().copy(id = UUID.randomUUID().toString())
         )
 
         whenever(placesRepository.sync()).thenReturn(

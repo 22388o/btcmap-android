@@ -58,6 +58,7 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit_place.*
 import org.joda.time.DateTime
 import java.lang.IllegalStateException
+import java.util.*
 import javax.inject.Inject
 
 class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
@@ -235,13 +236,13 @@ class EditPlaceFragment : DaggerFragment(), OnMapReadyCallback {
         val map = map ?: throw IllegalStateException("Map is not initialized")
 
         return Place(
-            id = place?.id ?: 0,
+            id = place?.id ?: UUID.randomUUID().toString(),
             name = name.text.toString(),
             latitude = map.cameraPosition.target.latitude,
             longitude = map.cameraPosition.target.longitude,
             phone = phone.text.toString(),
             website = website.text.toString(),
-            categoryId = place?.categoryId ?: 0,
+            categoryId = place?.categoryId ?: "",
             description = description.text.toString(),
             openingHours = openingHours.text.toString(),
             visible = !closedSwitch.isChecked,

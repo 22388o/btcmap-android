@@ -38,10 +38,10 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) : Worker(co
     override fun doWork() = runBlocking {
         try {
             (applicationContext as App).databaseSync.sync()
-            Result.SUCCESS
-        } catch (error: Exception) {
-            Timber.e(error)
-            Result.FAILURE
+            Result.success()
+        } catch (t: Throwable) {
+            Timber.e(t)
+            Result.retry()
         }
     }
 }

@@ -47,7 +47,7 @@ class CurrenciesPlacesRepository @Inject constructor(
         GlobalScope.launch { initBuiltInCache() }
     }
 
-    suspend fun findByPlaceId(placeId: Int) = withContext(Dispatchers.IO) {
+    suspend fun findByPlaceId(placeId: String) = withContext(Dispatchers.IO) {
         waitTillCacheIsReady()
         db.findByPlaceId(placeId)
     }
@@ -59,8 +59,7 @@ class CurrenciesPlacesRepository @Inject constructor(
             waitTillCacheIsReady()
 
             val response = api.getCurrenciesPlaces(
-                createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
-                maxResults = Int.MAX_VALUE
+                createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0)
             )
 
             db.insert(response)

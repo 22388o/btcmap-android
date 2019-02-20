@@ -203,7 +203,7 @@ class MapFragment :
 
         placesSearchResultModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
             model.navigateToNextSelectedPlace = true
-            model.selectPlace(id ?: 0)
+            model.selectPlace(id ?: "")
         })
 
         authResultModel.authorized.observe(viewLifecycleOwner, Observer {
@@ -400,7 +400,7 @@ class MapFragment :
         }
 
         map.setOnMapClickListener {
-            model.selectPlace(0)
+            model.selectPlace("")
         }
 
         model.placeMarkers.observe(viewLifecycleOwner, Observer { markers ->

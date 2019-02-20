@@ -49,6 +49,7 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 class PlacesSearchViewModelTest {
     @get:Rule
@@ -118,12 +119,12 @@ class PlacesSearchViewModelTest {
 
     private fun generatePlace(name: String): Place {
         return Place(
-            id = name.hashCode().toLong(),
+            id = UUID.randomUUID().toString(),
             name = name,
             latitude = 0.0,
             longitude = 0.0,
             description = "",
-            categoryId = 0,
+            categoryId = UUID.randomUUID().toString(),
             phone = "",
             website = "",
             visible = true,

@@ -69,7 +69,7 @@ class MockCoinsApi(
         )
     }
 
-    override suspend fun getUser(id: Long, authorization: String): UserResponse {
+    override suspend fun getUser(id: String, authorization: String): UserResponse {
         return UserResponse(
             id = 1L,
             email = "foo@bar.com",
@@ -85,42 +85,32 @@ class MockCoinsApi(
     override suspend fun createApiToken(authorization: String): TokenResponse {
         return TokenResponse(
             id = 1L,
-            userId = 1L,
+            userId = UUID.randomUUID().toString(),
             token = UUID.randomUUID().toString(),
             createdAt = Date(),
             updatedAt = Date()
         )
     }
 
-    override suspend fun getCurrencies(
-        createdOrUpdatedAfter: DateTime,
-        maxResults: Int
-    ): List<Currency> {
+    override suspend fun getCurrencies(createdOrUpdatedAfter: DateTime): List<Currency> {
         return emptyList()
     }
 
-    override suspend fun getCurrenciesPlaces(
-        createdOrUpdatedAfter: DateTime,
-        maxResults: Int
-    ): List<CurrencyPlace> {
+    override suspend fun getCurrenciesPlaces(createdOrUpdatedAfter: DateTime): List<CurrencyPlace> {
         return emptyList()
     }
 
-    override suspend fun getPlaces(
-        createdOrUpdatedAfter: DateTime,
-        maxResults: Int
-    ): List<Place> {
+    override suspend fun getPlaces(createdOrUpdatedAfter: DateTime): List<Place> {
         return emptyList()
     }
 
     override suspend fun createPlace(authorization: String, args: CreatePlaceArgs): Place {
-        val place = args.place.copy(id = UUID.randomUUID().toString().hashCode().toLong())
-        places += place
-        return place
+        places += args.place
+        return args.place
     }
 
     override suspend fun updatePlace(
-        id: Long,
+        id: String,
         authorization: String,
         args: UpdatePlaceArgs
     ): Place {
@@ -130,10 +120,7 @@ class MockCoinsApi(
         return args.place
     }
 
-    override suspend fun getPlaceCategories(
-        createdOrUpdatedAfter: DateTime,
-        maxResults: Int
-    ): List<PlaceCategory> {
+    override suspend fun getPlaceCategories(createdOrUpdatedAfter: DateTime): List<PlaceCategory> {
         return emptyList()
     }
 }

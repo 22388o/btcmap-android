@@ -48,7 +48,7 @@ class PlaceCategoriesRepository @Inject constructor(
         GlobalScope.launch { initBuiltInCache() }
     }
 
-    suspend fun findById(id: Long): PlaceCategory? {
+    suspend fun findById(id: String): PlaceCategory? {
         return withContext(Dispatchers.IO) {
             db.findById(id)
         }
@@ -61,8 +61,7 @@ class PlaceCategoriesRepository @Inject constructor(
             waitTillCacheIsReady()
 
             val response = api.getPlaceCategories(
-                createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
-                maxResults = Int.MAX_VALUE
+                createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0)
             )
 
             db.insert(response)

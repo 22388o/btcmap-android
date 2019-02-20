@@ -40,7 +40,7 @@ interface CurrenciesPlacesDb {
     fun all(): List<CurrencyPlace>
 
     @Query("SELECT * FROM CurrencyPlace WHERE placeId = :placeId")
-    fun findByPlaceId(placeId: Int): List<CurrencyPlace>
+    fun findByPlaceId(placeId: String): List<CurrencyPlace>
 
     @Query("SELECT COUNT(*) FROM CurrencyPlace")
     fun count(): Int

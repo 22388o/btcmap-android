@@ -43,6 +43,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 class CurrenciesPlacesRepositoryTest {
     @JvmField @Rule val instantExecutor = InstantTaskExecutorRule()
@@ -66,8 +67,8 @@ class CurrenciesPlacesRepositoryTest {
 
         val currenciesPlaces = listOf(
             CurrencyPlace(
-                currencyId = 1,
-                placeId = 1,
+                currencyId = UUID.randomUUID().toString(),
+                placeId = UUID.randomUUID().toString(),
                 createdAt = DateTime.now(),
                 updatedAt = DateTime.now()
             )

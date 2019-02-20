@@ -47,6 +47,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 class SettingsViewModelTest {
     @get:Rule
@@ -93,7 +94,7 @@ class SettingsViewModelTest {
     fun sendsRandomPlaceNotification() = runBlocking {
         whenever(placesRepository.findRandom()).thenReturn(
             emptyPlace().copy(
-                id = 1,
+                id = UUID.randomUUID().toString(),
                 name = "Random Place"
             )
         )

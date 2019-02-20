@@ -42,6 +42,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 class PlacesRepositoryTest {
     @JvmField @Rule val instantExecutor = InstantTaskExecutorRule()
@@ -63,12 +64,12 @@ class PlacesRepositoryTest {
     @Test
     fun usesAssetsCacheWhenEmpty() = runBlocking {
         whenever(placesDb.count()).thenReturn(0)
-        val places = listOf(emptyPlace().copy(id = 1, name = "Cafe"))
+        val places = listOf(emptyPlace().copy(id = UUID.randomUUID().toString(), name = "Cafe"))
         whenever(placesAssetsCache.getPlaces()).thenReturn(places)
 
         val repository = PlacesRepository(api, placesDb, placesAssetsCache, userRepository)
 
-        repository.find(1)
+        repository.find(UUID.randomUUID().toString())
 
         verify(placesAssetsCache).getPlaces()
         verify(placesDb).insert(places)

@@ -29,14 +29,15 @@ package com.bubelov.coins
 
 import com.bubelov.coins.model.Place
 import org.joda.time.DateTime
+import java.util.*
 
 fun emptyPlace(): Place {
     return Place(
-        id = 0,
+        id = UUID.randomUUID().toString(),
         name = "",
         latitude = 0.0,
         longitude = 0.0,
-        categoryId = 0,
+        categoryId = UUID.randomUUID().toString(),
         description = "",
         phone = "",
         website = "",

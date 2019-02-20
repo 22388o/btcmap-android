@@ -127,7 +127,7 @@ class MapViewModel @Inject constructor(
         job.cancel()
     }
 
-    fun selectPlace(id: Long) {
+    fun selectPlace(id: String) {
         Timber.d("Selecting place with id = $id")
 
         uiScope.launch {

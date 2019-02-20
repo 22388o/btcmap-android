@@ -60,7 +60,7 @@ class PlacesRepository @Inject constructor(
         GlobalScope.launch { initBuiltInCache() }
     }
 
-    suspend fun find(id: Long): Place? {
+    suspend fun find(id: String): Place? {
         waitTillCacheIsReady()
 
         return withContext(Dispatchers.IO) {
@@ -95,8 +95,7 @@ class PlacesRepository @Inject constructor(
             waitTillCacheIsReady()
 
             val response = api.getPlaces(
-                db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0),
-                Integer.MAX_VALUE
+                db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0)
             )
 
             val newPlaces = response.filter { db.find(it.id) == null }

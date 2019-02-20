@@ -43,7 +43,7 @@ interface CoinsApi {
 
     @GET("users/{id}")
     suspend fun getUser(
-        @Path("id") id: Long,
+        @Path("id") id: String,
         @Header("Authorization") authorization: String
     ): UserResponse
 
@@ -54,20 +54,17 @@ interface CoinsApi {
 
     @GET("currencies")
     suspend fun getCurrencies(
-        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
-        @Query("maxResults") maxResults: Int
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime
     ): List<Currency>
 
     @GET("currenciesPlaces")
     suspend fun getCurrenciesPlaces(
-        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
-        @Query("maxResults") maxResults: Int
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime
     ): List<CurrencyPlace>
 
     @GET("places")
     suspend fun getPlaces(
-        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
-        @Query("maxResults") maxResults: Int
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime
     ): List<Place>
 
     @POST("places")
@@ -78,14 +75,13 @@ interface CoinsApi {
 
     @PATCH("places/{id}")
     suspend fun updatePlace(
-        @Path("id") id: Long,
+        @Path("id") id: String,
         @Header("Authorization") authorization: String,
         @Json @Body args: UpdatePlaceArgs
     ): Place
 
     @GET("placeCategories")
     suspend fun getPlaceCategories(
-        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime,
-        @Query("maxResults") maxResults: Int
+        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime
     ): List<PlaceCategory>
 }

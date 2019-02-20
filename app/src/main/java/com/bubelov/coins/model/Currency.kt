@@ -37,7 +37,7 @@ import org.joda.time.DateTime
 @Entity
 data class Currency(
     @PrimaryKey
-    val id: Long,
+    val id: String,
     val name: String,
     val code: String,
     val crypto: Boolean,

@@ -37,7 +37,7 @@ import org.joda.time.DateTime
 @Entity
 data class PlaceCategory(
     @PrimaryKey
-    val id: Long,
+    val id: String,
     val name: String,
     val createdAt: DateTime,
     val updatedAt: DateTime

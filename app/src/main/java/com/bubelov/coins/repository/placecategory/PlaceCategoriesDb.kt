@@ -40,7 +40,7 @@ interface PlaceCategoriesDb {
     fun all(): List<PlaceCategory>
 
     @Query("SELECT * FROM PlaceCategory WHERE id = :id LIMIT 1")
-    fun findById(id: Long): PlaceCategory?
+    fun findById(id: String): PlaceCategory?
 
     @Query("SELECT COUNT(*) FROM PlaceCategory")
     fun count(): Int
