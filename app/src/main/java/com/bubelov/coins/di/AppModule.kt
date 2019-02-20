@@ -52,8 +52,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.joda.time.DateTime
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.mock.MockRetrofit
-import retrofit2.mock.NetworkBehavior
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
@@ -144,20 +142,7 @@ class AppModule {
         currenciesPlacesCache: BuiltInCurrenciesPlacesCache,
         placeCategoriesCache: BuiltInPlaceCategoriesCache
     ): CoinsApi {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.API_URL)
-            .build()
-
-        val behavior = NetworkBehavior.create()
-
-        val mockRetrofit = MockRetrofit.Builder(retrofit)
-            .networkBehavior(behavior)
-            .build()
-
-        val delegate = mockRetrofit.create(CoinsApi::class.java)
-
         return MockCoinsApi(
-            delegate = delegate,
             currenciesCache = currenciesCache,
             placesCache = placesCache,
             currenciesPlacesCache = currenciesPlacesCache,
