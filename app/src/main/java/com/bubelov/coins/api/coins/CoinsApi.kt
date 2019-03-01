@@ -36,8 +36,9 @@ import org.joda.time.DateTime
 import retrofit2.http.*
 
 interface CoinsApi {
+
     @POST("users")
-    suspend fun createUser(
+    suspend fun addUser(
         @Json @Body args: CreateUserArgs
     ): UserResponse
 
@@ -48,7 +49,7 @@ interface CoinsApi {
     ): UserResponse
 
     @POST("tokens")
-    suspend fun createApiToken(
+    suspend fun getApiToken(
         @Header("Authorization") authorization: String
     ): TokenResponse
 
@@ -68,7 +69,7 @@ interface CoinsApi {
     ): List<Place>
 
     @POST("places")
-    suspend fun createPlace(
+    suspend fun addPlace(
         @Header("Authorization") authorization: String,
         @Json @Body args: CreatePlaceArgs
     ): Place

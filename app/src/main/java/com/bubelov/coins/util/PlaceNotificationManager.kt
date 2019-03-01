@@ -85,7 +85,7 @@ internal constructor(
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        notificationManager.notify(place.id.toInt(), builder.build())
+        notificationManager.notify(place.id.hashCode(), builder.build())
     }
 
     private fun registerNotificationChannel() {

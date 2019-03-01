@@ -27,10 +27,8 @@
 
 package com.bubelov.coins.api.coins
 
+import com.bubelov.coins.model.*
 import com.bubelov.coins.model.Currency
-import com.bubelov.coins.model.CurrencyPlace
-import com.bubelov.coins.model.Place
-import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
 import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
@@ -49,6 +47,21 @@ class MockCoinsApi(
     private val currenciesPlaces = mutableListOf<CurrencyPlace>()
     private val placeCategories = mutableListOf<PlaceCategory>()
 
+    private val date1 = DateTime.parse("2019-03-01T20:10:14+07:00")
+
+    private val user1 = User(
+        id = "E5B65104-60FF-4EE4-8A38-36144F479A93",
+        email = "foo@bar.com",
+        emailConfirmed = false,
+        firstName = "Foo",
+        lastName = "Bar",
+        avatarUrl = "",
+        createdAt = date1,
+        updatedAt = date1
+    )
+
+    private val users = mutableListOf(user1)
+
     init {
         currencies.addAll(currenciesCache.getCurrencies())
         places.addAll(placesCache.getPlaces())
@@ -56,39 +69,54 @@ class MockCoinsApi(
         placeCategories.addAll(placeCategoriesCache.getPlaceCategories())
     }
 
-    override suspend fun createUser(args: CreateUserArgs): UserResponse {
-        return UserResponse(
-            id = 1L,
+    override suspend fun addUser(args: CreateUserArgs): UserResponse {
+        val user = User(
+            id = UUID.randomUUID().toString(),
             email = args.email,
-            firstName = "Foo",
-            lastName = "Bar",
+            emailConfirmed = false,
+            firstName = args.firstName,
+            lastName = args.lastName,
             avatarUrl = "",
-            god = false,
-            createdAt = Date(),
-            updatedAt = Date()
+            createdAt = DateTime.now(),
+            updatedAt = DateTime.now()
+        )
+
+        users += user
+
+        return UserResponse(
+            id = user.id,
+            email = user.email,
+            emailConfirmed = user.emailConfirmed,
+            firstName = user.firstName,
+            lastName = user.lastName,
+            avatarUrl = user.avatarUrl,
+            createdAt = user.createdAt,
+            updatedAt = user.updatedAt
         )
     }
 
     override suspend fun getUser(id: String, authorization: String): UserResponse {
+        val user = users.firstOrNull { it.id == id } ?: throw Exception("No user with id: $id")
+
         return UserResponse(
-            id = 1L,
-            email = "foo@bar.com",
-            firstName = "Boo",
-            lastName = "Bar",
-            avatarUrl = "",
-            god = false,
-            createdAt = Date(),
-            updatedAt = Date()
+            id = user.id,
+            email = user.email,
+            emailConfirmed = user.emailConfirmed,
+            firstName = user.firstName,
+            lastName = user.lastName,
+            avatarUrl = user.avatarUrl,
+            createdAt = user.createdAt,
+            updatedAt = user.updatedAt
         )
     }
 
-    override suspend fun createApiToken(authorization: String): TokenResponse {
+    override suspend fun getApiToken(authorization: String): TokenResponse {
         return TokenResponse(
-            id = 1L,
-            userId = UUID.randomUUID().toString(),
+            id = UUID.randomUUID().toString(),
+            userId = user1.id,
             token = UUID.randomUUID().toString(),
-            createdAt = Date(),
-            updatedAt = Date()
+            createdAt = DateTime.now(),
+            updatedAt = DateTime.now()
         )
     }
 
@@ -104,7 +132,7 @@ class MockCoinsApi(
         return emptyList()
     }
 
-    override suspend fun createPlace(authorization: String, args: CreatePlaceArgs): Place {
+    override suspend fun addPlace(authorization: String, args: CreatePlaceArgs): Place {
         places += args.place
         return args.place
     }

@@ -27,12 +27,12 @@
 
 package com.bubelov.coins.api.coins
 
-import java.util.*
+import org.joda.time.DateTime
 
 data class TokenResponse(
-    val id: Long,
+    val id: String,
     val userId: String,
     val token: String,
-    val createdAt: Date,
-    val updatedAt: Date
+    val createdAt: DateTime,
+    val updatedAt: DateTime
 )

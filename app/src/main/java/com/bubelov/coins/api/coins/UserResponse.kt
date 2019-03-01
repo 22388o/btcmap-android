@@ -27,15 +27,15 @@
 
 package com.bubelov.coins.api.coins
 
-import java.util.*
+import org.joda.time.DateTime
 
 data class UserResponse(
-    val id: Long,
+    val id: String,
     val email: String,
+    val emailConfirmed: Boolean,
     val firstName: String,
     val lastName: String,
     val avatarUrl: String,
-    val god: Boolean,
-    val createdAt: Date,
-    val updatedAt: Date
+    val createdAt: DateTime,
+    val updatedAt: DateTime
 )

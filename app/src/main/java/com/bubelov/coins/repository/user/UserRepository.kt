@@ -61,7 +61,7 @@ class UserRepository @Inject constructor(
 
     suspend fun signIn(googleToken: String) {
         withContext(Dispatchers.IO) {
-            val tokenResponse = api.createApiToken("GoogleToken $googleToken")
+            val tokenResponse = api.getApiToken("GoogleToken $googleToken")
             val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token)
 
             user = userResponse.toUser()
@@ -77,7 +77,7 @@ class UserRepository @Inject constructor(
                 Base64.NO_WRAP
             )
 
-            val tokenResponse = api.createApiToken("Basic $credentials")
+            val tokenResponse = api.getApiToken("Basic $credentials")
             val userResponse = api.getUser(tokenResponse.userId, tokenResponse.token)
 
             user = userResponse.toUser()
@@ -105,8 +105,8 @@ class UserRepository @Inject constructor(
         )
 
         withContext(Dispatchers.IO) {
-            val userResponse = api.createUser(createUserArgs)
-            val tokenResponse = api.createApiToken("Basic $authCredentials")
+            val userResponse = api.addUser(createUserArgs)
+            val tokenResponse = api.getApiToken("Basic $authCredentials")
 
             user = userResponse.toUser()
             userAuthToken = tokenResponse.token
@@ -129,9 +129,12 @@ class UserRepository @Inject constructor(
     private fun UserResponse.toUser() = User (
         id = id,
         email = email,
+        emailConfirmed = emailConfirmed,
         firstName = firstName,
         lastName = lastName,
-        avatarUrl = avatarUrl
+        avatarUrl = avatarUrl,
+        createdAt = createdAt,
+        updatedAt = updatedAt
     )
 
     companion object {

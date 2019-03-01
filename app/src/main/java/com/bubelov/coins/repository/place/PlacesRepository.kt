@@ -125,7 +125,7 @@ class PlacesRepository @Inject constructor(
 
     suspend fun addPlace(place: Place): Place {
         return withContext(Dispatchers.IO) {
-            val response = api.createPlace(
+            val response = api.addPlace(
                 authorization = userRepository.getAuthorization(),
                 args = CreatePlaceArgs(place)
             )
