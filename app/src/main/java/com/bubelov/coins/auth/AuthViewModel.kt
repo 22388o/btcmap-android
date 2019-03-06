@@ -36,6 +36,7 @@ import com.bubelov.coins.util.toSingleEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -83,15 +84,13 @@ class AuthViewModel @Inject constructor(
         return uiScope.launch {
             try {
                 _showProgress.value = true
-
-                try {
-                    block()
-                    _authorized.value = true
-                } catch (error: Throwable) {
-                    _errorMessage.value = error.message
-                }
-            } catch (error: Exception) {
-                _errorMessage.value = error.message
+                block()
+                _authorized.value = true
+            } catch (httpException: HttpException) {
+                _errorMessage.value =
+                    httpException.response()?.errorBody()?.string() ?: httpException.message()
+            } catch (t: Throwable) {
+                _errorMessage.value = t.message
             } finally {
                 _showProgress.value = false
             }
