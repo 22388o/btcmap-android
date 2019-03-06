@@ -25,12 +25,11 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.startup
+package com.bubelov.coins
 
 import android.os.Bundle
 import androidx.navigation.NavHost
 import androidx.navigation.findNavController
-import com.bubelov.coins.R
 import dagger.android.support.DaggerAppCompatActivity
 
 class AppActivity : DaggerAppCompatActivity(), NavHost {

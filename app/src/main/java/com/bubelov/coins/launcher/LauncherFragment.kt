@@ -25,7 +25,7 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.startup
+package com.bubelov.coins.launcher
 
 import android.app.Activity
 import android.content.Intent
@@ -36,7 +36,7 @@ import com.bubelov.coins.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 
-class CheckPlayServicesFragment : androidx.fragment.app.Fragment() {
+class LauncherFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -80,7 +80,7 @@ class CheckPlayServicesFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun onPlayServicesAvailable() {
-        findNavController().navigate(R.id.action_checkPlayServicesFragment_to_mapFragment)
+        findNavController().navigate(R.id.action_launcherFragment_to_mapFragment)
     }
 
     companion object {

@@ -30,8 +30,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "API_URL", "\"https://coin-map.com/api/v1/\"")
-        buildConfigField("Boolean", "MOCK_API", "true")
+        buildConfigField("String", "API_URL", "\"https://api.coin-map.com/v1/\"")
+        buildConfigField("Boolean", "MOCK_API", "false")
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", "\"557789430086-hnt5bk65a636mgi7phhn5t9b1porppik.apps.googleusercontent.com\"")
 
@@ -63,10 +63,10 @@ dependencies {
     implementation("androidx.core:core-ktx:1.0.1")
 
     // Dependency injection
-    implementation("com.google.dagger:dagger:2.16")
-    kapt("com.google.dagger:dagger-android-processor:2.16")
-    kapt("com.google.dagger:dagger-compiler:2.16")
-    implementation("com.google.dagger:dagger-android-support:2.16")
+    implementation("com.google.dagger:dagger:2.21")
+    kapt("com.google.dagger:dagger-android-processor:2.21")
+    kapt("com.google.dagger:dagger-compiler:2.21")
+    implementation("com.google.dagger:dagger-android-support:2.21")
 
     // Network
     implementation("com.squareup.retrofit2:retrofit:2.5.1-SNAPSHOT")
@@ -79,19 +79,19 @@ dependencies {
     kapt("androidx.room:room-compiler:2.1.0-alpha04")
 
     // Navigation
-    implementation("android.arch.navigation:navigation-ui-ktx:1.0.0-beta02")
-    implementation("android.arch.navigation:navigation-fragment-ktx:1.0.0-beta02")
+    implementation("android.arch.navigation:navigation-ui-ktx:1.0.0-rc02")
+    implementation("android.arch.navigation:navigation-fragment-ktx:1.0.0-rc02")
 
     // Scheduling
-    implementation("android.arch.work:work-runtime-ktx:1.0.0-rc01")
-    androidTestImplementation("android.arch.work:work-testing:1.0.0-rc01")
+    implementation("android.arch.work:work-runtime-ktx:1.0.0")
+    androidTestImplementation("android.arch.work:work-testing:1.0.0")
 
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
 
     // Compatibility
     implementation("androidx.appcompat:appcompat:1.1.0-alpha02")
-    implementation("com.google.android.material:material:1.1.0-alpha03")
+    implementation("com.google.android.material:material:1.1.0-alpha04")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-alpha3")
     implementation("androidx.browser:browser:1.0.0")
 
@@ -102,7 +102,7 @@ dependencies {
     implementation("com.google.maps.android:android-maps-utils:0.5")
 
     // JSON
-    implementation("com.google.code.gson:gson:2.8.2")
+    implementation("com.google.code.gson:gson:2.8.5")
 
     // Images
     implementation("com.squareup.picasso:picasso:2.5.2")

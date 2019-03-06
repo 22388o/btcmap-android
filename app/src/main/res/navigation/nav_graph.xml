@@ -3,14 +3,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/emptyFragment">
+    app:startDestination="@id/launcherFragment">
 
     <fragment
-        android:id="@+id/emptyFragment"
-        android:name="com.bubelov.coins.startup.CheckPlayServicesFragment"
-        android:label="CheckPlayServicesFragment">
+        android:id="@+id/launcherFragment"
+        android:name="com.bubelov.coins.launcher.LauncherFragment"
+        android:label="LauncherFragment">
         <action
-            android:id="@+id/action_checkPlayServicesFragment_to_mapFragment"
+            android:id="@+id/action_launcherFragment_to_mapFragment"
             app:destination="@id/mapFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"

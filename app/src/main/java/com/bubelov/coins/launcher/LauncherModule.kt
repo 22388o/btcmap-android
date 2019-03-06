@@ -25,16 +25,9 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-package com.bubelov.coins.di
-
-import com.bubelov.coins.AppActivity
-import com.bubelov.coins.launcher.LauncherModule
+package com.bubelov.coins.launcher
 
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class ActivityBuilder {
-    @ContributesAndroidInjector(modules = [LauncherModule::class])
-    abstract fun contributeAppActivityInjector(): AppActivity
-}
+class LauncherModule
