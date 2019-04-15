@@ -79,5 +79,12 @@
     <string name="open_github_repository">Open GitHub repository</string>
     <string name="bitcoin_map_donation_address">Bitcoin map donation address</string>
     <string name="address_have_been_copied">Address have been copied</string>
+    <string name="developer_tools">Developer tools</string>
+    <string name="sync_database">Sync database</string>
+    <string name="show_sync_log">Show sync log</string>
+    <string name="test_notification">Test notification</string>
+    <string name="shrink">Shrink</string>
+    <string name="expand">Expand</string>
+    <string name="d_km">%1$d km</string>
 
 </resources>

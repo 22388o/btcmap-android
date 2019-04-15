@@ -22,28 +22,48 @@
         app:layout_constraintBottom_toTopOf="@id/bottomPanel"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/bottomPanel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/primary_dark"
+        android:layout_height="80dp"
+        android:background="@color/primary"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/saa_distance"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/radius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50 000 m"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="@id/bottomPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bottomPanel" />
 
-        <SeekBar
-            android:id="@+id/radiusSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/shrink"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/shrink"
+        android:src="@drawable/ic_remove_circle"
+        app:layout_constraintBottom_toBottomOf="@id/bottomPanel"
+        app:layout_constraintEnd_toStartOf="@id/radius"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bottomPanel" />
 
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/expand"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/expand"
+        android:src="@drawable/ic_add_circle"
+        app:layout_constraintBottom_toBottomOf="@id/bottomPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/radius"
+        app:layout_constraintTop_toTopOf="@id/bottomPanel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

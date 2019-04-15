@@ -102,11 +102,20 @@ class PlaceIconsRepository @Inject constructor(
     }
 
     private fun createMarker(placeCategory: String): Bitmap {
-        val pinBitmap = createBitmap(emptyPinBitmap.width, emptyPinBitmap.height).applyCanvas {
+        val iconResId = getIconResId(placeCategory) ?: return createBitmap(
+            emptyPinBitmap.width,
+            emptyPinBitmap.height
+        ).applyCanvas {
             drawBitmap(emptyPinBitmap, 0f, 0f, Paint())
         }
 
-        val iconResId = getIconResId(placeCategory) ?: return pinBitmap
+        return createMarker(iconResId)
+    }
+
+    fun createMarker(drawableId: Int): Bitmap {
+        val pinBitmap = createBitmap(emptyPinBitmap.width, emptyPinBitmap.height).applyCanvas {
+            drawBitmap(emptyPinBitmap, 0f, 0f, Paint())
+        }
 
         pinBitmap.applyCanvas {
             drawCircle(
@@ -125,7 +134,7 @@ class PlaceIconsRepository @Inject constructor(
         ).toRect()
 
         val iconBitmap = toBitmap(
-            iconResId,
+            drawableId,
             iconFrame.right - iconFrame.left,
             iconFrame.bottom - iconFrame.top
         )

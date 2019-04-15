@@ -77,6 +77,9 @@
     <string name="open_github_repository">Open GitHub repository</string>
     <string name="bitcoin_map_donation_address">Bitcoin map donation address</string>
     <string name="address_have_been_copied">Address have been copied</string>
+    <string name="shrink">Shrink</string>
+    <string name="expand">Expand</string>
+    <string name="d_km">%1$d km</string>
 
     <string-array name="distance_units">
         <item>Automatic</item>

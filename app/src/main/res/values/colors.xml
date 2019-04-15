@@ -2,8 +2,8 @@
 
 <resources>
 
-    <color name="primary">@color/amber_500</color>
-    <color name="primary_dark">@color/amber_700</color>
+    <color name="primary">#feb236</color>
+    <color name="primary_dark">#e5a030</color>
     <color name="accent">@color/indigo_a_200</color>
 
     <color name="text_primary">#202020</color>
