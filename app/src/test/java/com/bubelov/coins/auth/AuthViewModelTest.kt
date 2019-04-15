@@ -30,6 +30,7 @@ package com.bubelov.coins.auth
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.blockingObserve
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
@@ -54,6 +55,10 @@ class AuthViewModelTest {
 
     @Test
     fun showProgressBar() = runBlocking {
+        whenever(userRepository.signIn("TEST")).then {
+            Thread.sleep(500)
+        }
+
         model.signIn("TEST")
         assertTrue(model.showProgress.blockingObserve())
     }
