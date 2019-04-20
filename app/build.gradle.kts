@@ -136,9 +136,7 @@ dependencies {
 }
 
 androidExtensions {
-    configure(delegateClosureOf<AndroidExtensionsExtension> {
-        isExperimental = true
-    })
+    isExperimental = true
 }
 
 apply(plugin = "com.google.gms.google-services")

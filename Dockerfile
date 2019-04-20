@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:8 as BUILD
 
 ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip"
 ENV ANDROID_HOME="/usr/local/android-sdk"
@@ -21,3 +21,14 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSIO
 COPY . /src
 WORKDIR /src
 RUN ./gradlew build
+
+FROM alpine
+
+RUN mkdir app
+COPY --from=BUILD /src/app/build/outputs/apk /app/
+WORKDIR /app
+
+#WORKDIR /
+#RUN mv src/app/build/outputs/apk apk
+#RUN rm -rf /src
+#RUN rm -rf $ANDROID_HOME
