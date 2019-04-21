@@ -1,3 +1,5 @@
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/bubelov/coins-android.svg)
+
 Thousands of places already accept Bitcoin. This app will help you find them.
 
 Key features:
