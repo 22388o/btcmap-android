@@ -82,5 +82,6 @@
     <string name="shrink">Shrink</string>
     <string name="expand">Expand</string>
     <string name="d_km">%1$d km</string>
+    <string name="accepted_currencies">Accepted currencies</string>
 
 </resources>

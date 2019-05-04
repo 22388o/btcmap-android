@@ -217,6 +217,48 @@
                 app:layout_constraintTop_toBottomOf="@id/openingHoursTitle"
                 app:layout_constraintVertical_chainStyle="packed" />
 
+            <ImageView
+                android:id="@+id/currenciesIcon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:contentDescription="@null"
+                android:padding="24dp"
+                android:src="@drawable/ic_dollar"
+                android:tint="@color/text_secondary"
+                app:layout_constraintBottom_toBottomOf="@id/currencies"
+                app:layout_constraintEnd_toStartOf="@id/currenciesTitle"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/currenciesTitle" />
+
+            <TextView
+                android:id="@+id/currenciesTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/accepted_currencies"
+                android:textColor="@color/text_secondary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/currencies"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/currenciesIcon"
+                app:layout_constraintTop_toBottomOf="@id/openingHours"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/currencies"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"
+                android:text="@string/not_provided"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/currenciesTitle"
+                app:layout_constraintTop_toBottomOf="@id/currenciesTitle"
+                app:layout_constraintVertical_chainStyle="packed" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

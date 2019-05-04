@@ -1,30 +1,3 @@
-/*
- * This is free and unencumbered software released into the public domain.
- *
- * Anyone is free to copy, modify, publish, use, compile, sell, or
- * distribute this software, either in source code form or as a compiled
- * binary, for any purpose, commercial or non-commercial, and by any
- * means.
- *
- * In jurisdictions that recognize copyright laws, the author or authors
- * of this software dedicate any and all copyright interest in the
- * software to the public domain. We make this dedication for the benefit
- * of the public at large and to the detriment of our heirs and
- * successors. We intend this dedication to be an overt act of
- * relinquishment in perpetuity of all present and future rights to this
- * software under copyright law.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- *
- * For more information, please refer to <https://unlicense.org>
- */
-
 package com.bubelov.coins.map
 
 import android.content.Context
@@ -39,11 +12,18 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.repository.currency.CurrenciesRepository
+import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.util.openUrl
 import kotlinx.android.synthetic.main.widget_place_details.view.*
+import kotlinx.coroutines.runBlocking
+import java.lang.StringBuilder
 import kotlin.properties.Delegates
 
 class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
+    lateinit var currenciesRepository: CurrenciesRepository
+    lateinit var currenciesPlacesRepository: CurrenciesPlacesRepository
+
     var place by Delegates.observable<Place?>(null) { _, _, newValue ->
         showPlace(newValue)
     }
@@ -81,10 +61,10 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
                             )
                         )
 
-                        val intent = Intent(android.content.Intent.ACTION_SEND).apply {
+                        val intent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
-                            putExtra(android.content.Intent.EXTRA_SUBJECT, subject)
-                            putExtra(android.content.Intent.EXTRA_TEXT, text)
+                            putExtra(Intent.EXTRA_SUBJECT, subject)
+                            putExtra(Intent.EXTRA_TEXT, text)
                         }
 
                         context.startActivity(Intent.createChooser(intent, "Share"))
@@ -151,5 +131,24 @@ class PlaceDetailsView(context: Context, attrs: AttributeSet) : FrameLayout(cont
         } else {
             openingHours.text = place.openingHours
         }
+
+        val acceptedCurrencies = runBlocking {
+            currenciesPlacesRepository.findByPlaceId(place.id).map {
+                currenciesRepository.find(it.currencyId)
+            }
+        }
+            .filterNotNull()
+
+        val acceptedCurrenciesString = StringBuilder().apply {
+            for (currency in acceptedCurrencies) {
+                append(currency.name)
+
+                if (currency != acceptedCurrencies.last()) {
+                    append(", ")
+                }
+            }
+        }
+
+        currencies.text = acceptedCurrenciesString
     }
 }
