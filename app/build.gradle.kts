@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -57,10 +55,9 @@ android {
 
 dependencies {
     // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.30")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1")
-    implementation("androidx.core:core-ktx:1.0.1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1")
 
     // Dependency injection
     implementation("com.google.dagger:dagger:2.21")
@@ -117,6 +114,9 @@ dependencies {
     implementation("com.crashlytics.sdk.android:crashlytics:2.8.0@aar") {
         isTransitive = true
     }
+
+    // Android utility functions
+    implementation("androidx.core:core-ktx:1.0.1")
 
     // Unit tests
     testImplementation("junit:junit:4.12")

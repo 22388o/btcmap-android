@@ -42,7 +42,7 @@ class ExchangeRatesViewModel @Inject constructor(
     private val exchangeRatesRepository: ExchangeRatesRepository
 ) : ViewModel() {
     private val mainJob = Job()
-    private var fetchRatesJob = Job()
+    private var fetchRatesJob: Job? = null
     private val uiScope = CoroutineScope(Dispatchers.Main + mainJob)
 
     private val _currencyPair = MutableLiveData<CurrencyPair>()
@@ -59,7 +59,7 @@ class ExchangeRatesViewModel @Inject constructor(
     fun selectCurrencyPair(pair: CurrencyPair) {
         _currencyPair.value = pair
 
-        fetchRatesJob.cancel()
+        fetchRatesJob?.cancel()
 
         fetchRatesJob = uiScope.launch {
             val sources = exchangeRatesRepository.getExchangeRatesSources(pair)
