@@ -21,6 +21,7 @@ import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
 import com.bubelov.coins.util.extention.getLocation
@@ -57,6 +58,10 @@ class MapFragment :
         activityViewModelProvider(modelFactory) as AuthResultViewModel
     }
 
+    private val placeDetailsFragment by lazy {
+        childFragmentManager.findFragmentById(R.id.placeDetailsFragment) as PlaceDetailsFragment
+    }
+
     private lateinit var drawerHeader: View
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -87,12 +92,12 @@ class MapFragment :
             setBottomSheetCallback(object :
                 BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    placeDetails.fullScreen = newState == BottomSheetBehavior.STATE_EXPANDED
-                    editPlaceFab.isVisible = placeDetails.fullScreen
+
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                     locationFab.isVisible = slideOffset < 0.5f
+                    placeDetailsFragment.setScrollProgress(slideOffset)
                 }
             })
 
@@ -101,10 +106,6 @@ class MapFragment :
 
         editPlaceFab.setOnClickListener {
             model.onEditPlaceClick()
-        }
-
-        placeDetails.onDismissed = {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         toolbar.apply {
@@ -151,9 +152,6 @@ class MapFragment :
 
         updateDrawerHeader()
 
-        placeDetails.currenciesRepository = model.currenciesRepository
-        placeDetails.currenciesPlacesRepository = model.currenciesPlacesRepository
-
         placeDetails.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -164,7 +162,7 @@ class MapFragment :
 
         model.selectedPlace.observe(viewLifecycleOwner, Observer { place ->
             if (place != null) {
-                placeDetails.place = place
+                placeDetailsFragment.setPlace(place)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             } else {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN

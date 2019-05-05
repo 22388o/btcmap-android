@@ -4,77 +4,80 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:layout_height="match_parent">
 
     <View
-        android:id="@+id/mapHeaderShadow"
+        android:id="@+id/headerShadow"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:alpha="0.5"
         android:background="@drawable/shape_place_details_shadow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/mapHeader"
+    <FrameLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/map_header_height"
         android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mapHeaderShadow">
+        app:layout_constraintTop_toBottomOf="@id/headerShadow">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingStart="24dp"
-            android:paddingEnd="8dp"
-            android:textColor="@color/text_primary"
-            android:textSize="20sp"
-            tools:text="Place name" />
+        <FrameLayout
+            android:id="@+id/activeHeaderColor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primary" />
 
-        <ImageView
-            android:id="@+id/checkMark"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="2dp"
-            android:src="@drawable/ic_check_circle"
-            android:tint="@color/green_700" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerShadow">
 
-        <ImageView
-            android:id="@+id/warning"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="2dp"
-            android:src="@drawable/ic_warning"
-            android:tint="@color/red_500" />
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingStart="24dp"
+                android:paddingEnd="8dp"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                tools:text="Place name" />
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/checkMark"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_check_circle"
+                android:tint="@color/green_700" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/placeToolbar"
-        style="@style/Toolbar"
-        android:layout_width="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mapHeader"
-        app:navigationIcon="?homeAsUpIndicator"
-        tools:title="Place Name" />
+            <ImageView
+                android:id="@+id/warning"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_warning"
+                android:tint="@color/red_500" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/placeToolbar">
+        app:layout_constraintTop_toBottomOf="@id/header">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

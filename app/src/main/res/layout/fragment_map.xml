@@ -29,13 +29,21 @@
 
         </LinearLayout>
 
-        <com.bubelov.coins.map.PlaceDetailsView
+        <FrameLayout
             android:id="@+id/placeDetails"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:behavior_hideable="true"
             app:layout_behavior="@string/bottom_sheet_behavior"
-            app:layout_insetEdge="bottom" />
+            app:layout_insetEdge="bottom">
+
+            <fragment
+                android:id="@+id/placeDetailsFragment"
+                android:name="com.bubelov.coins.placedetails.PlaceDetailsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/locationFab"
