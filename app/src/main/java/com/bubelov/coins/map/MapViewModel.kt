@@ -121,7 +121,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun onAddPlaceClick() {
-        if (userRepository.signedIn()) {
+        if (userRepository.getToken().isNotBlank()) {
             _openAddPlaceScreen.call()
         } else {
             postAuthAction = PostAuthAction.ADD_PLACE
@@ -130,7 +130,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun onEditPlaceClick() {
-        if (userRepository.signedIn()) {
+        if (userRepository.getToken().isNotBlank()) {
             _openEditPlaceScreen.call()
         } else {
             postAuthAction = PostAuthAction.EDIT_SELECTED_PLACE
@@ -139,7 +139,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun onDrawerHeaderClick() {
-        if (userRepository.signedIn()) {
+        if (userRepository.getToken().isNotBlank()) {
             callback?.showUserProfile()
         } else {
             postAuthAction = PostAuthAction.DO_NOTHING

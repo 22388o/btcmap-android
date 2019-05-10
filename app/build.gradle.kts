@@ -29,7 +29,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "API_URL", "\"https://api.coin-map.com/v1/\"")
-        buildConfigField("Boolean", "MOCK_API", "false")
+        buildConfigField("Boolean", "MOCK_API", "true")
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", "\"557789430086-hnt5bk65a636mgi7phhn5t9b1porppik.apps.googleusercontent.com\"")
 
@@ -93,7 +93,6 @@ dependencies {
     implementation("androidx.browser:browser:1.0.0")
 
     // Google services
-    implementation("com.google.android.gms:play-services-auth:16.0.1")
     implementation("com.google.android.gms:play-services-maps:16.1.0")
     implementation("com.google.firebase:firebase-core:16.0.7")
     implementation("com.google.maps.android:android-maps-utils:0.5")

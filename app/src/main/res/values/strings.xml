@@ -38,9 +38,7 @@
     <string name="location_is_not_specified">Location is not specified</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
-    <string name="authorization_hint">Authorized users can add new places and suggest edits</string>
-    <string name="sign_in_with_google">Sign in with Google</string>
-    <string name="sign_in_with_email">Sign in with email</string>
+    <string name="authorization_hint">You can use Bitcoin World Map anonymously but only authorized users are allowed to add or edit places. This helps us to prevent spam.</string>
     <string name="exchange_rates">Exchange rates</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -81,6 +79,8 @@
     <string name="expand">Expand</string>
     <string name="d_km">%1$d km</string>
     <string name="accepted_currencies">Accepted currencies</string>
+    <string name="authorization">Authorization</string>
+    <string name="i_have_an_account">I Have an Account</string>
 
     <string-array name="distance_units">
         <item>Automatic</item>

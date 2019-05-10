@@ -54,33 +54,33 @@ class MapViewModelTest {
 
     @Test
     fun redirectsToAuthOnAddPlaceIfUnauthorized() = runBlocking<Unit> {
-        whenever(userRepository.signedIn()).thenReturn(false)
+        whenever(userRepository.getToken()).thenReturn("")
         model.onAddPlaceClick()
         model.openSignInScreen.blockingObserve()
-        verify(userRepository).signedIn()
+        verify(userRepository).getToken()
     }
 
     @Test
     fun redirectsToAuthOnEditPlaceIfUnauthorized() = runBlocking<Unit> {
-        whenever(userRepository.signedIn()).thenReturn(false)
+        whenever(userRepository.getToken()).thenReturn("")
         model.onEditPlaceClick()
         model.openSignInScreen.blockingObserve()
-        verify(userRepository).signedIn()
+        verify(userRepository).getToken()
     }
 
     @Test
     fun opensAddPlaceScreen() = runBlocking<Unit> {
-        whenever(userRepository.signedIn()).thenReturn(true)
+        whenever(userRepository.getToken()).thenReturn("token")
         model.onAddPlaceClick()
         model.openAddPlaceScreen.blockingObserve()
-        verify(userRepository).signedIn()
+        verify(userRepository).getToken()
     }
 
     @Test
     fun opensEditPlaceScreen() = runBlocking<Unit> {
-        whenever(userRepository.signedIn()).thenReturn(true)
+        whenever(userRepository.getToken()).thenReturn("token")
         model.onEditPlaceClick()
         model.openEditPlaceScreen.blockingObserve()
-        verify(userRepository).signedIn()
+        verify(userRepository).getToken()
     }
 }

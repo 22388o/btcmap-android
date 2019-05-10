@@ -325,7 +325,7 @@ class MapFragment :
     }
 
     private fun updateDrawerHeader() {
-        val user = model.userRepository.user
+        val user = model.userRepository.getUser()
 
         if (user != null) {
             if (!TextUtils.isEmpty(user.avatarUrl)) {
