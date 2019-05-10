@@ -92,6 +92,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-alpha3")
     implementation("androidx.browser:browser:1.0.0")
 
+    // Maps
+    implementation("org.osmdroid:osmdroid-android:6.1.0")
+
     // Google services
     implementation("com.google.android.gms:play-services-maps:16.1.0")
     implementation("com.google.firebase:firebase-core:16.0.7")

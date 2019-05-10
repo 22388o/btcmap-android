@@ -24,11 +24,7 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
-import com.bubelov.coins.util.extention.getLocation
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
@@ -37,14 +33,18 @@ import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import javax.inject.Inject
 
 class MapFragment :
     DaggerFragment(),
-    OnMapReadyCallback,
     Toolbar.OnMenuItemClickListener,
     MapViewModel.Callback {
-    @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
+    @Inject
+    internal lateinit var modelFactory: ViewModelProvider.Factory
 
     private val model by lazy {
         activityViewModelProvider(modelFactory) as MapViewModel
@@ -68,7 +68,7 @@ class MapFragment :
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
 
-    private var map: GoogleMap? = null
+    var locationOverlay: MyLocationNewOverlay? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,8 +83,7 @@ class MapFragment :
 
         drawerHeader = navigationView.getHeaderView(0)
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        initMap()
 
         bottomSheetBehavior = BottomSheetBehavior.from(placeDetails).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
@@ -192,7 +191,7 @@ class MapFragment :
         model.openAddPlaceScreen.observe(viewLifecycleOwner, Observer {
             val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
                 null,
-                map.getLocation()
+                Location(map.boundingBox.centerLatitude, map.boundingBox.centerLongitude)
             )
 
             findNavController().navigate(action)
@@ -203,7 +202,7 @@ class MapFragment :
 
             val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
                 selectedPlace,
-                map.getLocation()
+                Location(map.boundingBox.centerLatitude, map.boundingBox.centerLongitude)
             )
 
             findNavController().navigate(action)
@@ -214,13 +213,9 @@ class MapFragment :
         })
     }
 
-    override fun onDestroyView() {
-        map?.clear()
-        super.onDestroyView()
-    }
-
     override fun onResume() {
         super.onResume()
+        map.onResume()
         drawerToggle.syncState()
 
         val placeArg = arguments?.getParcelable(PLACE_ARG) as Place?
@@ -229,6 +224,11 @@ class MapFragment :
             model.selectPlace(placeArg.id)
             model.moveToLocation(Location(placeArg.latitude, placeArg.longitude))
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        map.onPause()
     }
 
     @SuppressLint("MissingPermission")
@@ -279,32 +279,24 @@ class MapFragment :
     }
 
     @SuppressLint("MissingPermission")
-    override fun onMapReady(map: GoogleMap) {
+    private fun initMap() {
         if (view == null) {
             return
         }
 
-        this.map = map
+        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        map.setMultiTouchControls(true)
 
-        map.uiSettings.apply {
-            isMyLocationButtonEnabled = false
-            isZoomControlsEnabled = false
-            isCompassEnabled = false
-            isMapToolbarEnabled = false
-        }
-
-        initClustering(map)
+        //initClustering(map)
 
         model.onMapReady()
 
         model.selectedPlace.observe(viewLifecycleOwner, Observer { place ->
             if (place != null && model.navigateToNextSelectedPlace) {
-                map.moveCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        place.toLatLng(),
-                        DEFAULT_MAP_ZOOM
-                    )
-                )
+                val mapController = map.controller
+                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+                val startPoint = GeoPoint(place.latitude, place.longitude)
+                mapController.setCenter(startPoint)
 
                 model.navigateToNextSelectedPlace = false
             }
@@ -312,14 +304,17 @@ class MapFragment :
 
         model.moveMapToLocation.observe(viewLifecycleOwner, Observer {
             it?.let { location ->
-                map.isMyLocationEnabled = true
+                if (locationOverlay == null) {
+                    locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
+                        enableMyLocation()
+                        map.overlays += this
+                    }
+                }
 
-                map.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        location.toLatLng(),
-                        DEFAULT_MAP_ZOOM
-                    )
-                )
+                val mapController = map.controller
+                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+                val startPoint = GeoPoint(location.latitude, location.longitude)
+                mapController.setCenter(startPoint)
             }
         })
     }
