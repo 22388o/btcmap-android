@@ -10,6 +10,14 @@
         android:name="com.bubelov.coins.launcher.LauncherFragment"
         android:label="LauncherFragment">
         <action
+            android:id="@+id/action_launcherFragment_to_permissionsFragment"
+            app:destination="@id/permissionsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_graph" />
+        <action
             android:id="@+id/action_launcherFragment_to_mapFragment"
             app:destination="@id/mapFragment"
             app:enterAnim="@anim/fade_in"
@@ -18,6 +26,21 @@
             app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/nav_graph" />
     </fragment>
+
+    <fragment
+        android:id="@+id/permissionsFragment"
+        android:name="com.bubelov.coins.permissions.PermissionsFragment"
+        android:label="PermissionsFragment">
+        <action
+            android:id="@+id/action_permissionsFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.bubelov.coins.map.MapFragment"
@@ -79,14 +102,17 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
+
     <fragment
         android:id="@+id/supportProjectFragment"
         android:name="com.bubelov.coins.support.SupportProjectFragment"
         android:label="SupportProjectFragment" />
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.bubelov.coins.settings.SettingsFragment"
         android:label="SettingsFragment" />
+
     <fragment
         android:id="@+id/authFragment"
         android:name="com.bubelov.coins.auth.AuthFragment"
@@ -99,10 +125,12 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.bubelov.coins.profile.ProfileFragment"
         android:label="ProfileFragment" />
+
     <fragment
         android:id="@+id/editPlaceFragment"
         android:name="com.bubelov.coins.editplace.EditPlaceFragment"
@@ -123,6 +151,7 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
+
     <fragment
         android:id="@+id/pickLocationFragment"
         android:name="com.bubelov.coins.picklocation.PickLocationFragment"
@@ -132,6 +161,7 @@
             app:argType="com.bubelov.coins.model.Location"
             app:nullable="false" />
     </fragment>
+
     <fragment
         android:id="@+id/placesSearchFragment"
         android:name="com.bubelov.coins.search.PlacesSearchFragment"
@@ -141,14 +171,17 @@
             app:argType="com.bubelov.coins.model.Location"
             app:nullable="true" />
     </fragment>
+
     <fragment
         android:id="@+id/exchangeRatesFragment"
         android:name="com.bubelov.coins.rates.ExchangeRatesFragment"
         android:label="ExchangeRatesFragment" />
+
     <fragment
         android:id="@+id/notificationAreaFragment"
         android:name="com.bubelov.coins.notificationarea.NotificationAreaFragment"
         android:label="NotificationAreaFragment" />
+
     <fragment
         android:id="@+id/emailAuthFragment"
         android:name="com.bubelov.coins.auth.EmailAuthFragment"

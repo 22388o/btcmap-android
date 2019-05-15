@@ -8,7 +8,6 @@ import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.HasActivityInjector
 import dagger.android.HasServiceInjector
-import org.osmdroid.config.Configuration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,8 +23,6 @@ class App : DaggerApplication(), HasActivityInjector, HasServiceInjector {
         } else {
             Timber.plant(CrashlyticsTree())
         }
-
-        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
 
         databaseSyncScheduler.schedule()
     }

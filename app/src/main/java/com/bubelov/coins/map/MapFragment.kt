@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.preference.PreferenceManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -75,6 +76,7 @@ class MapFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        org.osmdroid.config.Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
@@ -273,7 +275,10 @@ class MapFragment :
 
     private fun requestLocationPermissions() {
         requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),
             REQUEST_ACCESS_LOCATION
         )
     }

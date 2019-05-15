@@ -7,6 +7,8 @@ import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.map.MapModule
 import com.bubelov.coins.notificationarea.NotificationAreaFragment
 import com.bubelov.coins.notificationarea.NotificationAreaModule
+import com.bubelov.coins.permissions.PermissionsFragment
+import com.bubelov.coins.permissions.PermissionsModule
 import com.bubelov.coins.picklocation.PickLocationFragment
 import com.bubelov.coins.picklocation.PickLocationModule
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
@@ -67,4 +69,7 @@ abstract class FragmentBuilder {
 
     @ContributesAndroidInjector(modules = [PlaceDetailsModule::class])
     abstract fun contributePlaceDetailsFragmentInjector(): PlaceDetailsFragment
+
+    @ContributesAndroidInjector(modules = [PermissionsModule::class])
+    abstract fun contributePermissionsFragmentInjector(): PermissionsFragment
 }
