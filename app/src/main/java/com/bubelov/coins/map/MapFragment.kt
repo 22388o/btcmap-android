@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
@@ -17,7 +16,6 @@ import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
-import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.model.Location
@@ -25,11 +23,6 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.maps.android.clustering.ClusterManager
-import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_map.*
@@ -357,57 +350,57 @@ class MapFragment :
         requireContext().openUrl("https://t.me/joinchat/AAAAAAwVT4aVBdFzcKKbsw")
     }
 
-    private fun initClustering(map: GoogleMap) {
-        val placesManager = ClusterManager<PlaceMarker>(requireContext(), map)
-        placesManager.setAnimation(false)
-        map.setOnMarkerClickListener(placesManager)
+//    private fun initClustering(map: GoogleMap) {
+//        val placesManager = ClusterManager<PlaceMarker>(requireContext(), map)
+//        placesManager.setAnimation(false)
+//        map.setOnMarkerClickListener(placesManager)
+//
+//        val renderer = PlacesRenderer(requireContext(), map, placesManager)
+//        renderer.setAnimation(false)
+//        placesManager.renderer = renderer
+//
+//        renderer.setOnClusterItemClickListener(ClusterItemClickListener())
+//
+//        map.setOnCameraIdleListener {
+//            placesManager.onCameraIdle()
+//            model.mapBounds.value = map.projection.visibleRegion.latLngBounds
+//        }
+//
+//        map.setOnMapClickListener {
+//            model.selectPlace("")
+//        }
+//
+//        model.placeMarkers.observe(viewLifecycleOwner, Observer { markers ->
+//            placesManager.clearItems()
+//            placesManager.addItems(markers)
+//            placesManager.cluster()
+//        })
+//    }
 
-        val renderer = PlacesRenderer(requireContext(), map, placesManager)
-        renderer.setAnimation(false)
-        placesManager.renderer = renderer
+//    private inner class PlacesRenderer internal constructor(
+//        context: Context,
+//        map: GoogleMap,
+//        clusterManager: ClusterManager<PlaceMarker>
+//    ) : DefaultClusterRenderer<PlaceMarker>(context, map, clusterManager) {
+//        override fun onBeforeClusterItemRendered(
+//            placeMarker: PlaceMarker,
+//            markerOptions: MarkerOptions
+//        ) {
+//            super.onBeforeClusterItemRendered(placeMarker, markerOptions)
+//
+//            markerOptions
+//                .icon(BitmapDescriptorFactory.fromBitmap(placeMarker.icon))
+//                .anchor(BuildConfig.MAP_MARKER_ANCHOR_U, BuildConfig.MAP_MARKER_ANCHOR_V)
+//        }
+//    }
 
-        renderer.setOnClusterItemClickListener(ClusterItemClickListener())
-
-        map.setOnCameraIdleListener {
-            placesManager.onCameraIdle()
-            model.mapBounds.value = map.projection.visibleRegion.latLngBounds
-        }
-
-        map.setOnMapClickListener {
-            model.selectPlace("")
-        }
-
-        model.placeMarkers.observe(viewLifecycleOwner, Observer { markers ->
-            placesManager.clearItems()
-            placesManager.addItems(markers)
-            placesManager.cluster()
-        })
-    }
-
-    private inner class PlacesRenderer internal constructor(
-        context: Context,
-        map: GoogleMap,
-        clusterManager: ClusterManager<PlaceMarker>
-    ) : DefaultClusterRenderer<PlaceMarker>(context, map, clusterManager) {
-        override fun onBeforeClusterItemRendered(
-            placeMarker: PlaceMarker,
-            markerOptions: MarkerOptions
-        ) {
-            super.onBeforeClusterItemRendered(placeMarker, markerOptions)
-
-            markerOptions
-                .icon(BitmapDescriptorFactory.fromBitmap(placeMarker.icon))
-                .anchor(BuildConfig.MAP_MARKER_ANCHOR_U, BuildConfig.MAP_MARKER_ANCHOR_V)
-        }
-    }
-
-    private inner class ClusterItemClickListener :
-        ClusterManager.OnClusterItemClickListener<PlaceMarker> {
-        override fun onClusterItemClick(placeMarker: PlaceMarker): Boolean {
-            model.selectPlace(placeMarker.placeId)
-            return true
-        }
-    }
+//    private inner class ClusterItemClickListener :
+//        ClusterManager.OnClusterItemClickListener<PlaceMarker> {
+//        override fun onClusterItemClick(placeMarker: PlaceMarker): Boolean {
+//            model.selectPlace(placeMarker.placeId)
+//            return true
+//        }
+//    }
 
     companion object {
         private const val REQUEST_ACCESS_LOCATION = 10

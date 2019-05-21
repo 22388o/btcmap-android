@@ -1,16 +1,11 @@
 package com.bubelov.coins.repository.place
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreatePlaceArgs
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.TableSyncResult
-import com.bubelov.coins.util.toLatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
 import timber.log.Timber
@@ -53,12 +48,12 @@ class PlacesRepository @Inject constructor(
         db.findRandom()
     }
 
-    fun getPlaces(bounds: LatLngBounds): LiveData<List<Place>> =
-        Transformations.switchMap(allPlaces) {
-            MutableLiveData<List<Place>>().apply {
-                value = it.filter { bounds.contains(it.toLatLng()) }
-            }
-        }
+//    fun getPlaces(bounds: LatLngBounds): LiveData<List<Place>> =
+//        Transformations.switchMap(allPlaces) {
+//            MutableLiveData<List<Place>>().apply {
+//                value = it.filter { bounds.contains(it.toLatLng()) }
+//            }
+//        }
 
     suspend fun sync() = withContext(Dispatchers.IO) {
         val syncStartDate = DateTime.now()

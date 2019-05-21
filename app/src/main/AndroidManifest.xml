@@ -28,14 +28,6 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCFlG9gZj-6ja-CQC6cAgvQXq6fs0foYVQ" />
-
-        <meta-data
-            android:name="firebase_crashlytics_collection_enabled"
-            android:value="${crashlyticsEnabled}" />
-
     </application>
 
 </manifest>

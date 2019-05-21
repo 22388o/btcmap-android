@@ -17,8 +17,6 @@ import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.LiveEvent
 import com.bubelov.coins.util.LocationLiveData
 import com.bubelov.coins.util.toSingleEvent
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -47,26 +45,26 @@ class MapViewModel @Inject constructor(
 
     var callback: Callback? = null
 
-    var mapBounds = MutableLiveData<LatLngBounds>()
+//    var mapBounds = MutableLiveData<LatLngBounds>()
 
-    private val places: LiveData<List<Place>> =
-        Transformations.switchMap(mapBounds) { placesRepository.getPlaces(it) }
-
-    val placeMarkers: LiveData<List<PlaceMarker>> = Transformations.switchMap(places) { places ->
-        MutableLiveData<List<PlaceMarker>>().apply {
-            uiScope.launch {
-                value = places.map {
-                    PlaceMarker(
-                        placeId = it.id,
-                        icon = placeIconsRepository.getMarker(
-                            placeCategoriesRepository.findById(it.categoryId)?.name ?: ""
-                        ),
-                        latLng = LatLng(it.latitude, it.longitude)
-                    )
-                }
-            }
-        }
-    }
+//    private val places: LiveData<List<Place>> =
+//        Transformations.switchMap(mapBounds) { placesRepository.getPlaces(it) }
+//
+//    val placeMarkers: LiveData<List<PlaceMarker>> = Transformations.switchMap(places) { places ->
+//        MutableLiveData<List<PlaceMarker>>().apply {
+//            uiScope.launch {
+//                value = places.map {
+//                    PlaceMarker(
+//                        placeId = it.id,
+//                        icon = placeIconsRepository.getMarker(
+//                            placeCategoriesRepository.findById(it.categoryId)?.name ?: ""
+//                        ),
+//                        latLng = LatLng(it.latitude, it.longitude)
+//                    )
+//                }
+//            }
+//        }
+//    }
 
     val userLocation: LiveData<Location> = Transformations.map(location) { location ->
         if (location != null && notificationAreaRepository.notificationArea == null) {

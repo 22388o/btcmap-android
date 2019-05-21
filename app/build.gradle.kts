@@ -31,25 +31,11 @@ android {
         buildConfigField("String", "API_URL", "\"https://api.coin-map.com/v1/\"")
         buildConfigField("Boolean", "MOCK_API", "true")
 
-        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"557789430086-hnt5bk65a636mgi7phhn5t9b1porppik.apps.googleusercontent.com\"")
-
         buildConfigField("Float", "MAP_MARKER_ANCHOR_U", "0.5f")
         buildConfigField("Float", "MAP_MARKER_ANCHOR_V", "0.91145f")
 
         buildConfigField("Double", "DEFAULT_LOCATION_LAT", "40.7141667")
         buildConfigField("Double", "DEFAULT_LOCATION_LON", "-74.0063889")
-
-        manifestPlaceholders = mapOf("crashlyticsEnabled" to true)
-    }
-
-    buildTypes {
-        getByName("debug") {
-            manifestPlaceholders = mapOf("crashlyticsEnabled" to false)
-        }
-
-        getByName("release") {
-            manifestPlaceholders = mapOf("crashlyticsEnabled" to true)
-        }
     }
 }
 
@@ -95,11 +81,6 @@ dependencies {
     // Maps
     implementation("org.osmdroid:osmdroid-android:6.1.0")
 
-    // Google services
-    implementation("com.google.android.gms:play-services-maps:16.1.0")
-    implementation("com.google.firebase:firebase-core:16.0.7")
-    implementation("com.google.maps.android:android-maps-utils:0.5")
-
     // JSON
     implementation("com.google.code.gson:gson:2.8.5")
 
@@ -111,11 +92,6 @@ dependencies {
 
     // Dates handling
     implementation("joda-time:joda-time:2.10.1")
-
-    // Crash reporting
-    implementation("com.crashlytics.sdk.android:crashlytics:2.8.0@aar") {
-        isTransitive = true
-    }
 
     // Android utility functions
     implementation("androidx.core:core-ktx:1.0.1")
@@ -140,5 +116,3 @@ dependencies {
 androidExtensions {
     isExperimental = true
 }
-
-apply(plugin = "com.google.gms.google-services")

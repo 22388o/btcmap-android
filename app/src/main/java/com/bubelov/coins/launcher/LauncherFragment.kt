@@ -2,43 +2,40 @@ package com.bubelov.coins.launcher
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 
 class LauncherFragment : Fragment() {
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        val googleApiAvailability = GoogleApiAvailability.getInstance()
-
-        val playServicesAvailability =
-            googleApiAvailability.isGooglePlayServicesAvailable(requireContext())
-
-        if (playServicesAvailability == ConnectionResult.SUCCESS) {
-            onPlayServicesAvailable()
-        } else {
-            if (googleApiAvailability.isUserResolvableError(playServicesAvailability)) {
-                val dialog = googleApiAvailability.getErrorDialog(
-                    requireActivity(),
-                    playServicesAvailability,
-                    PLAY_SERVICES_RESOLUTION_REQUEST
-                )
-
-                dialog.setCancelable(false)
-                dialog.show()
-
-                dialog.setOnDismissListener {
-                    if (playServicesAvailability == ConnectionResult.SERVICE_INVALID) {
-                        requireActivity().finish()
-                    }
-                }
-            }
-        }
-    }
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//
+//        val googleApiAvailability = GoogleApiAvailability.getInstance()
+//
+//        val playServicesAvailability =
+//            googleApiAvailability.isGooglePlayServicesAvailable(requireContext())
+//
+//        if (playServicesAvailability == ConnectionResult.SUCCESS) {
+//            onPlayServicesAvailable()
+//        } else {
+//            if (googleApiAvailability.isUserResolvableError(playServicesAvailability)) {
+//                val dialog = googleApiAvailability.getErrorDialog(
+//                    requireActivity(),
+//                    playServicesAvailability,
+//                    PLAY_SERVICES_RESOLUTION_REQUEST
+//                )
+//
+//                dialog.setCancelable(false)
+//                dialog.show()
+//
+//                dialog.setOnDismissListener {
+//                    if (playServicesAvailability == ConnectionResult.SERVICE_INVALID) {
+//                        requireActivity().finish()
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PLAY_SERVICES_RESOLUTION_REQUEST) {
