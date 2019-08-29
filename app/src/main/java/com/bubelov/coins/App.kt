@@ -1,22 +1,29 @@
 package com.bubelov.coins
 
+import android.app.Application
 import com.bubelov.coins.di.DaggerAppComponent
 import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.sync.DatabaseSyncScheduler
 import com.bubelov.coins.util.CrashlyticsTree
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
-import dagger.android.HasActivityInjector
-import dagger.android.HasServiceInjector
+import dagger.android.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class App : DaggerApplication(), HasActivityInjector, HasServiceInjector {
-    @Inject lateinit var databaseSyncScheduler: DatabaseSyncScheduler
-    @Inject lateinit var databaseSync: DatabaseSync
+class App : Application(), HasAndroidInjector {
+
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
+    @Inject
+    lateinit var databaseSyncScheduler: DatabaseSyncScheduler
+
+    @Inject
+    lateinit var databaseSync: DatabaseSync
 
     override fun onCreate() {
         super.onCreate()
+
+        DaggerAppComponent.factory().create(this).inject(this)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -27,7 +34,5 @@ class App : DaggerApplication(), HasActivityInjector, HasServiceInjector {
         databaseSyncScheduler.schedule()
     }
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder().create(this)
-    }
+    override fun androidInjector() = androidInjector
 }

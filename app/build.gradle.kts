@@ -41,15 +41,15 @@ android {
 
 dependencies {
     // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0")
 
     // Dependency injection
-    implementation("com.google.dagger:dagger:2.21")
-    kapt("com.google.dagger:dagger-android-processor:2.21")
-    kapt("com.google.dagger:dagger-compiler:2.21")
-    implementation("com.google.dagger:dagger-android-support:2.21")
+    implementation("com.google.dagger:dagger:2.24")
+    kapt("com.google.dagger:dagger-android-processor:2.24")
+    kapt("com.google.dagger:dagger-compiler:2.24")
+    implementation("com.google.dagger:dagger-android-support:2.24")
 
     // Network
     implementation("com.squareup.retrofit2:retrofit:2.5.1-SNAPSHOT")
@@ -58,8 +58,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:3.10.0")
 
     // Cache
-    implementation("androidx.room:room-runtime:2.1.0-alpha04")
-    kapt("androidx.room:room-compiler:2.1.0-alpha04")
+    implementation("androidx.room:room-runtime:2.2.0-beta01")
+    kapt("androidx.room:room-compiler:2.2.0-beta01")
 
     // Navigation
     implementation("android.arch.navigation:navigation-ui-ktx:1.0.0-rc02")
@@ -111,8 +111,4 @@ dependencies {
     androidTestImplementation("androidx.test:runner:1.1.1")
     androidTestImplementation("androidx.test:rules:1.1.1")
     androidTestImplementation("androidx.room:room-testing:2.1.0-alpha04")
-}
-
-androidExtensions {
-    isExperimental = true
 }
