@@ -42,7 +42,7 @@ class ProfileFragment : DaggerFragment(), Toolbar.OnMenuItemClickListener {
         }
 
         if (!TextUtils.isEmpty(user.avatarUrl)) {
-            Picasso.with(requireContext())
+            Picasso.get()
                 .load(user.avatarUrl)
                 .transform(CircleTransformation())
                 .into(avatar)

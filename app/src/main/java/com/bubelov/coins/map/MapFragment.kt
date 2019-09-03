@@ -322,7 +322,7 @@ class MapFragment :
 
         if (user != null) {
             if (!TextUtils.isEmpty(user.avatarUrl)) {
-                Picasso.with(requireContext())
+                Picasso.get()
                     .load(user.avatarUrl)
                     .transform(CircleTransformation())
                     .into(drawerHeader.avatar)
