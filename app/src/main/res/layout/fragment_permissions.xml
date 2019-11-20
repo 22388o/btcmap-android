@@ -17,36 +17,23 @@
         android:id="@+id/disclaimer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="16dp"
+        android:layout_margin="16dp"
         android:text="@string/permissions_explanation"
         android:textColor="@color/text_primary"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/grantPermissions"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintBottom_toTopOf="@id/continueToMap"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintVertical_bias="0" />
 
     <Button
-        android:id="@+id/grantPermissions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Grant permissions"
-        app:layout_constraintBottom_toTopOf="@id/skip"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/skip"
+        android:id="@+id/continueToMap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Skip"
+        android:text="@string/continue_to_map"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

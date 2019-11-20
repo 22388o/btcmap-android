@@ -2,18 +2,27 @@ package com.bubelov.coins.permissions
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_permissions.*
+import javax.inject.Inject
 
 class PermissionsFragment : Fragment() {
+
+    @Inject
+    lateinit var modelFactory: ViewModelProvider.Factory
+
+    private val model by lazy {
+        ViewModelProvider(this, modelFactory)[PermissionsViewModel::class.java]
+    }
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -28,7 +37,9 @@ class PermissionsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        grantPermissions.setOnClickListener {
+        AndroidSupportInjection.inject(this)
+
+        continueToMap.setOnClickListener {
             requestPermissions(
                 arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -37,10 +48,6 @@ class PermissionsFragment : Fragment() {
                 PERMISSIONS_REQUEST
             )
         }
-
-        skip.setOnClickListener {
-            findNavController().navigate(R.id.action_permissionsFragment_to_mapFragment)
-        }
     }
 
     override fun onRequestPermissionsResult(
@@ -48,13 +55,8 @@ class PermissionsFragment : Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == PERMISSIONS_REQUEST) {
-            if (grantResults.size == 2
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                findNavController().navigate(R.id.action_permissionsFragment_to_mapFragment)
-            }
-        }
+        model.permissionsExplained = true
+        findNavController().navigate(R.id.action_permissionsFragment_to_mapFragment)
     }
 
     companion object {

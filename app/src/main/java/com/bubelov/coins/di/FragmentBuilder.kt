@@ -3,6 +3,8 @@ package com.bubelov.coins.di
 import com.bubelov.coins.auth.*
 import com.bubelov.coins.editplace.EditPlaceFragment
 import com.bubelov.coins.editplace.EditPlaceModule
+import com.bubelov.coins.launcher.LauncherFragment
+import com.bubelov.coins.launcher.LauncherModule
 import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.map.MapModule
 import com.bubelov.coins.notificationarea.NotificationAreaFragment
@@ -72,4 +74,7 @@ abstract class FragmentBuilder {
 
     @ContributesAndroidInjector(modules = [PermissionsModule::class])
     abstract fun contributePermissionsFragmentInjector(): PermissionsFragment
+
+    @ContributesAndroidInjector(modules = [LauncherModule::class])
+    abstract fun contributeLauncherFragmentInjector(): LauncherFragment
 }

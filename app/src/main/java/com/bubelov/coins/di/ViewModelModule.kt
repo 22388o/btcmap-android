@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.auth.AuthViewModel
 import com.bubelov.coins.editplace.EditPlaceViewModel
+import com.bubelov.coins.launcher.LauncherViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.notificationarea.NotificationAreaViewModel
+import com.bubelov.coins.permissions.PermissionsViewModel
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import com.bubelov.coins.placedetails.PlaceDetailsViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
@@ -73,6 +75,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PlaceDetailsViewModel::class)
     internal abstract fun bindPlaceDetailsViewModel(placeDetailsViewModel: PlaceDetailsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LauncherViewModel::class)
+    internal abstract fun bindLauncherViewModel(launcherViewModel: LauncherViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PermissionsViewModel::class)
+    internal abstract fun bindPermissionsViewModel(permissionsViewModel: PermissionsViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

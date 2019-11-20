@@ -81,9 +81,10 @@
     <string name="accepted_currencies">Accepted currencies</string>
     <string name="authorization">Authorization</string>
     <string name="i_have_an_account">I Have an Account</string>
-    <string name="permissions_explanation">Bitcoin World Map does not require any special permissions although the app will work better if you allow it to use your storage to save the map and use your location in order to show in on the map and notify you about any new Bitcoin accepting places nearby.</string>
+    <string name="permissions_explanation">Bitcoin World Map does not require any special permissions although the app will work better if you allow it to use your storage (to save the map) and use your location (to show in on the map and notify you about any new Bitcoin accepting places nearby).</string>
     <string name="done">Done</string>
     <string name="permissions">Permissions</string>
+    <string name="continue_to_map">Continue</string>
 
     <string-array name="distance_units">
         <item>Automatic</item>
