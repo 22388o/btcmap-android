@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
@@ -69,7 +70,8 @@ class MapFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        org.osmdroid.config.Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
+        org.osmdroid.config.Configuration.getInstance()
+            .load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
@@ -282,6 +284,15 @@ class MapFragment :
             return
         }
 
+        val appContext = requireContext().applicationContext
+
+        org.osmdroid.config.Configuration.getInstance().load(
+            appContext,
+            PreferenceManager.getDefaultSharedPreferences(appContext)
+        )
+
+        map.setTileSource(TileSourceFactory.MAPNIK)
+
         map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
         map.setMultiTouchControls(true)
 
@@ -303,10 +314,11 @@ class MapFragment :
         model.moveMapToLocation.observe(viewLifecycleOwner, Observer {
             it?.let { location ->
                 if (locationOverlay == null) {
-                    locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
-                        enableMyLocation()
-                        map.overlays += this
-                    }
+                    locationOverlay =
+                        MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
+                            enableMyLocation()
+                            map.overlays += this
+                        }
                 }
 
                 val mapController = map.controller

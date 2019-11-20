@@ -83,7 +83,7 @@ dependencies {
     implementation "androidx.browser:browser:1.0.0"
 
     // Maps
-    implementation "org.osmdroid:osmdroid-android:6.1.0"
+    implementation "org.osmdroid:osmdroid-android:6.1.2"
 
     // JSON
     implementation "com.google.code.gson:gson:2.8.5"

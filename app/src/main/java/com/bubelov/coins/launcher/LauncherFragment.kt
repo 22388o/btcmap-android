@@ -2,21 +2,24 @@ package com.bubelov.coins.launcher
 
 import android.app.Activity
 import android.content.Intent
-import android.widget.Toast
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 
 class LauncherFragment : Fragment() {
-    override fun onResume() {
-        super.onResume()
-        Toast.makeText(requireContext(), "Launcher", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_launcherFragment_to_permissionsFragment)
-    }
 
-//   override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//
+
+//    override fun onResume() {
+//        super.onResume()
+//        //Toast.makeText(requireContext(), "Launcher", Toast.LENGTH_SHORT).show()
+//        //findNavController().navigate(R.id.action_launcherFragment_to_permissionsFragment)
+//    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        findNavController().navigate(R.id.action_launcherFragment_to_mapFragment)
+
 //        val googleApiAvailability = GoogleApiAvailability.getInstance()
 //
 //        val playServicesAvailability =
@@ -42,7 +45,7 @@ class LauncherFragment : Fragment() {
 //                }
 //            }
 //        }
-//    }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PLAY_SERVICES_RESOLUTION_REQUEST) {
