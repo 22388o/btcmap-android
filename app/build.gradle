@@ -1,33 +1,29 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-android-extensions"
+    id "kotlin-kapt"
+    id "androidx.navigation.safeargs.kotlin"
+}
 
 android {
-    compileSdkVersion 28
-
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.bubelov.coins"
 
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         versionCode 42
         versionName "3.0.0"
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/src/main/assets/schemas".toString()]
+                arguments = [
+                        "room.schemaLocation"  : "$projectDir/src/main/assets/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
             }
         }
 
@@ -41,9 +37,11 @@ android {
 
         buildConfigField "Double", "DEFAULT_LOCATION_LAT", "40.7141667"
         buildConfigField "Double", "DEFAULT_LOCATION_LON", "-74.0063889"
-
-        project.ext.set("archivesBaseName", "coin-map-android-" + defaultConfig.versionName)
     }
+}
+
+ext {
+    archivesBaseName = "coin-map-android"
 }
 
 dependencies {
@@ -64,9 +62,10 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit-mock:2.6.1"
     implementation "com.squareup.okhttp3:logging-interceptor:4.1.0"
 
-    // Cache
-    implementation "androidx.room:room-runtime:2.2.0-beta01"
-    kapt "androidx.room:room-compiler:2.2.0-beta01"
+    // DB
+    implementation "androidx.room:room-runtime:2.2.1"
+    kapt "androidx.room:room-compiler:2.2.1"
+    implementation "androidx.room:room-ktx:2.2.1"
 
     // Navigation
     implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
