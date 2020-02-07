@@ -7,6 +7,7 @@ import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import org.joda.time.DateTime
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,6 +55,10 @@ class PlacesRepository @Inject constructor(
 //                value = it.filter { bounds.contains(it.toLatLng()) }
 //            }
 //        }
+
+    fun getAll(): Flow<List<Place>> {
+        return db.allAsFlow()
+    }
 
     suspend fun sync() = withContext(Dispatchers.IO) {
         val syncStartDate = DateTime.now()

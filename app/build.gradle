@@ -31,12 +31,6 @@ android {
 
         buildConfigField "String", "API_URL", "\"https://api.coin-map.com/v1/\""
         buildConfigField "Boolean", "MOCK_API", "true"
-
-        buildConfigField "Float", "MAP_MARKER_ANCHOR_U", "0.5f"
-        buildConfigField "Float", "MAP_MARKER_ANCHOR_V", "0.91145f"
-
-        buildConfigField "Double", "DEFAULT_LOCATION_LAT", "40.7141667"
-        buildConfigField "Double", "DEFAULT_LOCATION_LON", "-74.0063889"
     }
 
     compileOptions {

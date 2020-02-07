@@ -15,6 +15,7 @@ import android.text.TextUtils
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
@@ -27,9 +28,13 @@ import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import javax.inject.Inject
@@ -327,6 +332,38 @@ class MapFragment :
                 mapController.setCenter(startPoint)
             }
         })
+
+        lifecycleScope.launch {
+            model.locationFlow.collect { location ->
+                if (locationOverlay == null) {
+                    locationOverlay =
+                        MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
+                            enableMyLocation()
+                            map.overlays += this
+                        }
+                }
+
+                val mapController = map.controller
+                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+                val startPoint = GeoPoint(location.latitude, location.longitude)
+                mapController.setCenter(startPoint)
+            }
+
+            model.allPlaces.collect {
+                val items = mutableListOf<OverlayItem>()
+
+                it.forEach { place ->
+                    items += OverlayItem(
+                        "Title",
+                        "Description",
+                        GeoPoint(place.latitude, place.longitude)
+                    )
+                }
+
+                val overlay = ItemizedIconOverlay<OverlayItem>(requireContext(), items, null)
+                map.overlays.add(overlay)
+            }
+        }
     }
 
     private fun updateDrawerHeader() {

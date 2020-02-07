@@ -14,6 +14,6 @@ class SettingsRepository @Inject constructor(
         set(value) = preferences.edit { putBoolean(PERMISSIONS_EXPLAINED_KEY, value) }
 
     companion object {
-        const val PERMISSIONS_EXPLAINED_KEY = "permissions-explained"
+        const val PERMISSIONS_EXPLAINED_KEY = "permissions_explained"
     }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.model.Place
+import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
@@ -33,6 +34,7 @@ class MapViewModel @Inject constructor(
     val userRepository: UserRepository,
     val currenciesRepository: CurrenciesRepository,
     val currenciesPlacesRepository: CurrenciesPlacesRepository,
+    val locationRepository: LocationRepository,
     coroutineContext: CoroutineContext
 ) : ViewModel() {
     private val job = Job()
@@ -44,6 +46,10 @@ class MapViewModel @Inject constructor(
     var navigateToNextSelectedPlace = false
 
     var callback: Callback? = null
+
+    val locationFlow = locationRepository.location
+
+    val allPlaces = placesRepository.getAll()
 
 //    var mapBounds = MutableLiveData<LatLngBounds>()
 
