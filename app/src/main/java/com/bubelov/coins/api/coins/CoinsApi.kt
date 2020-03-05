@@ -1,7 +1,7 @@
 package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.data.Currency
-import com.bubelov.coins.model.CurrencyPlace
+import com.bubelov.coins.data.CurrencyPlace
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.model.User

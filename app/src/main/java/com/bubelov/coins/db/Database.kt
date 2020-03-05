@@ -5,10 +5,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
-import com.bubelov.coins.model.CurrencyPlace
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.PlaceCategory
-import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesDb
 import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesDb
 import com.bubelov.coins.util.transaction
@@ -16,7 +14,6 @@ import com.bubelov.coins.util.transaction
 @Database(
     entities = [
         Place::class,
-        CurrencyPlace::class,
         PlaceCategory::class
     ],
     version = 3,
@@ -25,7 +22,6 @@ import com.bubelov.coins.util.transaction
 @TypeConverters(Converters::class)
 abstract class Database : RoomDatabase() {
     abstract fun placesDb(): PlacesDb
-    abstract fun currenciesPlacesDb(): CurrenciesPlacesDb
     abstract fun placeCategoriesDb(): PlaceCategoriesDb
 
     companion object {
