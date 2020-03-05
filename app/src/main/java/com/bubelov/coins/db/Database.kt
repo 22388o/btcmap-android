@@ -1,30 +1,3 @@
-/*
- * This is free and unencumbered software released into the public domain.
- *
- * Anyone is free to copy, modify, publish, use, compile, sell, or
- * distribute this software, either in source code form or as a compiled
- * binary, for any purpose, commercial or non-commercial, and by any
- * means.
- *
- * In jurisdictions that recognize copyright laws, the author or authors
- * of this software dedicate any and all copyright interest in the
- * software to the public domain. We make this dedication for the benefit
- * of the public at large and to the detriment of our heirs and
- * successors. We intend this dedication to be an overt act of
- * relinquishment in perpetuity of all present and future rights to this
- * software under copyright law.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- *
- * For more information, please refer to <https://unlicense.org>
- */
-
 package com.bubelov.coins.db
 
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -32,11 +5,9 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
-import com.bubelov.coins.model.Currency
 import com.bubelov.coins.model.CurrencyPlace
 import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.PlaceCategory
-import com.bubelov.coins.repository.currency.CurrenciesDb
 import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesDb
 import com.bubelov.coins.repository.place.PlacesDb
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesDb
@@ -44,7 +15,6 @@ import com.bubelov.coins.util.transaction
 
 @Database(
     entities = [
-        Currency::class,
         Place::class,
         CurrencyPlace::class,
         PlaceCategory::class
@@ -54,7 +24,6 @@ import com.bubelov.coins.util.transaction
 )
 @TypeConverters(Converters::class)
 abstract class Database : RoomDatabase() {
-    abstract fun currenciesDb(): CurrenciesDb
     abstract fun placesDb(): PlacesDb
     abstract fun currenciesPlacesDb(): CurrenciesPlacesDb
     abstract fun placeCategoriesDb(): PlaceCategoriesDb

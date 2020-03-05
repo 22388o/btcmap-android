@@ -1,7 +1,7 @@
 package com.bubelov.coins.api.coins
 
+import com.bubelov.coins.data.Currency
 import com.bubelov.coins.model.*
-import com.bubelov.coins.model.Currency
 import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
 import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
 import com.bubelov.coins.repository.place.BuiltInPlacesCache

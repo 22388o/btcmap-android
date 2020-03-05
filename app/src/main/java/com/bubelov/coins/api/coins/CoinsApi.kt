@@ -1,6 +1,10 @@
 package com.bubelov.coins.api.coins
 
-import com.bubelov.coins.model.*
+import com.bubelov.coins.data.Currency
+import com.bubelov.coins.model.CurrencyPlace
+import com.bubelov.coins.model.Place
+import com.bubelov.coins.model.PlaceCategory
+import com.bubelov.coins.model.User
 import com.bubelov.coins.util.Json
 import org.joda.time.DateTime
 import retrofit2.http.*

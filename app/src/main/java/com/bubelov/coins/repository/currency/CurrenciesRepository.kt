@@ -1,7 +1,8 @@
 package com.bubelov.coins.repository.currency
 
+import com.bubelov.coins.Database
 import com.bubelov.coins.api.coins.CoinsApi
-import com.bubelov.coins.model.Currency
+import com.bubelov.coins.data.Currency
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
@@ -12,9 +13,11 @@ import javax.inject.Singleton
 @Singleton
 class CurrenciesRepository @Inject constructor(
     private val api: CoinsApi,
-    private val db: CurrenciesDb,
+    db: Database,
     private val builtInCache: BuiltInCurrenciesCache
 ) {
+    private val queries = db.currencyQueries;
+
     private var builtInCacheInitialized = false
 
     init {
@@ -23,13 +26,13 @@ class CurrenciesRepository @Inject constructor(
 
     suspend fun all(): List<Currency> {
         return withContext(Dispatchers.IO) {
-            db.all()
+            queries.selectAll().executeAsList()
         }
     }
 
     suspend fun find(id: String): Currency? {
         return withContext(Dispatchers.IO) {
-            db.find(id)
+            queries.selectById(id).executeAsOneOrNull()
         }
     }
 
@@ -39,11 +42,18 @@ class CurrenciesRepository @Inject constructor(
         try {
             waitTillCacheIsReady()
 
+            val maxUpdatedAt = queries.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
+                ?: DateTime(0).toString()
+
             val response = api.getCurrencies(
-                createdOrUpdatedAfter = db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0)
+                createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt)
             )
 
-            db.insert(response)
+            queries.transaction {
+                response.forEach {
+                    queries.insertOrReplace(it)
+                }
+            }
 
             TableSyncResult(
                 startDate = syncStartDate,
@@ -65,8 +75,12 @@ class CurrenciesRepository @Inject constructor(
 
     private suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
-            if (db.count() == 0) {
-                db.insert(builtInCache.getCurrencies())
+            if (queries.selectCount().executeAsOne() == 0L) {
+                queries.transaction {
+                    builtInCache.getCurrencies().forEach {
+                        queries.insertOrReplace(it)
+                    }
+                }
             }
 
             builtInCacheInitialized = true

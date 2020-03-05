@@ -9,6 +9,7 @@ ext.versions = [
         retrofit         : '2.7.1',
         http_logging     : '4.3.1',
         room             : '2.2.4',
+        sqldelight       : "1.2.2",
         work             : '2.3.2',
         appcompat        : '1.1.0',
         material         : '1.2.0-alpha05',

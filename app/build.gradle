@@ -4,6 +4,7 @@ plugins {
     id "kotlin-android-extensions"
     id "kotlin-kapt"
     id "androidx.navigation.safeargs.kotlin"
+    id "com.squareup.sqldelight"
 }
 
 android {
@@ -34,8 +35,16 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    packagingOptions {
+        exclude 'META-INF/kotlinx-coroutines-core.kotlin_module'
     }
 }
 
@@ -62,6 +71,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}"
     implementation "com.squareup.okhttp3:logging-interceptor:${versions.http_logging}"
     implementation "androidx.room:room-runtime:${versions.room}"
+    implementation "com.squareup.sqldelight:android-driver:${versions.sqldelight}"
+    implementation "com.squareup.sqldelight:coroutines-extensions:1.2.1" // WTF?!
     kapt "androidx.room:room-compiler:${versions.room}"
     implementation "androidx.room:room-ktx:${versions.room}"
     implementation "androidx.work:work-runtime-ktx:${versions.work}"
@@ -80,6 +91,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:${versions.arch_core_testing}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_kotlin}"
+    testImplementation "com.squareup.sqldelight:sqlite-driver:${versions.sqldelight}"
 
     androidTestImplementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
