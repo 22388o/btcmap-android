@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bubelov.coins.R
-import com.bubelov.coins.model.Place
+import com.bubelov.coins.data.Place
 import com.bubelov.coins.util.openUrl
 import com.bubelov.coins.util.viewModelProvider
 import dagger.android.support.DaggerFragment

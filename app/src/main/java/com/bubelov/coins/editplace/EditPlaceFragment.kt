@@ -29,8 +29,8 @@ class EditPlaceFragment : DaggerFragment() {
         activityViewModelProvider(modelFactory) as PickLocationResultViewModel
     }
 
-    private val place by lazy {
-        EditPlaceFragmentArgs.fromBundle(arguments!!).place
+    private val placeId by lazy {
+        EditPlaceFragmentArgs.fromBundle(arguments!!).placeId
     }
 
     private val passedLocation by lazy {
@@ -65,18 +65,18 @@ class EditPlaceFragment : DaggerFragment() {
             }
         }
 
-        val place = place
-
-        if (place == null) {
-            toolbar.setTitle(R.string.action_add_place)
-            closedSwitch.isVisible = false
-        } else {
-            name.setText(place.name)
-            phone.setText(place.phone)
-            website.setText(place.website)
-            description.setText(place.description)
-            openingHours.setText(place.openingHours)
-        }
+//        val place = place
+//
+//        if (place == null) {
+//            toolbar.setTitle(R.string.action_add_place)
+//            closedSwitch.isVisible = false
+//        } else {
+//            name.setText(place.name)
+//            phone.setText(place.phone)
+//            website.setText(place.website)
+//            description.setText(place.description)
+//            openingHours.setText(place.openingHours)
+//        }
 
 //        (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(this)
 

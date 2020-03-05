@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
-import com.bubelov.coins.model.Place
 import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.currency.CurrenciesRepository

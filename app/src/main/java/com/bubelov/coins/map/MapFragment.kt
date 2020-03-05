@@ -19,8 +19,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
+import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.Location
-import com.bubelov.coins.model.Place
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
@@ -203,7 +203,7 @@ class MapFragment :
             val selectedPlace = model.selectedPlace.value ?: return@Observer
 
             val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
-                selectedPlace,
+                selectedPlace.id,
                 Location(map.boundingBox.centerLatitude, map.boundingBox.centerLongitude)
             )
 
@@ -220,11 +220,11 @@ class MapFragment :
         map.onResume()
         drawerToggle.syncState()
 
-        val placeArg = arguments?.getParcelable(PLACE_ARG) as Place?
+        val placeId = arguments?.getString(PLACE_ID_ARG)
 
-        if (placeArg != null) {
-            model.selectPlace(placeArg.id)
-            model.moveToLocation(Location(placeArg.latitude, placeArg.longitude))
+        if (placeId != null) {
+            model.selectPlace(placeId)
+            //model.moveToLocation(Location(placeArg.latitude, placeArg.longitude))
         }
     }
 
@@ -456,10 +456,10 @@ class MapFragment :
 
         private const val DEFAULT_MAP_ZOOM = 15f
 
-        private const val PLACE_ARG = "place"
+        private const val PLACE_ID_ARG = "place_id"
 
         fun newOpenPlaceArguments(place: Place): Bundle {
-            return bundleOf(Pair(PLACE_ARG, place))
+            return bundleOf(Pair(PLACE_ID_ARG, place.id))
         }
     }
 }

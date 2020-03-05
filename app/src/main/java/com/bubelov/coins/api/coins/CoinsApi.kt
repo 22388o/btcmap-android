@@ -2,8 +2,8 @@ package com.bubelov.coins.api.coins
 
 import com.bubelov.coins.data.Currency
 import com.bubelov.coins.data.CurrencyPlace
+import com.bubelov.coins.data.Place
 import com.bubelov.coins.data.PlaceCategory
-import com.bubelov.coins.model.Place
 import com.bubelov.coins.model.User
 import com.bubelov.coins.util.Json
 import org.joda.time.DateTime

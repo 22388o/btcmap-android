@@ -8,16 +8,16 @@ import org.junit.Test
 import java.util.*
 import kotlin.random.Random
 
-class CurrencyQueriesTests {
+class PlaceQueriesTests {
 
-    lateinit var queries: CurrencyQueries
+    lateinit var queries: PlaceQueries
 
     @Before
     fun setUp() {
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         Database.Schema.create(driver)
         val database = Database(driver)
-        queries = database.currencyQueries
+        queries = database.placeQueries
     }
 
     @Test
@@ -27,7 +27,7 @@ class CurrencyQueriesTests {
 
     @Test
     fun insertOrReplace_insertsItem() {
-        val item = currency()
+        val item = place()
         queries.insertOrReplace(item)
 
         assert(queries.selectCount().executeAsOne() == 1L)
@@ -36,7 +36,7 @@ class CurrencyQueriesTests {
 
     @Test
     fun insertOrReplace_replacesItem() {
-        val item = currency()
+        val item = place()
         queries.insertOrReplace(item)
 
         val updatedItem = item.copy(name = "Changed")
@@ -48,7 +48,7 @@ class CurrencyQueriesTests {
 
     @Test
     fun selectAll_selectsAllItems() {
-        val items = listOf(currency(), currency())
+        val items = listOf(place(), place())
 
         queries.transaction {
             items.forEach {
@@ -62,9 +62,9 @@ class CurrencyQueriesTests {
     @Test
     @ExperimentalStdlibApi
     fun selectById_selectsCorrectItem() {
-        val items = buildList<Currency> {
+        val items = buildList<Place> {
             repeat(100) {
-                add(currency())
+                add(place())
             }
         }
 
@@ -80,13 +80,52 @@ class CurrencyQueriesTests {
     }
 
     @Test
-    @ExperimentalStdlibApi
+    fun selectBySearchQuery_searchesByName() {
+        queries.transaction {
+            repeat(100) {
+                var place = place()
+
+                if (it == 1) {
+                    place = place.copy(name = "Good Cafe")
+                }
+
+                if (it == 2) {
+                    place = place.copy(name = "Bad Cafe")
+                }
+
+                queries.insertOrReplace(place)
+            }
+        }
+
+        assert(queries.selectBySearchQuery("cafe").executeAsList().size == 2)
+    }
+
+    @Test
+    fun selectRandom_returnsRandomItem() {
+        val count = 1 + Random(System.currentTimeMillis()).nextInt(100)
+
+        queries.transaction {
+            repeat(count) {
+                queries.insertOrReplace(place())
+            }
+        }
+
+        var lastResult = queries.selectRandom().executeAsOneOrNull()
+
+        while (queries.selectRandom().executeAsOne() == lastResult) {
+            lastResult = queries.selectRandom().executeAsOneOrNull()
+        }
+
+        assert(true)
+    }
+
+    @Test
     fun selectCount_returnsCorrectCount() {
         val count = 1 + Random(System.currentTimeMillis()).nextInt(100)
 
         queries.transaction {
             repeat(count) {
-                queries.insertOrReplace(currency())
+                queries.insertOrReplace(place())
             }
         }
 
@@ -99,22 +138,28 @@ class CurrencyQueriesTests {
 
         queries.transaction {
             repeat(count) {
-                queries.insertOrReplace(currency())
+                queries.insertOrReplace(place())
             }
         }
 
-        val item = currency()
+        val item = place()
         val updatedAt = DateTime.parse(item.updatedAt).plusYears(5).toString()
         queries.insertOrReplace(item.copy(updatedAt = updatedAt))
 
         assert(queries.selectMaxUpdatedAt().executeAsOne().MAX == updatedAt)
     }
 
-    private fun currency() = Currency.Impl(
+    private fun place() = Place.Impl(
         id = UUID.randomUUID().toString(),
         name = "Test",
-        code = "TST",
-        crypto = true,
+        latitude = 50.0,
+        longitude = 1.0,
+        categoryId = UUID.randomUUID().toString(),
+        description = "Test",
+        phone = "1234",
+        website = "www.test.com",
+        openingHours = "24/7",
+        visible = true,
         createdAt = DateTime.now().toString(),
         updatedAt = DateTime.now().toString()
     )

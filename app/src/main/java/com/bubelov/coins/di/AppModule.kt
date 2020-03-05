@@ -7,7 +7,6 @@ import android.preference.PreferenceManager
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
-import com.bubelov.coins.db.Database
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
 import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
@@ -35,9 +34,6 @@ class AppModule {
     @Provides
     @Named("default_location")
     fun provideLocation() = Location(40.7141667, -74.0063889)
-
-    @Provides
-    fun providePlacesDb(database: Database) = database.placesDb()
 
     @Provides
     fun providePreferences(context: Context): SharedPreferences {

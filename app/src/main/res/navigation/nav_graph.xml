@@ -136,8 +136,8 @@
         android:name="com.bubelov.coins.editplace.EditPlaceFragment"
         android:label="EditPlaceFragment">
         <argument
-            android:name="place"
-            app:argType="com.bubelov.coins.model.Place"
+            android:name="placeId"
+            app:argType="string"
             app:nullable="true" />
         <argument
             android:name="mapLocation"

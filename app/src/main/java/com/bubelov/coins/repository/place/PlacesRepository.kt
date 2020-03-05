@@ -1,13 +1,16 @@
 package com.bubelov.coins.repository.place
 
+import com.bubelov.coins.Database
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreatePlaceArgs
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
-import com.bubelov.coins.model.Place
+import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.TableSyncResult
+import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
 import timber.log.Timber
 import javax.inject.Inject
@@ -16,11 +19,13 @@ import javax.inject.Singleton
 @Singleton
 class PlacesRepository @Inject constructor(
     private val api: CoinsApi,
-    private val db: PlacesDb,
+    val db: Database,
     private val builtInCache: BuiltInPlacesCache,
     private val userRepository: UserRepository
 ) {
-    private val allPlaces = db.allAsync()
+    private val queries = db.placeQueries
+
+    private val allPlaces = queries.selectAll().asFlow().map { it.executeAsList() }
 
     private var builtInCacheInitialized = false
 
@@ -32,7 +37,7 @@ class PlacesRepository @Inject constructor(
         waitTillCacheIsReady()
 
         return withContext(Dispatchers.IO) {
-            db.find(id)
+            queries.selectById(id).executeAsOneOrNull()
         }
     }
 
@@ -40,13 +45,13 @@ class PlacesRepository @Inject constructor(
         waitTillCacheIsReady()
 
         return withContext(Dispatchers.IO) {
-            db.findBySearchQuery(searchQuery)
+            queries.selectBySearchQuery(searchQuery).executeAsList()
         }
     }
 
     suspend fun findRandom() = withContext(Dispatchers.IO) {
         waitTillCacheIsReady()
-        db.findRandom()
+        queries.selectRandom().executeAsOneOrNull()
     }
 
 //    fun getPlaces(bounds: LatLngBounds): LiveData<List<Place>> =
@@ -57,7 +62,7 @@ class PlacesRepository @Inject constructor(
 //        }
 
     fun getAll(): Flow<List<Place>> {
-        return db.allAsFlow()
+        return allPlaces;
     }
 
     suspend fun sync() = withContext(Dispatchers.IO) {
@@ -66,12 +71,22 @@ class PlacesRepository @Inject constructor(
         try {
             waitTillCacheIsReady()
 
+            val maxUpdatedAt = queries.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
+                ?: DateTime(0).toString()
+
             val response = api.getPlaces(
-                db.maxUpdatedAt()?.plusMillis(1) ?: DateTime(0)
+                createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt)
             )
 
-            val newPlaces = response.filter { db.find(it.id) == null }
-            db.insert(response)
+            val newPlaces = response.filter {
+                queries.selectById(it.id).executeAsOneOrNull() == null
+            }
+
+            queries.transaction {
+                response.forEach {
+                    queries.insertOrReplace(it)
+                }
+            }
 
             val tableSyncResult = TableSyncResult(
                 startDate = syncStartDate,
@@ -102,7 +117,7 @@ class PlacesRepository @Inject constructor(
                 args = CreatePlaceArgs(place)
             )
 
-            db.insert(listOf(response))
+            queries.insertOrReplace(response)
             response
         }
     }
@@ -115,15 +130,19 @@ class PlacesRepository @Inject constructor(
                 args = UpdatePlaceArgs(place)
             )
 
-            db.update(response)
+            queries.insertOrReplace(response)
             response
         }
     }
 
     private suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
-            if (db.count() == 0) {
-                db.insert(builtInCache.getPlaces())
+            if (queries.selectCount().executeAsOne() == 0L) {
+                queries.transaction {
+                    builtInCache.getPlaces().forEach {
+                        queries.insertOrReplace(it)
+                    }
+                }
             }
 
             builtInCacheInitialized = true
