@@ -8,16 +8,16 @@ import org.junit.Test
 import java.util.*
 import kotlin.random.Random
 
-class CurrencyQueriesTests {
+class PlaceCategoryQueriesTests {
 
-    lateinit var queries: CurrencyQueries
+    lateinit var queries: PlaceCategoryQueries
 
     @Before
     fun setUp() {
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         Database.Schema.create(driver)
         val database = Database(driver)
-        queries = database.currencyQueries
+        queries = database.placeCategoryQueries
     }
 
     @Test
@@ -27,7 +27,7 @@ class CurrencyQueriesTests {
 
     @Test
     fun insertOrReplace_insertsItem() {
-        val item = currency()
+        val item = placeCategory()
         queries.insertOrReplace(item)
 
         assert(queries.selectCount().executeAsOne() == 1L)
@@ -36,7 +36,7 @@ class CurrencyQueriesTests {
 
     @Test
     fun insertOrReplace_replacesItem() {
-        val item = currency()
+        val item = placeCategory()
         queries.insertOrReplace(item)
 
         val updatedItem = item.copy(name = "Changed")
@@ -48,7 +48,7 @@ class CurrencyQueriesTests {
 
     @Test
     fun selectAll_selectsAllItems() {
-        val items = listOf(currency(), currency())
+        val items = listOf(placeCategory(), placeCategory())
 
         queries.transaction {
             items.forEach {
@@ -62,9 +62,9 @@ class CurrencyQueriesTests {
     @Test
     @ExperimentalStdlibApi
     fun selectById_selectsCorrectItem() {
-        val items = buildList<Currency> {
+        val items = buildList<PlaceCategory> {
             repeat(100) {
-                add(currency())
+                add(placeCategory())
             }
         }
 
@@ -74,9 +74,9 @@ class CurrencyQueriesTests {
             }
         }
 
-        val randomCurrency = items.random()
+        val randomItem = items.random()
 
-        assert(queries.selectById(randomCurrency.id).executeAsOne() == randomCurrency)
+        assert(queries.selectById(randomItem.id).executeAsOne() == randomItem)
     }
 
     @Test
@@ -86,7 +86,7 @@ class CurrencyQueriesTests {
 
         queries.transaction {
             repeat(count) {
-                queries.insertOrReplace(currency())
+                queries.insertOrReplace(placeCategory())
             }
         }
 
@@ -99,22 +99,20 @@ class CurrencyQueriesTests {
 
         queries.transaction {
             repeat(count) {
-                queries.insertOrReplace(currency())
+                queries.insertOrReplace(placeCategory())
             }
         }
 
-        val item = currency()
+        val item = placeCategory()
         val updatedAt = DateTime.parse(item.updatedAt).plusYears(5).toString()
         queries.insertOrReplace(item.copy(updatedAt = updatedAt))
 
         assert(queries.selectMaxUpdatedAt().executeAsOne().MAX == updatedAt)
     }
 
-    private fun currency() = Currency.Impl(
+    private fun placeCategory() = PlaceCategory.Impl(
         id = UUID.randomUUID().toString(),
         name = "Test",
-        code = "TST",
-        crypto = true,
         createdAt = DateTime.now().toString(),
         updatedAt = DateTime.now().toString()
     )

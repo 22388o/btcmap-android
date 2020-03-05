@@ -1,0 +1,28 @@
+CREATE TABLE PlaceCategory (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL
+);
+
+insertOrReplace:
+INSERT OR REPLACE
+INTO PlaceCategory
+VALUES ?;
+
+selectAll:
+SELECT *
+FROM PlaceCategory;
+
+selectById:
+SELECT *
+FROM PlaceCategory
+WHERE id = ?;
+
+selectCount:
+SELECT COUNT(*)
+FROM PlaceCategory;
+
+selectMaxUpdatedAt:
+SELECT MAX(updatedAt)
+FROM PlaceCategory;

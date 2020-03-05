@@ -26,7 +26,7 @@ class CurrencyPlaceQueriesTests {
     }
 
     @Test
-    fun insertOrReplace_insertsData() {
+    fun insertOrReplace_insertsItem() {
         val item = currencyPlace()
         queries.insertOrReplace(item)
 
@@ -35,7 +35,7 @@ class CurrencyPlaceQueriesTests {
     }
 
     @Test
-    fun insertOrReplace_replacesData() {
+    fun insertOrReplace_replacesItem() {
         val item = currencyPlace()
         queries.insertOrReplace(item)
 
@@ -47,7 +47,7 @@ class CurrencyPlaceQueriesTests {
     }
 
     @Test
-    fun selectAll_selectsAll() {
+    fun selectAll_selectsAllItems() {
         val items = listOf(currencyPlace(), currencyPlace())
 
         queries.transaction {

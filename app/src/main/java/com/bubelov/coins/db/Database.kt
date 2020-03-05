@@ -6,15 +6,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import com.bubelov.coins.model.Place
-import com.bubelov.coins.model.PlaceCategory
 import com.bubelov.coins.repository.place.PlacesDb
-import com.bubelov.coins.repository.placecategory.PlaceCategoriesDb
 import com.bubelov.coins.util.transaction
 
 @Database(
     entities = [
-        Place::class,
-        PlaceCategory::class
+        Place::class
     ],
     version = 3,
     exportSchema = true
@@ -22,7 +19,6 @@ import com.bubelov.coins.util.transaction
 @TypeConverters(Converters::class)
 abstract class Database : RoomDatabase() {
     abstract fun placesDb(): PlacesDb
-    abstract fun placeCategoriesDb(): PlaceCategoriesDb
 
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
