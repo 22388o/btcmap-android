@@ -21,4 +21,8 @@ class DatabaseModule {
 
         return Database(driver)
     }
+
+    @Provides
+    @Singleton
+    fun providePlaceQueries(database: Database) = database.placeQueries
 }
