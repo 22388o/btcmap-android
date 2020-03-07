@@ -9,11 +9,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import java.text.NumberFormat
-import javax.inject.Inject
 
-class ExchangeRatesViewModel @Inject constructor(
+class ExchangeRatesViewModel(
     private val exchangeRatesRepository: ExchangeRatesRepository
 ) : ViewModel() {
+
     private val rootJob = Job()
     private var fetchRatesJob: Job? = null
     private val uiScope = CoroutineScope(Dispatchers.Main + rootJob)

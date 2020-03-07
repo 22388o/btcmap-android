@@ -5,10 +5,9 @@ import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class PlaceDetailsViewModel @Inject constructor(
+class PlaceDetailsViewModel(
     val currenciesRepository: CurrenciesRepository,
     val currenciesPlacesRepository: CurrenciesPlacesRepository,
     coroutineContext: CoroutineContext

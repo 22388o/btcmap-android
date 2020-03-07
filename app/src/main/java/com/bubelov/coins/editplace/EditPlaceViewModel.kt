@@ -11,10 +11,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class EditPlaceViewModel @Inject constructor(
+class EditPlaceViewModel(
     private val placesRepository: PlacesRepository,
     coroutineContext: CoroutineContext
 ) : ViewModel() {

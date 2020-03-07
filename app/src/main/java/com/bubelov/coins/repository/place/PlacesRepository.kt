@@ -13,11 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PlacesRepository @Inject constructor(
+class PlacesRepository(
     private val api: CoinsApi,
     private val db: PlaceQueries,
     private val builtInCache: BuiltInPlacesCache,

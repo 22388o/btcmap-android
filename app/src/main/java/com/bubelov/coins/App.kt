@@ -1,38 +1,41 @@
 package com.bubelov.coins
 
 import android.app.Application
-import com.bubelov.coins.di.DaggerAppComponent
+import com.bubelov.coins.di.apiModule
+import com.bubelov.coins.di.appModule
+import com.bubelov.coins.di.mockApiModule
 import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.sync.DatabaseSyncScheduler
-import com.bubelov.coins.util.CrashlyticsTree
-import dagger.android.*
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 import timber.log.Timber
-import javax.inject.Inject
 
-class App : Application(), HasAndroidInjector {
+class App : Application() {
 
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    private val databaseSyncScheduler: DatabaseSyncScheduler by inject()
 
-    @Inject
-    lateinit var databaseSyncScheduler: DatabaseSyncScheduler
-
-    @Inject
-    lateinit var databaseSync: DatabaseSync
+    val databaseSync: DatabaseSync by inject()
 
     override fun onCreate() {
         super.onCreate()
 
-        DaggerAppComponent.factory().create(this).inject(this)
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+
+            if (BuildConfig.MOCK_API) {
+                modules(listOf(appModule, mockApiModule))
+            } else {
+                modules(listOf(appModule, apiModule))
+            }
+        }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        } else {
-            Timber.plant(CrashlyticsTree())
         }
 
         databaseSyncScheduler.schedule()
     }
-
-    override fun androidInjector() = androidInjector
 }

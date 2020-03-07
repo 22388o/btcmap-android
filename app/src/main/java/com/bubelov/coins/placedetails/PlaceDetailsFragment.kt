@@ -11,23 +11,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import com.bubelov.coins.R
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.util.openUrl
-import com.bubelov.coins.util.viewModelProvider
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_place_details.*
 import kotlinx.coroutines.runBlocking
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
-class PlaceDetailsFragment : DaggerFragment() {
-    @Inject lateinit var modelFactory: ViewModelProvider.Factory
+class PlaceDetailsFragment : Fragment() {
 
-    private val model by lazy {
-        viewModelProvider(modelFactory) as PlaceDetailsViewModel
-    }
+    private val model: PlaceDetailsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

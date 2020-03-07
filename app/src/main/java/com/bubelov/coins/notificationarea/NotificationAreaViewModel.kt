@@ -7,13 +7,10 @@ import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
-import javax.inject.Inject
-import javax.inject.Named
 
-class NotificationAreaViewModel @Inject constructor(
+class NotificationAreaViewModel(
     private val areaRepository: NotificationAreaRepository,
     private val placeIconsRepository: PlaceIconsRepository,
-    @Named("default_location")
     private val defaultLocation: Location
 ) : ViewModel() {
 

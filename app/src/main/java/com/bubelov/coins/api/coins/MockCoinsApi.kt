@@ -10,9 +10,11 @@ import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
 import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
 import org.joda.time.DateTime
+import retrofit2.mock.BehaviorDelegate
 import java.util.*
 
 class MockCoinsApi(
+    private val delegate: BehaviorDelegate<CoinsApi>,
     currenciesCache: BuiltInCurrenciesCache,
     placesCache: BuiltInPlacesCache,
     currenciesPlacesCache: BuiltInCurrenciesPlacesCache,

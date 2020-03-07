@@ -4,20 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.bubelov.coins.R
-import com.bubelov.coins.util.activityViewModelProvider
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_pick_location.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class PickLocationFragment : DaggerFragment() {
-    @Inject lateinit var modelFactory: ViewModelProvider.Factory
+class PickLocationFragment : Fragment() {
 
-    private val resultModel by lazy {
-        activityViewModelProvider(modelFactory) as PickLocationResultViewModel
-    }
+    private val resultModel: PickLocationResultViewModel by sharedViewModel()
 
     private val initialLocation by lazy {
         PickLocationFragmentArgs.fromBundle(arguments!!).initialLocation

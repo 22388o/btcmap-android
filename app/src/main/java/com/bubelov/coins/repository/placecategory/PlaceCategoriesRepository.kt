@@ -7,15 +7,13 @@ import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PlaceCategoriesRepository @Inject constructor(
+class PlaceCategoriesRepository(
     private val api: CoinsApi,
     val db: Database,
-    private val builtInCache: BuildInPlaceCategoriesCache
+    private val builtInCache: BuiltInPlaceCategoriesCache
 ) {
+
     private val queries = db.placeCategoryQueries
 
     private var builtInCacheInitialized = false

@@ -7,17 +7,18 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.CircleTransformation
 import com.squareup.picasso.Picasso
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-class ProfileFragment : DaggerFragment(), Toolbar.OnMenuItemClickListener {
-    @Inject lateinit var userRepository: UserRepository
+class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
+
+    private  val userRepository: UserRepository by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,

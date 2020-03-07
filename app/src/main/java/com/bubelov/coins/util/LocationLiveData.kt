@@ -9,16 +9,16 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import com.bubelov.coins.model.Location
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 @SuppressLint("MissingPermission")
-class LocationLiveData @Inject constructor(
+class LocationLiveData(
     private val context: Context,
     private val permissionChecker: PermissionChecker
 ) : LiveData<Location>() {
-    private val locationManager by lazy { context.getSystemService(LOCATION_SERVICE) as LocationManager }
+
+    private val locationManager by lazy {
+        context.getSystemService(LOCATION_SERVICE) as LocationManager
+    }
 
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: android.location.Location) {

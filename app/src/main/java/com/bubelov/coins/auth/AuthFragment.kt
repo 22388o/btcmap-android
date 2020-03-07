@@ -1,31 +1,24 @@
 package com.bubelov.coins.auth
 
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import com.bubelov.coins.util.activityViewModelProvider
-import com.bubelov.coins.util.viewModelProvider
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_auth.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class AuthFragment : DaggerFragment() {
-    @Inject internal lateinit var modelFactory: ViewModelProvider.Factory
+class AuthFragment : Fragment() {
 
-    private val model by lazy {
-        viewModelProvider(modelFactory) as AuthViewModel
-    }
+    private val model: AuthViewModel by viewModel()
 
-    private val resultModel by lazy {
-        activityViewModelProvider(modelFactory) as AuthResultViewModel
-    }
+    private val resultModel: AuthResultViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

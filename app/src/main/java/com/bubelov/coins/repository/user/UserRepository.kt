@@ -8,15 +8,13 @@ import com.bubelov.coins.model.User
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class UserRepository @Inject constructor(
+class UserRepository(
     private val api: CoinsApi,
     private val preferences: SharedPreferences,
     private val gson: Gson
 ) {
+
     fun getUser(): User? {
         return gson.fromJson(preferences.getString(USER_KEY, null), User::class.java)
     }

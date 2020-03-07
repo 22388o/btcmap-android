@@ -1,25 +1,20 @@
 package com.bubelov.coins.notificationarea
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.OnSeekBarChangeAdapter
-import com.bubelov.coins.util.viewModelProvider
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_notification_area.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class NotificationAreaFragment : DaggerFragment() {
-    @Inject lateinit var modelFactory: ViewModelProvider.Factory
+class NotificationAreaFragment : Fragment() {
 
-    private val model by lazy {
-        viewModelProvider(modelFactory) as NotificationAreaViewModel
-    }
+    private val model: NotificationAreaViewModel by viewModel()
 
 //    private var map: GoogleMap? = null
 //

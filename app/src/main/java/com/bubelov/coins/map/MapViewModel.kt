@@ -22,10 +22,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class MapViewModel @Inject constructor(
+class MapViewModel(
     private val notificationAreaRepository: NotificationAreaRepository,
     private val placesRepository: PlacesRepository,
     private val placeCategoriesRepository: PlaceCategoriesRepository,

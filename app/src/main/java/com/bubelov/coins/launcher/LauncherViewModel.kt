@@ -2,9 +2,8 @@ package com.bubelov.coins.launcher
 
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.repository.settings.SettingsRepository
-import javax.inject.Inject
 
-class LauncherViewModel @Inject constructor(
+class LauncherViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
     var permissionsExplained

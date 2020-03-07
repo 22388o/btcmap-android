@@ -7,11 +7,8 @@ import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class CurrenciesRepository @Inject constructor(
+class CurrenciesRepository(
     private val api: CoinsApi,
     db: Database,
     private val builtInCache: BuiltInCurrenciesCache

@@ -11,15 +11,12 @@ import com.bubelov.coins.data.Place
 import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PlaceNotificationManager @Inject
-internal constructor(
+class PlaceNotificationManager(
     private val context: Context,
     private val notificationAreaRepository: NotificationAreaRepository
 ) {
+
     init {
         registerNotificationChannel()
     }

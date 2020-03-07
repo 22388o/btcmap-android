@@ -1,33 +1,26 @@
 package com.bubelov.coins.editplace
 
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
-import com.bubelov.coins.util.activityViewModelProvider
-import com.bubelov.coins.util.viewModelProvider
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit_place.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class EditPlaceFragment : DaggerFragment() {
-    @Inject lateinit var modelFactory: ViewModelProvider.Factory
+class EditPlaceFragment : Fragment() {
 
-    private val model by lazy {
-        viewModelProvider(modelFactory) as EditPlaceViewModel
-    }
+    private val model: EditPlaceViewModel by viewModel()
 
-    private val locationResultModel by lazy {
-        activityViewModelProvider(modelFactory) as PickLocationResultViewModel
-    }
+    private val locationResultModel: PickLocationResultViewModel by sharedViewModel()
 
     private val placeId by lazy {
         EditPlaceFragmentArgs.fromBundle(arguments!!).placeId

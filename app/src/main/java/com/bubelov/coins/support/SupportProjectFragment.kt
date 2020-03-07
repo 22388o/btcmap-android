@@ -8,13 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.openUrl
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_support_project.*
 
-class SupportProjectFragment : DaggerFragment() {
+class SupportProjectFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -1,10 +1,6 @@
 package com.bubelov.coins.sync
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class DatabaseSyncScheduler @Inject constructor() {
+class DatabaseSyncScheduler {
     fun schedule() {
 //        val lifecycleOwner = ProcessLifecycleOwner.get()
 //

@@ -5,11 +5,8 @@ import com.bubelov.coins.data.Currency
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.InputStreamReader
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class BuiltInCurrenciesCache @Inject constructor(
+class BuiltInCurrenciesCache(
     private val context: Context,
     val gson: Gson
 ) {

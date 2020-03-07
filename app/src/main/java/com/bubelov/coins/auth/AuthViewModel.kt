@@ -10,10 +10,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class AuthViewModel @Inject constructor(
+class AuthViewModel(
     private val userRepository: UserRepository,
     context: CoroutineContext
 ) : ViewModel() {

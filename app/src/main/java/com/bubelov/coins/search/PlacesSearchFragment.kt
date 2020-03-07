@@ -1,7 +1,6 @@
 package com.bubelov.coins.search
 
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,26 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.*
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_places_search.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class PlacesSearchFragment : DaggerFragment() {
-    @Inject lateinit var modelFactory: ViewModelProvider.Factory
+class PlacesSearchFragment : Fragment() {
 
-    private val model by lazy {
-        (viewModelProvider(modelFactory) as PlacesSearchViewModel).apply {
-            val args = PlacesSearchFragmentArgs.fromBundle(arguments!!)
-            setUp(args.location)
-        }
-    }
+    private val model: PlacesSearchViewModel by viewModel()
 
-    private val resultModel by lazy {
-        activityViewModelProvider(modelFactory) as PlacesSearchResultViewModel
-    }
+    private val resultModel: PlacesSearchResultViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +33,9 @@ class PlacesSearchFragment : DaggerFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val args = PlacesSearchFragmentArgs.fromBundle(arguments!!)
+        model.setUp(args.location)
+
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         list.layoutManager = LinearLayoutManager(requireContext())

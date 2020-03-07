@@ -19,10 +19,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class PlacesSearchViewModel @Inject constructor(
+class PlacesSearchViewModel(
     private val placesRepository: PlacesRepository,
     private val placeCategoriesRepository: PlaceCategoriesRepository,
     private val placeIconsRepository: PlaceIconsRepository,
@@ -30,6 +29,7 @@ class PlacesSearchViewModel @Inject constructor(
     private val resources: Resources,
     coroutineContext: CoroutineContext
 ) : ViewModel() {
+
     private val mainJob = Job()
     private var searchJob: Job? = null
     private val uiScope = CoroutineScope(coroutineContext + mainJob)

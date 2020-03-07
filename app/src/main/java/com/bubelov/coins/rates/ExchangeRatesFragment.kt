@@ -1,34 +1,29 @@
 package com.bubelov.coins.rates
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.CurrencyPair
-import com.bubelov.coins.util.viewModelProvider
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_exchange_rates.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class ExchangeRatesFragment : DaggerFragment() {
+class ExchangeRatesFragment : Fragment() {
+
     private val rootJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + rootJob)
 
-    @Inject lateinit var modelFactory: ViewModelProvider.Factory
-
-    private val model by lazy {
-        viewModelProvider(modelFactory) as ExchangeRatesViewModel
-    }
+    private val model: ExchangeRatesViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -3,7 +3,6 @@ package com.bubelov.coins.map
 import android.Manifest
 import android.annotation.SuppressLint
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
@@ -15,6 +14,7 @@ import android.text.TextUtils
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
@@ -25,11 +25,12 @@ import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
 import com.squareup.picasso.Picasso
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -37,26 +38,17 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import javax.inject.Inject
 
 class MapFragment :
-    DaggerFragment(),
+    Fragment(),
     Toolbar.OnMenuItemClickListener,
     MapViewModel.Callback {
-    @Inject
-    internal lateinit var modelFactory: ViewModelProvider.Factory
 
-    private val model by lazy {
-        activityViewModelProvider(modelFactory) as MapViewModel
-    }
+    private val model: MapViewModel by viewModel()
 
-    private val placesSearchResultModel by lazy {
-        activityViewModelProvider(modelFactory) as PlacesSearchResultViewModel
-    }
+    private val placesSearchResultModel: PlacesSearchResultViewModel by sharedViewModel()
 
-    private val authResultModel by lazy {
-        activityViewModelProvider(modelFactory) as AuthResultViewModel
-    }
+    private val authResultModel: AuthResultViewModel by sharedViewModel()
 
     private val placeDetailsFragment by lazy {
         childFragmentManager.findFragmentById(R.id.placeDetailsFragment) as PlaceDetailsFragment
