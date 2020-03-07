@@ -1,6 +1,5 @@
 package com.bubelov.coins.editplace
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
@@ -90,21 +89,21 @@ class EditPlaceFragment : Fragment() {
 //            findNavController().navigate(action)
 //        }
 
-        model.showProgress.observe(viewLifecycleOwner, Observer { showProgress ->
-            content.isVisible = !showProgress
-            progress.isVisible = showProgress
-        })
-
-        model.changesSubmitted.observe(viewLifecycleOwner, Observer {
-            findNavController().popBackStack()
-        })
-
-        model.error.observe(viewLifecycleOwner, Observer {
-            AlertDialog.Builder(requireContext())
-                .setMessage(it)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
-        })
+//        model.showProgress.observe(viewLifecycleOwner, Observer { showProgress ->
+//            content.isVisible = !showProgress
+//            progress.isVisible = showProgress
+//        })
+//
+//        model.changesSubmitted.observe(viewLifecycleOwner, Observer {
+//            findNavController().popBackStack()
+//        })
+//
+//        model.error.observe(viewLifecycleOwner, Observer {
+//            AlertDialog.Builder(requireContext())
+//                .setMessage(it)
+//                .setPositiveButton(android.R.string.ok, null)
+//                .show()
+//        })
 
 //        locationResultModel.pickedLocation.observe(viewLifecycleOwner, Observer {
 //            it.let { location ->

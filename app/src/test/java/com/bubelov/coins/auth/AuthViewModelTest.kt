@@ -1,6 +1,7 @@
 package com.bubelov.coins.auth
 
 import com.bubelov.coins.repository.user.UserRepository
+import com.bubelov.coins.util.BasicTaskState
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.toList
@@ -25,22 +26,22 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun firstStateIsProgress() = runBlocking {
+    fun signIn_firstStateIsProgress() = runBlocking {
         val firstState = model.signIn("test", "test").first()
-        assert(firstState is AuthState.Progress)
+        assert(firstState is BasicTaskState.Progress)
     }
 
     @Test
-    fun lastStateIsSuccessWhenAllFine() = runBlocking {
+    fun signIn_lastStateIsSuccess_whenAllFine() = runBlocking {
         val lastState = model.signIn("test", "test")
             .toList()
             .last()
 
-        assert(lastState is AuthState.Success)
+        assert(lastState is BasicTaskState.Success)
     }
 
     @Test
-    fun lastStateIsErrorWhenExceptionOccurs() = runBlocking {
+    fun signIn_lastStateIsError_whenExceptionOccurs() = runBlocking {
         val exception = Exception("Test exception")
 
         whenever(userRepository.signIn("test", "test")).then {
@@ -51,6 +52,6 @@ class AuthViewModelTest {
             .toList()
             .last()
 
-        assert(lastState is AuthState.Error && lastState.message == exception.message)
+        assert(lastState is BasicTaskState.Error && lastState.message == exception.message)
     }
 }

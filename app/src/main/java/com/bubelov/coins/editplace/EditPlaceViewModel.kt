@@ -1,49 +1,28 @@
 package com.bubelov.coins.editplace
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.util.LiveEvent
-import com.bubelov.coins.util.toSingleEvent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.bubelov.coins.util.BasicTaskState
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
 
 class EditPlaceViewModel(
-    private val placesRepository: PlacesRepository,
-    coroutineContext: CoroutineContext
+    private val placesRepository: PlacesRepository
 ) : ViewModel() {
-
-    private val job = Job()
-    private val uiScope = CoroutineScope(coroutineContext + job)
-
-    private val _showProgress = MutableLiveData<Boolean>()
-    val showProgress: LiveData<Boolean> = _showProgress
-
-    private val _changesSubmitted = LiveEvent<Unit>()
-    val changesSubmitted = _changesSubmitted.toSingleEvent()
-
-    private val _error = LiveEvent<String>()
-    val error = _error.toSingleEvent()
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
-    }
 
     fun submitChanges(
         originalPlace: Place?,
         updatedPlace: Place
-    ) {
+    ): Flow<BasicTaskState> {
         Timber.d("Original place: $originalPlace")
         Timber.d("Updated place: $updatedPlace")
 
-        uiScope.launch {
-            _showProgress.value = true
+        return flow {
+            emit(BasicTaskState.Progress)
 
             try {
                 if (originalPlace == null) {
@@ -52,11 +31,15 @@ class EditPlaceViewModel(
                     placesRepository.updatePlace(updatedPlace)
                 }
 
-                _changesSubmitted.call()
-            } catch (error: Exception) {
-                _error.value = error.message
-            } finally {
-                _showProgress.value = false
+                emit(BasicTaskState.Success)
+            } catch (httpException: HttpException) {
+                val message = withContext(Dispatchers.IO) {
+                    httpException.response()?.errorBody()?.string() ?: "Unknown error"
+                }
+
+                emit(BasicTaskState.Error(message))
+            } catch (e: Exception) {
+                emit(BasicTaskState.Error(e.message ?: ""))
             }
         }
     }

@@ -78,7 +78,7 @@ val appModule = module {
     single { BuiltInCurrenciesPlacesCache(get(), get()) }
     single { BuiltInPlaceCategoriesCache(get(), get()) }
 
-    viewModel { EditPlaceViewModel(get(), get()) }
+    viewModel { EditPlaceViewModel(get()) }
     viewModel { ExchangeRatesViewModel(get()) }
     viewModel { MapViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { NotificationAreaViewModel(get(), get(), get(named("default_location"))) }

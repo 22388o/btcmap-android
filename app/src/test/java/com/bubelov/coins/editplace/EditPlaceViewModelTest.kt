@@ -1,42 +1,35 @@
 package com.bubelov.coins.editplace
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.util.blockingObserve
+import com.bubelov.coins.util.BasicTaskState
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.util.*
 
 class EditPlaceViewModelTest {
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock private lateinit var placesRepository: PlacesRepository
+
     private lateinit var model: EditPlaceViewModel
 
     @Before
-    fun setup() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
-
-        model = EditPlaceViewModel(
-            placesRepository = placesRepository,
-            coroutineContext = Dispatchers.Default
-        )
+        model = EditPlaceViewModel(placesRepository)
     }
 
     @Test
-    fun submitNewPlace() = runBlocking<Unit> {
+    fun submitChanges_withNewPlace_addsPlace() = runBlocking<Unit> {
         val place = emptyPlace().copy(
             id = UUID.randomUUID().toString(),
             name = "Crypto Library"
@@ -44,15 +37,14 @@ class EditPlaceViewModelTest {
 
         whenever(placesRepository.addPlace(place)).thenReturn(place)
 
-        model.submitChanges(null, place)
-        model.changesSubmitted.blockingObserve()
+        model.submitChanges(null, place).collect()
 
         verify(placesRepository).addPlace(place)
         verify(placesRepository, never()).updatePlace(place)
     }
 
     @Test
-    fun updateExistingPlace() = runBlocking<Unit> {
+    fun submitChanges_withExistingPlace_updatesPlace() = runBlocking<Unit> {
         val originalPlace = emptyPlace().copy(
             id = UUID.randomUUID().toString(),
             name = "Crypto Library"
@@ -62,17 +54,21 @@ class EditPlaceViewModelTest {
 
         whenever(placesRepository.updatePlace(updatedPlace)).thenReturn(updatedPlace)
 
-        model.submitChanges(originalPlace, updatedPlace)
-        model.changesSubmitted.blockingObserve()
+        model.submitChanges(originalPlace, updatedPlace).collect()
 
         verify(placesRepository).updatePlace(updatedPlace)
         verify(placesRepository, never()).addPlace(any())
     }
 
     @Test
-    fun handleFailure() = runBlocking {
-        whenever(placesRepository.addPlace(any())).thenThrow(IllegalStateException("Test"))
-        model.submitChanges(null, emptyPlace())
-        Assert.assertNotNull(model.error.blockingObserve())
+    fun submitChanges_handlesFailure() = runBlocking {
+        val exception = Exception("Test exception")
+
+        whenever(placesRepository.addPlace(any())).then {
+            throw exception
+        }
+
+        val lastState = model.submitChanges(null, emptyPlace()).toList().last()
+        assert(lastState is BasicTaskState.Error && lastState.message == exception.message)
     }
 }

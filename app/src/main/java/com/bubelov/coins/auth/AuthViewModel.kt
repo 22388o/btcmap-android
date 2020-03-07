@@ -2,6 +2,7 @@ package com.bubelov.coins.auth
 
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.repository.user.UserRepository
+import com.bubelov.coins.util.BasicTaskState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,33 +18,33 @@ class AuthViewModel(
         password: String,
         firstName: String,
         lastName: String
-    ): Flow<AuthState> {
+    ): Flow<BasicTaskState> {
         return getAuthFlow {
             userRepository.signUp(email, password, firstName, lastName)
         }
     }
 
-    fun signIn(email: String, password: String): Flow<AuthState> {
+    fun signIn(email: String, password: String): Flow<BasicTaskState> {
         return getAuthFlow {
             userRepository.signIn(email, password)
         }
     }
 
-    private fun getAuthFlow(authFunction: suspend () -> Unit): Flow<AuthState> {
+    private fun getAuthFlow(authFunction: suspend () -> Unit): Flow<BasicTaskState> {
         return flow {
-            emit(AuthState.Progress)
+            emit(BasicTaskState.Progress)
 
             try {
                 authFunction()
-                emit(AuthState.Success)
+                emit(BasicTaskState.Success)
             } catch (httpException: HttpException) {
                 val message = withContext(Dispatchers.IO) {
                     httpException.response()?.errorBody()?.string() ?: "Unknown error"
                 }
 
-                emit(AuthState.Error(message))
+                emit(BasicTaskState.Error(message))
             } catch (t: Throwable) {
-                emit(AuthState.Error(t.message ?: ""))
+                emit(BasicTaskState.Error(t.message ?: ""))
             }
         }
     }

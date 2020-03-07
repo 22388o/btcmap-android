@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
+import com.bubelov.coins.util.BasicTaskState
 import com.bubelov.coins.util.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_email_sign_up.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -65,14 +66,14 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
             .launchIn(lifecycleScope)
     }
 
-    private fun updateUI(state: AuthState) {
+    private fun updateUI(state: BasicTaskState) {
         when (state) {
-            is AuthState.Progress -> {
+            is BasicTaskState.Progress -> {
                 progress.isVisible = true
                 signUpForm.isVisible = false
             }
 
-            is AuthState.Success -> {
+            is BasicTaskState.Success -> {
                 resultModel.onAuthSuccess()
 
                 findNavController().apply {
@@ -81,7 +82,7 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
                 }
             }
 
-            is AuthState.Error -> {
+            is BasicTaskState.Error -> {
                 progress.isVisible = false
                 signUpForm.isVisible = true
 
