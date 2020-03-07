@@ -1,6 +1,5 @@
 package com.bubelov.coins.auth
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import android.view.KeyEvent
@@ -11,13 +10,18 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_email_sign_in.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
+@ExperimentalCoroutinesApi
 class EmailSignInFragment : Fragment(), TextView.OnEditorActionListener {
 
     private val model: AuthViewModel by viewModel()
@@ -33,35 +37,12 @@ class EmailSignInFragment : Fragment(), TextView.OnEditorActionListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        password.setOnEditorActionListener(this)
+        passwordInput.setOnEditorActionListener(this)
 
-        signIn.setOnClickListener {
+        signInButton.setOnClickListener {
             requireContext().hideKeyboard(it)
             signIn()
         }
-
-        model.showProgress.observe(viewLifecycleOwner, Observer { showProgress ->
-            progress.isVisible = showProgress
-            signInForm.isVisible = !showProgress
-        })
-
-        model.authorized.observe(viewLifecycleOwner, Observer { authorized ->
-            if (authorized == true) {
-                resultModel.onAuthSuccess()
-
-                findNavController().apply {
-                    popBackStack()
-                    popBackStack()
-                }
-            }
-        })
-
-        model.errorMessage.observe(viewLifecycleOwner, Observer {
-            AlertDialog.Builder(requireContext())
-                .setMessage(it)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
-        })
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
@@ -74,6 +55,39 @@ class EmailSignInFragment : Fragment(), TextView.OnEditorActionListener {
     }
 
     private fun signIn() {
-        model.signIn(email.text.toString(), password.text.toString())
+        val email = emailInput.text.toString()
+        val password = passwordInput.text.toString()
+
+        model.signIn(email, password)
+            .onEach { updateUI(it) }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun updateUI(state: AuthState) {
+        when (state) {
+            is AuthState.Progress -> {
+                progress.isVisible = true
+                signInForm.isVisible = false
+            }
+
+            is AuthState.Success -> {
+                resultModel.onAuthSuccess()
+
+                findNavController().apply {
+                    popBackStack()
+                    popBackStack()
+                }
+            }
+
+            is AuthState.Error -> {
+                progress.isVisible = false
+                signInForm.isVisible = true
+
+                AlertDialog.Builder(requireContext())
+                    .setMessage(state.message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
+        }
     }
 }

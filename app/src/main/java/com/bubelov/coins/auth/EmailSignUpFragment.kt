@@ -1,6 +1,5 @@
 package com.bubelov.coins.auth
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import android.view.KeyEvent
@@ -11,13 +10,18 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_email_sign_up.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
+@ExperimentalCoroutinesApi
 class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
 
     private val model: AuthViewModel by viewModel()
@@ -33,26 +37,42 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lastName.setOnEditorActionListener(this)
+        lastNameInput.setOnEditorActionListener(this)
 
-        sign_up.setOnClickListener {
+        signUpButton.setOnClickListener {
             requireContext().hideKeyboard(it)
+            signUp()
+        }
+    }
 
-            signUp(
-                email.text.toString(),
-                password.text.toString(),
-                firstName.text.toString(),
-                lastName.text.toString()
-            )
+    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+            signUp()
+            return true
         }
 
-        model.showProgress.observe(viewLifecycleOwner, Observer { showProgress ->
-            progress.isVisible = showProgress
-            signUpForm.isVisible = !showProgress
-        })
+        return false
+    }
 
-        model.authorized.observe(viewLifecycleOwner, Observer { authorized ->
-            if (authorized) {
+    private fun signUp() {
+        val email = emailInput.text.toString()
+        val password = passwordInput.text.toString()
+        val firstName = firstNameInput.text.toString()
+        val lastName = lastNameInput.text.toString()
+
+        model.signUp(email, password, firstName, lastName)
+            .onEach { updateUI(it) }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun updateUI(state: AuthState) {
+        when (state) {
+            is AuthState.Progress -> {
+                progress.isVisible = true
+                signUpForm.isVisible = false
+            }
+
+            is AuthState.Success -> {
                 resultModel.onAuthSuccess()
 
                 findNavController().apply {
@@ -60,32 +80,16 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
                     popBackStack()
                 }
             }
-        })
 
-        model.errorMessage.observe(viewLifecycleOwner, Observer {
-            AlertDialog.Builder(requireContext())
-                .setMessage(it)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
-        })
-    }
+            is AuthState.Error -> {
+                progress.isVisible = false
+                signUpForm.isVisible = true
 
-    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
-        if (actionId == EditorInfo.IME_ACTION_GO) {
-            signUp(
-                email.text.toString(),
-                password.text.toString(),
-                firstName.text.toString(),
-                lastName.text.toString()
-            )
-
-            return true
+                AlertDialog.Builder(requireContext())
+                    .setMessage(state.message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
         }
-
-        return false
-    }
-
-    private fun signUp(email: String, password: String, firstName: String, lastName: String) {
-        model.signUp(email, password, firstName, lastName)
     }
 }

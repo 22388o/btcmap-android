@@ -1,38 +1,56 @@
 package com.bubelov.coins.auth
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.lang.Exception
 
 class AuthViewModelTest {
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var userRepository: UserRepository
+    @Mock
+    private lateinit var userRepository: UserRepository
+
     private lateinit var model: AuthViewModel
 
     @Before
-    fun setup() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
-        model = AuthViewModel(userRepository, Dispatchers.Default)
+        model = AuthViewModel(userRepository)
     }
 
     @Test
-    fun showProgressBar() = runBlocking {
+    fun firstStateIsProgress() = runBlocking {
+        val firstState = model.signIn("test", "test").first()
+        assert(firstState is AuthState.Progress)
+    }
+
+    @Test
+    fun lastStateIsSuccessWhenAllFine() = runBlocking {
+        val lastState = model.signIn("test", "test")
+            .toList()
+            .last()
+
+        assert(lastState is AuthState.Success)
+    }
+
+    @Test
+    fun lastStateIsErrorWhenExceptionOccurs() = runBlocking {
+        val exception = Exception("Test exception")
+
         whenever(userRepository.signIn("test", "test")).then {
-            Thread.sleep(500)
+            throw exception
         }
 
-        model.signIn("test", "test")
-        assertTrue(model.showProgress.blockingObserve())
+        val lastState = model.signIn("test", "test")
+            .toList()
+            .last()
+
+        assert(lastState is AuthState.Error && lastState.message == exception.message)
     }
 }

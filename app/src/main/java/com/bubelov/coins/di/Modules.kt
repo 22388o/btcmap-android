@@ -85,7 +85,7 @@ val appModule = module {
     viewModel { PlacesSearchViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { PlacesSearchResultViewModel() }
     viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { AuthViewModel(get(), get()) }
+    viewModel { AuthViewModel(get()) }
     viewModel { AuthResultViewModel() }
     viewModel { PickLocationResultViewModel() }
     viewModel { PlaceDetailsViewModel(get(), get(), get()) }

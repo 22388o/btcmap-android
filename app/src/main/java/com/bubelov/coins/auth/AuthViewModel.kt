@@ -1,64 +1,49 @@
 package com.bubelov.coins.auth
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.LiveEvent
-import com.bubelov.coins.util.toSingleEvent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import kotlin.coroutines.CoroutineContext
 
 class AuthViewModel(
-    private val userRepository: UserRepository,
-    context: CoroutineContext
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val job = Job()
-    private val uiScope = CoroutineScope(context + job)
-
-    private val _showProgress = MutableLiveData<Boolean>()
-    val showProgress: LiveData<Boolean> = _showProgress
-
-    private val _authorized = MutableLiveData<Boolean>()
-    val authorized: LiveData<Boolean> = _authorized
-
-    private val _errorMessage = LiveEvent<String>()
-    val errorMessage = _errorMessage.toSingleEvent()
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
-    }
-
-    fun signUp(email: String, password: String, firstName: String, lastName: String) {
-        launchAuthFlow {
+    fun signUp(
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String
+    ): Flow<AuthState> {
+        return getAuthFlow {
             userRepository.signUp(email, password, firstName, lastName)
         }
     }
 
-    fun signIn(email: String, password: String) {
-        launchAuthFlow {
+    fun signIn(email: String, password: String): Flow<AuthState> {
+        return getAuthFlow {
             userRepository.signIn(email, password)
         }
     }
 
-    private fun launchAuthFlow(block: suspend () -> Unit): Job {
-        return uiScope.launch {
+    private fun getAuthFlow(authFunction: suspend () -> Unit): Flow<AuthState> {
+        return flow {
+            emit(AuthState.Progress)
+
             try {
-                _showProgress.value = true
-                block()
-                _authorized.value = true
+                authFunction()
+                emit(AuthState.Success)
             } catch (httpException: HttpException) {
-                _errorMessage.value =
-                    httpException.response()?.errorBody()?.string() ?: httpException.message()
+                val message = withContext(Dispatchers.IO) {
+                    httpException.response()?.errorBody()?.string() ?: "Unknown error"
+                }
+
+                emit(AuthState.Error(message))
             } catch (t: Throwable) {
-                _errorMessage.value = t.message
-            } finally {
-                _showProgress.value = false
+                emit(AuthState.Error(t.message ?: ""))
             }
         }
     }
