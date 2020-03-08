@@ -33,6 +33,7 @@ import com.google.gson.GsonBuilder
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.joda.time.DateTime
@@ -46,6 +47,7 @@ import retrofit2.mock.NetworkBehavior
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
+@ExperimentalCoroutinesApi
 val appModule = module {
     single { PreferenceManager.getDefaultSharedPreferences(get()) }
 
@@ -80,7 +82,7 @@ val appModule = module {
 
     viewModel { EditPlaceViewModel(get()) }
     viewModel { ExchangeRatesViewModel(get()) }
-    viewModel { MapViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MapViewModel(get(), get(), get()) }
     viewModel { NotificationAreaViewModel(get(), get(), get(named("default_location"))) }
     viewModel { PlacesSearchViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { PlacesSearchResultViewModel() }

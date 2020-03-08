@@ -1,89 +1,104 @@
 package com.bubelov.coins.map
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.repository.LocationRepository
-import com.bubelov.coins.repository.area.NotificationAreaRepository
-import com.bubelov.coins.repository.currency.CurrenciesRepository
-import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
-import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
-import com.bubelov.coins.util.LocationLiveData
-import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 class MapViewModelTest {
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var notificationAreaRepository: NotificationAreaRepository
     @Mock private lateinit var placesRepository: PlacesRepository
-    @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
-    @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
-    @Mock private lateinit var location: LocationLiveData
     @Mock private lateinit var userRepository: UserRepository
-    @Mock private lateinit var currenciesRepository: CurrenciesRepository
-    @Mock private lateinit var currenciesPlacesRepository: CurrenciesPlacesRepository
     @Mock private lateinit var locationRepository: LocationRepository
 
     private lateinit var model: MapViewModel
 
     @Before
-    fun setup() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
 
         model = MapViewModel(
-            notificationAreaRepository,
             placesRepository,
-            placeCategoriesRepository,
-            placeIconsRepository,
-            location,
             userRepository,
-            currenciesRepository,
-            currenciesPlacesRepository,
-            locationRepository,
-            Dispatchers.Default
+            locationRepository
         )
     }
 
     @Test
-    fun redirectsToAuthOnAddPlaceIfUnauthorized() = runBlocking<Unit> {
+    fun getSelectedPlaceFlow_returnsNull() = runBlocking {
+        val place = model.selectedPlaceFlow.take(1).first()
+        assert(place == null)
+    }
+
+    @Test
+    fun setSelectedPlace() = runBlocking {
+        val place = emptyPlace().copy(name = "Test")
+        whenever(placesRepository.find(place.id)).thenReturn(place)
+        model.selectPlace(place.id)
+        verify(placesRepository).getAll()
+        verify(placesRepository).find(place.id)
+        verifyNoMoreInteractions(placesRepository)
+        assert(model.selectedPlaceFlow.take(1).single() == place)
+    }
+
+    @Test
+    fun onAddPlaceClick_returnsUnauthorized_whenUnauthorized() = runBlocking {
         whenever(userRepository.getToken()).thenReturn("")
-        model.onAddPlaceClick()
-        model.openSignInScreen.blockingObserve()
+        val result = model.onAddPlaceClick()
         verify(userRepository).getToken()
+        assert(result == MapViewModel.AddPlaceClickResult.UNAUTHORIZED)
     }
 
     @Test
-    fun redirectsToAuthOnEditPlaceIfUnauthorized() = runBlocking<Unit> {
+    fun onEditPlaceClick_returnsUnauthorized_whenUnauthorized() = runBlocking<Unit> {
         whenever(userRepository.getToken()).thenReturn("")
-        model.onEditPlaceClick()
-        model.openSignInScreen.blockingObserve()
+        val result = model.onEditPlaceClick()
         verify(userRepository).getToken()
+        assert(result == MapViewModel.EditPlaceClickResult.UNAUTHORIZED)
     }
 
     @Test
-    fun opensAddPlaceScreen() = runBlocking<Unit> {
-        whenever(userRepository.getToken()).thenReturn("token")
-        model.onAddPlaceClick()
-        model.openAddPlaceScreen.blockingObserve()
+    fun onDrawerHeaderClick_returnsUnauthorized_whenUnauthorized() = runBlocking {
+        whenever(userRepository.getToken()).thenReturn("")
+        val result = model.onDrawerHeaderClick()
         verify(userRepository).getToken()
+        assert(result == MapViewModel.DrawerHeaderClickResult.REQUIRE_AUTH)
     }
 
     @Test
-    fun opensEditPlaceScreen() = runBlocking<Unit> {
+    fun onAddPlaceClick_allowsAccess_whenAuthorized() = runBlocking {
         whenever(userRepository.getToken()).thenReturn("token")
-        model.onEditPlaceClick()
-        model.openEditPlaceScreen.blockingObserve()
+        val result = model.onAddPlaceClick()
         verify(userRepository).getToken()
+        assert(result == MapViewModel.AddPlaceClickResult.ALLOWED)
+    }
+
+    @Test
+    fun onEditPlaceClick_allowsAccess_whenAuthorized() = runBlocking<Unit> {
+        whenever(userRepository.getToken()).thenReturn("token")
+        val result = model.onEditPlaceClick()
+        verify(userRepository).getToken()
+        assert(result == MapViewModel.EditPlaceClickResult.ALLOWED)
+    }
+
+    @Test
+    fun onDrawerHeaderClick_allowsAccess_whenAuthorized() = runBlocking {
+        whenever(userRepository.getToken()).thenReturn("token")
+        val result = model.onDrawerHeaderClick()
+        verify(userRepository).getToken()
+        assert(result == MapViewModel.DrawerHeaderClickResult.SHOW_USER_PROFILE)
     }
 }

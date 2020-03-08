@@ -27,7 +27,11 @@ import com.bubelov.coins.util.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -39,10 +43,10 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
+@ExperimentalCoroutinesApi
 class MapFragment :
     Fragment(),
-    Toolbar.OnMenuItemClickListener,
-    MapViewModel.Callback {
+    Toolbar.OnMenuItemClickListener {
 
     private val model: MapViewModel by viewModel()
 
@@ -73,8 +77,6 @@ class MapFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        model.callback = this
-
         drawerHeader = navigationView.getHeaderView(0)
 
         initMap()
@@ -153,57 +155,59 @@ class MapFragment :
             }
         }
 
-        model.selectedPlace.observe(viewLifecycleOwner, Observer { place ->
-            if (place != null) {
-                placeDetailsFragment.setPlace(place)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            } else {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        lifecycleScope.launch {
+            model.selectedPlaceFlow.collect {
+                if (it != null) {
+                    placeDetailsFragment.setPlace(it)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                } else {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                }
             }
-        })
+        }
 
-        model.userLocation.observe(viewLifecycleOwner, Observer {
-            locationFab.setOnClickListener {
-                model.onLocationButtonClick()
-            }
-        })
+//        model.userLocation.observe(viewLifecycleOwner, Observer {
+//            locationFab.setOnClickListener {
+//                model.onLocationButtonClick()
+//            }
+//        })
 
         placesSearchResultModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
-            model.navigateToNextSelectedPlace = true
-            model.selectPlace(id ?: "")
+            lifecycleScope.launch {
+                model.selectPlace(id ?: "")
+            }
         })
 
         authResultModel.authorized.observe(viewLifecycleOwner, Observer {
             updateDrawerHeader()
-            model.onAuthSuccess()
-        })
 
-        model.openSignInScreen.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.action_mapFragment_to_authFragment)
-        })
+            when (model.postAuthAction) {
+                PostAuthAction.ADD_PLACE -> {
+                    val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
+                        null,
+                        Location(map.boundingBox.centerLatitude, map.boundingBox.centerLongitude)
+                    )
 
-        model.openAddPlaceScreen.observe(viewLifecycleOwner, Observer {
-            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
-                null,
-                Location(map.boundingBox.centerLatitude, map.boundingBox.centerLongitude)
-            )
+                    findNavController().navigate(action)
+                }
 
-            findNavController().navigate(action)
-        })
+                PostAuthAction.EDIT_SELECTED_PLACE -> {
+                    lifecycleScope.launch {
+                        val selectedPlace =
+                            model.selectedPlaceFlow.toList().lastOrNull() ?: return@launch
 
-        model.openEditPlaceScreen.observe(viewLifecycleOwner, Observer {
-            val selectedPlace = model.selectedPlace.value ?: return@Observer
+                        val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
+                            selectedPlace.id,
+                            Location(
+                                map.boundingBox.centerLatitude,
+                                map.boundingBox.centerLongitude
+                            )
+                        )
 
-            val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
-                selectedPlace.id,
-                Location(map.boundingBox.centerLatitude, map.boundingBox.centerLongitude)
-            )
-
-            findNavController().navigate(action)
-        })
-
-        model.requestLocationPermissions.observe(viewLifecycleOwner, Observer {
-            requestLocationPermissions()
+                        findNavController().navigate(action)
+                    }
+                }
+            }
         })
     }
 
@@ -215,7 +219,10 @@ class MapFragment :
         val placeId = arguments?.getString(PLACE_ID_ARG)
 
         if (placeId != null) {
-            model.selectPlace(placeId)
+            lifecycleScope.launch {
+                model.selectPlace(placeId)
+            }
+
             //model.moveToLocation(Location(placeArg.latitude, placeArg.longitude))
         }
     }
@@ -233,7 +240,7 @@ class MapFragment :
     ) {
         when (requestCode) {
             REQUEST_ACCESS_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                model.onLocationPermissionGranted()
+                //model.onLocationPermissionGranted()
             }
         }
     }
@@ -243,11 +250,17 @@ class MapFragment :
             R.id.action_add -> model.onAddPlaceClick()
 
             R.id.action_search -> {
-                val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
-                    model.userLocation.value
-                )
+                lifecycleScope.launch {
+                    val location = model.locationFlow.take(1).singleOrNull()
 
-                findNavController().navigate(action)
+                    if (location != null) {
+                        val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
+                            location
+                        )
+
+                        findNavController().navigate(action)
+                    }
+                }
             }
 
             else -> return super.onOptionsItemSelected(item)
@@ -261,7 +274,7 @@ class MapFragment :
         super.onConfigurationChanged(newConfig)
     }
 
-    override fun showUserProfile() {
+    fun showUserProfile() {
         findNavController().navigate(R.id.action_mapFragment_to_profileFragment)
     }
 
@@ -295,35 +308,37 @@ class MapFragment :
 
         //initClustering(map)
 
-        model.onMapReady()
+        lifecycleScope.launch {
+            //model.onMapReady()
 
-        model.selectedPlace.observe(viewLifecycleOwner, Observer { place ->
-            if (place != null && model.navigateToNextSelectedPlace) {
-                val mapController = map.controller
-                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
-                val startPoint = GeoPoint(place.latitude, place.longitude)
-                mapController.setCenter(startPoint)
+//            model.selectedPlaceFlow.collect { place ->
+//                if (place != null && model.navigateToNextSelectedPlace) {
+//                    val mapController = map.controller
+//                    mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+//                    val startPoint = GeoPoint(place.latitude, place.longitude)
+//                    mapController.setCenter(startPoint)
+//
+//                    model.navigateToNextSelectedPlace = false
+//                }
+//            }
+        }
 
-                model.navigateToNextSelectedPlace = false
-            }
-        })
-
-        model.moveMapToLocation.observe(viewLifecycleOwner, Observer {
-            it?.let { location ->
-                if (locationOverlay == null) {
-                    locationOverlay =
-                        MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
-                            enableMyLocation()
-                            map.overlays += this
-                        }
-                }
-
-                val mapController = map.controller
-                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
-                val startPoint = GeoPoint(location.latitude, location.longitude)
-                mapController.setCenter(startPoint)
-            }
-        })
+//        model.moveMapToLocation.observe(viewLifecycleOwner, Observer {
+//            it?.let { location ->
+//                if (locationOverlay == null) {
+//                    locationOverlay =
+//                        MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
+//                            enableMyLocation()
+//                            map.overlays += this
+//                        }
+//                }
+//
+//                val mapController = map.controller
+//                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+//                val startPoint = GeoPoint(location.latitude, location.longitude)
+//                mapController.setCenter(startPoint)
+//            }
+//        })
 
         lifecycleScope.launch {
             model.locationFlow.collect { location ->
