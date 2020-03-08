@@ -12,7 +12,7 @@ class BuiltInCurrenciesCache(
 ) {
     fun getCurrencies(): List<Currency> {
         val input = context.assets.open("currencies.json")
-        val typeToken = object : TypeToken<List<Currency>>() {}
+        val typeToken = object : TypeToken<List<Currency.Impl>>() {}
         return gson.fromJson(InputStreamReader(input), typeToken.type)
     }
 }

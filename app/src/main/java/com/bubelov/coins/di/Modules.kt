@@ -18,21 +18,37 @@ import com.bubelov.coins.permissions.PermissionsViewModel
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import com.bubelov.coins.placedetails.PlaceDetailsViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
+import com.bubelov.coins.repository.LocationRepository
+import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
+import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
+import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
+import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
+import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
+import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
+import com.bubelov.coins.repository.rate.BitcoinAverage
+import com.bubelov.coins.repository.rate.Bitstamp
+import com.bubelov.coins.repository.rate.Coinbase
+import com.bubelov.coins.repository.rate.ExchangeRatesRepository
+import com.bubelov.coins.repository.settings.SettingsRepository
+import com.bubelov.coins.repository.synclogs.SyncLogsRepository
+import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.search.PlacesSearchViewModel
 import com.bubelov.coins.settings.SettingsViewModel
+import com.bubelov.coins.sync.DatabaseSync
+import com.bubelov.coins.sync.DatabaseSyncScheduler
 import com.bubelov.coins.util.ConnectivityCheckingInterceptor
 import com.bubelov.coins.util.DateTimeAdapter
 import com.bubelov.coins.util.JsonStringConverterFactory
+import com.bubelov.coins.util.PlaceNotificationManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -45,13 +61,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.CoroutineContext
 
 @ExperimentalCoroutinesApi
 val appModule = module {
-    single { PreferenceManager.getDefaultSharedPreferences(get()) }
+    single { PreferenceManager.getDefaultSharedPreferences(get()) } // TODO remove
 
     single { Database(get()) }
+
+    single { get<Database>().currencyQueries }
+    single { get<Database>().currencyPlaceQueries }
+    single { get<Database>().placeQueries }
+    single { get<Database>().placeCategoryQueries }
 
     single<SqlDriver> {
         AndroidSqliteDriver(
@@ -60,8 +80,6 @@ val appModule = module {
             name = "data.db"
         )
     }
-
-    single<CoroutineContext> { Dispatchers.Main }
 
     single {
         GsonBuilder()
@@ -75,10 +93,31 @@ val appModule = module {
         Location(40.7141667, -74.0063889)
     }
 
+    single { PlaceNotificationManager(get(), get()) }
+
+    single { DatabaseSync(get(), get(), get(), get(), get(), get()) }
+    single { DatabaseSyncScheduler() }
+
     single { BuiltInCurrenciesCache(get(), get()) }
     single { BuiltInPlacesCache(get(), get()) }
     single { BuiltInCurrenciesPlacesCache(get(), get()) }
     single { BuiltInPlaceCategoriesCache(get(), get()) }
+
+    single { BitcoinAverage(get()) }
+    single { Bitstamp(get()) }
+    single { Coinbase(get()) }
+
+    single { PlacesRepository(get(), get(), get(), get()) }
+    single { ExchangeRatesRepository(get(), get(), get()) }
+    single { UserRepository(get(), get(), get()) }
+    single { LocationRepository(get(), get(named("default_location"))) }
+    single { NotificationAreaRepository(get(), get()) }
+    single { PlaceIconsRepository(get()) }
+    single { PlaceCategoriesRepository(get(), get(), get()) }
+    single { SyncLogsRepository(get(), get()) }
+    single { CurrenciesRepository(get(), get(), get()) }
+    single { CurrenciesPlacesRepository(get(), get(), get()) }
+    single { SettingsRepository(get()) }
 
     viewModel { EditPlaceViewModel(get()) }
     viewModel { ExchangeRatesViewModel(get()) }

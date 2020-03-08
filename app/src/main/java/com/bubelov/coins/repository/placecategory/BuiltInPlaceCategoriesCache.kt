@@ -13,7 +13,7 @@ class BuiltInPlaceCategoriesCache(
 
     fun getPlaceCategories(): List<PlaceCategory> {
         val input = context.assets.open("place_categories.json")
-        val typeToken = object : TypeToken<List<PlaceCategory>>() {}
+        val typeToken = object : TypeToken<List<PlaceCategory.Impl>>() {}
         return gson.fromJson(InputStreamReader(input), typeToken.type)
     }
 }

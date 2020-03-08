@@ -15,7 +15,7 @@ ext.versions = [
         constraint_layout: '2.0.0-beta4',
         ktx              : '1.2.0',
         browser          : '1.2.0',
-        osmdroid         : '6.1.5',
+        osmdroid         : '6.1.6',
         gson             : '2.8.6',
         picasso          : '2.71828',
         timber           : '4.7.1',

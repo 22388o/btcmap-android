@@ -7,6 +7,7 @@ import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
+import kotlin.math.ln
 
 class NotificationAreaViewModel(
     private val areaRepository: NotificationAreaRepository,
@@ -28,7 +29,7 @@ class NotificationAreaViewModel(
 
     fun getZoomLevel(area: Double): Int {
         val scale = area / 500
-        return (16 - Math.log(scale) / Math.log(2.0)).toInt()
+        return (16 - ln(scale) / ln(2.0)).toInt()
     }
 
     fun getPinIcon(): Bitmap {

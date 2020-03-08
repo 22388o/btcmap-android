@@ -13,7 +13,7 @@ class BuiltInPlacesCache(
 
     fun getPlaces(): List<Place> {
         val input = context.assets.open("places.json")
-        val typeToken = object : TypeToken<List<Place>>() {}
+        val typeToken = object : TypeToken<List<Place.Impl>>() {}
         return gson.fromJson(InputStreamReader(input), typeToken.type)
     }
 }

@@ -5,21 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
+import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.util.OnSeekBarChangeAdapter
 import kotlinx.android.synthetic.main.fragment_notification_area.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polygon
 
 class NotificationAreaFragment : Fragment() {
 
     private val model: NotificationAreaViewModel by viewModel()
 
-//    private var map: GoogleMap? = null
-//
-//    private var marker: Marker? = null
-//    private var areaCircle: Circle? = null
+    private var marker: Marker? = null
+    private var areaCircle: Polygon? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,21 +40,11 @@ class NotificationAreaFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-//        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-//        mapFragment.getMapAsync(this)
-    }
+        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        map.setMultiTouchControls(true)
 
-//    override fun onMapReady(map: GoogleMap) {
-//        this.map = map
-//
-//        map.apply {
-//            uiSettings.isMyLocationButtonEnabled = false
-//            uiSettings.isZoomControlsEnabled = false
-//            uiSettings.isCompassEnabled = false
-//        }
-//
 //        map.setOnMarkerDragListener(OnMarkerDragListener())
-//
+
 //        if (ActivityCompat.checkSelfPermission(
 //                requireContext(),
 //                Manifest.permission.ACCESS_FINE_LOCATION
@@ -57,62 +52,60 @@ class NotificationAreaFragment : Fragment() {
 //        ) {
 //            map.isMyLocationEnabled = true
 //        }
-//
-//        showArea(model.getNotificationArea())
-//    }
 
-//    private fun showArea(area: NotificationArea) {
-//        val map = map ?: return
-//
-//        marker?.remove()
-//        areaCircle?.remove()
-//
-//        val markerDescriptor =
-//            BitmapDescriptorFactory.fromBitmap(model.getPinIcon())
-//
-//        marker = map.addMarker(
-//            MarkerOptions()
-//                .position(LatLng(area.latitude, area.longitude))
-//                .icon(markerDescriptor)
-//                .anchor(BuildConfig.MAP_MARKER_ANCHOR_U, BuildConfig.MAP_MARKER_ANCHOR_V)
-//                .draggable(true)
-//        )
-//
-//        val circleOptions = CircleOptions()
-//            .center(marker?.position)
-//            .radius(area.radius)
-//            .fillColor(ContextCompat.getColor(requireContext(), R.color.notification_area))
-//            .strokeColor(ContextCompat.getColor(requireContext(), R.color.notification_area_border))
-//            .strokeWidth(4f)
-//
-//        val circle = map.addCircle(circleOptions)
-//        areaCircle = circle
-//
-//        updateRadiusLabel(circle)
-//
-//        shrink.setOnClickListener {
-//            circle.radius = circle.radius * 0.8
-//            updateRadiusLabel(circle)
-//        }
-//
-//        expand.setOnClickListener {
-//            circle.radius = areaCircle!!.radius * 1.2
-//            updateRadiusLabel(circle)
-//        }
-//
-//        val areaCenter = LatLng(area.latitude, area.longitude)
-//
-//        map.moveCamera(
-//            CameraUpdateFactory.newLatLngZoom(
-//                areaCenter,
-//                (model.getZoomLevel(area.radius) - 1).toFloat()
-//            )
-//        )
-//    }
+        showArea(model.getNotificationArea())
+    }
 
-//    private fun updateRadiusLabel(circle: Circle) {
-//        radius.text = getString(R.string.d_km, circle.radius.toInt() / 1000)
-//    }
+    private fun showArea(area: NotificationArea) {
+        marker?.remove(map)
+        map.overlays.remove(areaCircle)
+
+        marker = Marker(map).apply {
+            position = GeoPoint(area.latitude, area.longitude)
+            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            icon = model.getPinIcon().toDrawable(resources)
+            setInfoWindow(null)
+            isDraggable = true
+            map.overlays += this
+        }
+
+        val circlePoints = mutableListOf<GeoPoint>()
+
+        (0..360).forEach {
+            circlePoints += GeoPoint(area.latitude, area.longitude)
+                .destinationPoint(area.radius, it.toDouble())
+        }
+
+        areaCircle = Polygon(map).apply {
+            points = circlePoints
+            fillPaint.color = ContextCompat.getColor(requireContext(), R.color.notification_area)
+            outlinePaint.color = ContextCompat.getColor(requireContext(), R.color.notification_area_border)
+            outlinePaint.strokeWidth = 4f
+            map.overlays.add(0, this)
+        }
+
+        updateRadiusLabel(area)
+
+        //shrink.setOnClickListener {
+        //    circle.radius = circle.radius * 0.8
+        //    updateRadiusLabel(circle)
+        //}
+
+        //expand.setOnClickListener {
+        //    circle.radius = areaCircle!!.radius * 1.2
+        //    updateRadiusLabel(circle)
+        //}
+
+        val areaCenter = GeoPoint(area.latitude, area.longitude)
+
+        val mapController = map.controller
+        mapController.setZoom(model.getZoomLevel(area.radius))
+        mapController.setCenter(areaCenter)
+    }
+
+    private fun updateRadiusLabel(area: NotificationArea) {
+        radius.text = getString(R.string.d_km, area.radius.toInt() / 1000)
+    }
 
     private fun saveArea() {
 //        val circle = areaCircle ?: return
