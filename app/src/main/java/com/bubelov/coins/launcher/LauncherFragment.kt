@@ -13,7 +13,7 @@ class LauncherFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (model.permissionsExplained) {
+        if (model.getPermissionsExplained()) {
             findNavController().navigate(R.id.action_launcherFragment_to_mapFragment)
         } else {
             findNavController().navigate(R.id.action_launcherFragment_to_permissionsFragment)

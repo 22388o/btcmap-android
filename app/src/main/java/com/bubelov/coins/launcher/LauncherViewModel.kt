@@ -6,9 +6,14 @@ import com.bubelov.coins.repository.settings.SettingsRepository
 class LauncherViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
-    var permissionsExplained
-        get() = settingsRepository.permissionsExplained
-        set(value) {
-            settingsRepository.permissionsExplained = value
-        }
+
+    fun getPermissionsExplained() = settingsRepository.getBoolean(
+        key = SettingsRepository.PERMISSIONS_EXPLAINED_KEY,
+        defaultValue = false
+    )
+
+    fun setPermissionsExplained(value: Boolean) = settingsRepository.setBoolean(
+        key = SettingsRepository.PERMISSIONS_EXPLAINED_KEY,
+        value = value
+    )
 }

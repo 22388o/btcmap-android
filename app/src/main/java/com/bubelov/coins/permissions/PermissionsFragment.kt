@@ -40,7 +40,7 @@ class PermissionsFragment : Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        model.permissionsExplained = true
+        model.setPermissionsExplained(true)
         findNavController().navigate(R.id.action_permissionsFragment_to_mapFragment)
     }
 
