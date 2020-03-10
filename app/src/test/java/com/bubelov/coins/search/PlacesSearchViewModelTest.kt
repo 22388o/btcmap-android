@@ -14,6 +14,7 @@ import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.setMain
 import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Before
@@ -25,6 +26,7 @@ import org.mockito.MockitoAnnotations
 import java.util.*
 
 class PlacesSearchViewModelTest {
+
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -33,10 +35,11 @@ class PlacesSearchViewModelTest {
     @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
     @Mock private lateinit var preferences: SharedPreferences
     @Mock private lateinit var resources: Resources
+
     private lateinit var model: PlacesSearchViewModel
 
     @Before
-    fun setup() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
 
         model = PlacesSearchViewModel(
@@ -44,8 +47,7 @@ class PlacesSearchViewModelTest {
             placeCategoriesRepository,
             placeIconsRepository,
             preferences,
-            resources,
-            Dispatchers.Default
+            resources
         )
 
         model.setUp(null)
@@ -67,6 +69,7 @@ class PlacesSearchViewModelTest {
 
     @Test
     fun searchBars() = runBlocking {
+        Dispatchers.setMain(Dispatchers.Default)
         model.setQuery("bar")
         val rows = model.rows.blockingObserve()
         verify(placesRepository).findBySearchQuery("bar")

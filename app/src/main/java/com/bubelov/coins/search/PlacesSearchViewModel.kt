@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.lifecycle.viewModelScope
 import com.bubelov.coins.R
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.Location
@@ -14,25 +15,20 @@ import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.DistanceUnits
 import com.bubelov.coins.util.DistanceUtils
 import com.bubelov.coins.util.distanceTo
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
-import kotlin.coroutines.CoroutineContext
 
 class PlacesSearchViewModel(
     private val placesRepository: PlacesRepository,
     private val placeCategoriesRepository: PlaceCategoriesRepository,
     private val placeIconsRepository: PlaceIconsRepository,
     private val preferences: SharedPreferences,
-    private val resources: Resources,
-    coroutineContext: CoroutineContext
+    private val resources: Resources
 ) : ViewModel() {
 
-    private val mainJob = Job()
     private var searchJob: Job? = null
-    private val uiScope = CoroutineScope(coroutineContext + mainJob)
 
     private var location: Location? = null
 
@@ -43,11 +39,6 @@ class PlacesSearchViewModel(
         this.location = location
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        mainJob.cancel()
-    }
-
     fun setQuery(query: String) {
         searchJob?.cancel()
 
@@ -56,7 +47,7 @@ class PlacesSearchViewModel(
             return
         }
 
-        searchJob = uiScope.launch {
+        searchJob = viewModelScope.launch {
             var places = placesRepository.findBySearchQuery(query)
 
             val location = location

@@ -21,17 +21,19 @@ class PlacesRepository(
     private val userRepository: UserRepository
 ) {
 
-    suspend fun init() {
-        withContext(Dispatchers.IO) {
-            val empty = db.selectCount().executeAsOne() == 0L
+    init {
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                val empty = db.selectCount().executeAsOne() == 0L
 
-            if (!empty) {
-                return@withContext
-            }
+                if (!empty) {
+                    return@withContext
+                }
 
-            db.transaction {
-                builtInCache.getPlaces().forEach {
-                    db.insertOrReplace(it)
+                db.transaction {
+                    builtInCache.getPlaces().forEach {
+                        db.insertOrReplace(it)
+                    }
                 }
             }
         }

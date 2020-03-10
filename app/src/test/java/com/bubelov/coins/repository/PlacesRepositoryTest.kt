@@ -40,7 +40,6 @@ class PlacesRepositoryTest {
         whenever(placesAssetsCache.getPlaces()).thenReturn(listOf(place))
 
         val repository = PlacesRepository(api, queries, placesAssetsCache, userRepository)
-        repository.init()
 
         repository.find(UUID.randomUUID().toString())
 
