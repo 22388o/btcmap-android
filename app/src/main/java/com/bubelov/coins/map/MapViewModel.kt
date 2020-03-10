@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.place.PlacesRepository
+import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
+import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -13,7 +15,9 @@ import kotlinx.coroutines.flow.*
 class MapViewModel(
     private val placesRepository: PlacesRepository,
     val userRepository: UserRepository,
-    locationRepository: LocationRepository
+    locationRepository: LocationRepository,
+    private val placeIconsRepository: PlaceIconsRepository,
+    private val placeCategoriesRepository: PlaceCategoriesRepository
 ) : ViewModel() {
 
     val selectedPlaceFlow = flow {
@@ -28,6 +32,19 @@ class MapViewModel(
     val locationFlow = locationRepository.location
 
     val allPlaces = placesRepository.getAll()
+
+    val placeMarkers = allPlaces.map { places ->
+        places.map {
+            PlaceMarker(
+                placeId = it.id,
+                icon = placeIconsRepository.getMarker(
+                    placeCategoriesRepository.findById(it.categoryId)?.name ?: ""
+                ),
+                latitude = it.latitude,
+                longitude = it.longitude
+            )
+        }
+    }
 
     private var initializedLocation = false
 

@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -28,10 +29,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -308,7 +306,7 @@ class MapFragment :
 
         //initClustering(map)
 
-        lifecycleScope.launch {
+//        lifecycleScope.launch {
             //model.onMapReady()
 
 //            model.selectedPlaceFlow.collect { place ->
@@ -321,7 +319,7 @@ class MapFragment :
 //                    model.navigateToNextSelectedPlace = false
 //                }
 //            }
-        }
+//        }
 
 //        model.moveMapToLocation.observe(viewLifecycleOwner, Observer {
 //            it?.let { location ->
@@ -340,37 +338,54 @@ class MapFragment :
 //            }
 //        })
 
-        lifecycleScope.launch {
-            model.locationFlow.collect { location ->
-                if (locationOverlay == null) {
-                    locationOverlay =
-                        MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
-                            enableMyLocation()
-                            map.overlays += this
-                        }
-                }
-
-                val mapController = map.controller
-                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
-                val startPoint = GeoPoint(location.latitude, location.longitude)
-                mapController.setCenter(startPoint)
+        model.locationFlow.onEach {
+            if (locationOverlay == null) {
+                locationOverlay =
+                    MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
+                        enableMyLocation()
+                        map.overlays += this
+                    }
             }
 
-            model.allPlaces.collect {
-                val items = mutableListOf<OverlayItem>()
+            val mapController = map.controller
+            mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
 
-                it.forEach { place ->
-                    items += OverlayItem(
-                        "Title",
-                        "Description",
-                        GeoPoint(place.latitude, place.longitude)
-                    )
+            val startPoint = GeoPoint(it.latitude, it.longitude)
+            mapController.setCenter(startPoint)
+        }.launchIn(lifecycleScope)
+
+        model.placeMarkers.onEach {
+            val items = mutableListOf<OverlayItem>()
+
+            it.forEach { place ->
+                if (place.latitude > map.boundingBox.latNorth) {
+                    return@forEach
                 }
 
-                val overlay = ItemizedIconOverlay<OverlayItem>(requireContext(), items, null)
-                map.overlays.add(overlay)
+                if (place.latitude < map.boundingBox.latSouth) {
+                    return@forEach
+                }
+
+                if (place.longitude < map.boundingBox.lonWest) {
+                    return@forEach
+                }
+
+                if (place.longitude > map.boundingBox.lonEast) {
+                    return@forEach
+                }
+
+                items += OverlayItem(
+                    "Title",
+                    "Description",
+                    GeoPoint(place.latitude, place.longitude)
+                ).apply {
+                    setMarker(place.icon.toDrawable(resources))
+                }
             }
-        }
+
+            val overlay = ItemizedIconOverlay(requireContext(), items, null)
+            map.overlays.add(overlay)
+        }.launchIn(lifecycleScope)
     }
 
     private fun updateDrawerHeader() {
