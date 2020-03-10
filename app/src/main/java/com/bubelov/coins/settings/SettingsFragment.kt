@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment() {
@@ -49,7 +51,11 @@ class SettingsFragment : Fragment() {
             distanceUnits.text = labels[values.indexOf(it)]
         })
 
-        syncDatabase.setOnClickListener { model.syncDatabase() }
+        syncDatabase.setOnClickListener {
+            lifecycleScope.launch {
+                model.syncDatabase()
+            }
+        }
 
         showSyncLog.setOnClickListener {
             model.showSyncLogs()
@@ -63,6 +69,10 @@ class SettingsFragment : Fragment() {
             }
         })
 
-        testNotification.setOnClickListener { model.testNotification() }
+        testNotification.setOnClickListener {
+            lifecycleScope.launch {
+                model.testNotification()
+            }
+        }
     }
 }

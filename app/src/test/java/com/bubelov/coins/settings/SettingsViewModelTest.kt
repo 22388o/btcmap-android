@@ -1,30 +1,3 @@
-/*
- * This is free and unencumbered software released into the public domain.
- *
- * Anyone is free to copy, modify, publish, use, compile, sell, or
- * distribute this software, either in source code form or as a compiled
- * binary, for any purpose, commercial or non-commercial, and by any
- * means.
- *
- * In jurisdictions that recognize copyright laws, the author or authors
- * of this software dedicate any and all copyright interest in the
- * software to the public domain. We make this dedication for the benefit
- * of the public at large and to the detriment of our heirs and
- * successors. We intend this dedication to be an overt act of
- * relinquishment in perpetuity of all present and future rights to this
- * software under copyright law.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- *
- * For more information, please refer to <https://unlicense.org>
- */
-
 package com.bubelov.coins.settings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -40,7 +13,9 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -49,7 +24,9 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.util.*
 
+@ExperimentalCoroutinesApi
 class SettingsViewModelTest {
+
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -58,10 +35,11 @@ class SettingsViewModelTest {
     @Mock private lateinit var syncLogsRepository: SyncLogsRepository
     @Mock private lateinit var placesRepository: PlacesRepository
     @Mock private lateinit var notificationManager: PlaceNotificationManager
+
     private lateinit var model: SettingsViewModel
 
     @Before
-    fun setup() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
 
         model = SettingsViewModel(
@@ -69,19 +47,19 @@ class SettingsViewModelTest {
             distanceUnitsLiveData,
             databaseSync,
             syncLogsRepository,
-            notificationManager,
-            Dispatchers.Default
+            notificationManager
         )
     }
 
     @Test
     fun callsSync() = runBlocking {
-        model.syncDatabase().join()
+        model.syncDatabase()
         verify(databaseSync).sync()
     }
 
     @Test
     fun returnsSyncLogs() = runBlocking {
+        Dispatchers.setMain(Dispatchers.Default)
         val logs = listOf(SyncLogEntry(0, 10))
         whenever(syncLogsRepository.all()).thenReturn(logs)
         model.showSyncLogs().join()
@@ -99,7 +77,7 @@ class SettingsViewModelTest {
             )
         )
 
-        model.testNotification().join()
+        model.testNotification()
 
         verify(placesRepository).findRandom()
         verifyNoMoreInteractions(placesRepository)

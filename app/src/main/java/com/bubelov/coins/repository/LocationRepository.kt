@@ -3,6 +3,7 @@ package com.bubelov.coins.repository
 import android.content.Context
 import android.location.LocationManager
 import com.bubelov.coins.model.Location
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
 class LocationRepository(
@@ -15,5 +16,9 @@ class LocationRepository(
 
     val location = callbackFlow {
         offer(defaultLocation)
+
+        awaitClose {
+            // TODO
+        }
     }
 }

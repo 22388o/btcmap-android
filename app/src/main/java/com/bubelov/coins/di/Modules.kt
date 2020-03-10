@@ -30,7 +30,6 @@ import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
-import com.bubelov.coins.repository.rate.BitcoinAverage
 import com.bubelov.coins.repository.rate.Bitstamp
 import com.bubelov.coins.repository.rate.Coinbase
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
@@ -42,10 +41,7 @@ import com.bubelov.coins.search.PlacesSearchViewModel
 import com.bubelov.coins.settings.SettingsViewModel
 import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.sync.DatabaseSyncScheduler
-import com.bubelov.coins.util.ConnectivityCheckingInterceptor
-import com.bubelov.coins.util.DateTimeAdapter
-import com.bubelov.coins.util.JsonStringConverterFactory
-import com.bubelov.coins.util.PlaceNotificationManager
+import com.bubelov.coins.util.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.squareup.sqldelight.android.AndroidSqliteDriver
@@ -104,9 +100,10 @@ val appModule = module {
     single { BuiltInCurrenciesPlacesCache(get(), get()) }
     single { BuiltInPlaceCategoriesCache(get(), get()) }
 
-    single { BitcoinAverage(get()) }
     single { Bitstamp(get()) }
     single { Coinbase(get()) }
+
+    single { DistanceUnitsLiveData(get(), get()) } // TODO remove
 
     single { PlacesRepository(get(), get(), get(), get()) }
     single { ExchangeRatesRepository(get(), get()) }
@@ -126,7 +123,7 @@ val appModule = module {
     viewModel { NotificationAreaViewModel(get(), get(), get(named("default_location"))) }
     viewModel { PlacesSearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { PlacesSearchResultViewModel() }
-    viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
     viewModel { AuthViewModel(get()) }
     viewModel { AuthResultViewModel() }
     viewModel { PickLocationResultViewModel() }
