@@ -10,15 +10,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.CircleTransformation
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
-    private  val userRepository: UserRepository by inject()
+    private val model: ProfileViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +34,7 @@ class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             setOnMenuItemClickListener(this@ProfileFragment)
         }
 
-        val user = userRepository.getUser()
+        val user = model.getUser()
 
         if (user == null) {
             findNavController().popBackStack()
@@ -68,7 +67,7 @@ class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun signOut() {
-        userRepository.clear()
+        model.signOut()
         findNavController().popBackStack()
     }
 }

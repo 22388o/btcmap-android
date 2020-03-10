@@ -7,21 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.CurrencyPair
 import kotlinx.android.synthetic.main.fragment_exchange_rates.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ExchangeRatesFragment : Fragment() {
-
-    private val rootJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + rootJob)
 
     private val model: ExchangeRatesViewModel by viewModel()
 
@@ -48,7 +42,7 @@ class ExchangeRatesFragment : Fragment() {
                         AlertDialog.Builder(requireContext())
                             .setTitle(R.string.currency)
                             .setItems(itemTitles) { _, index ->
-                                model.selectCurrencyPair(items[index])
+                                model.setSelectedPair(items[index])
                             }
                             .show()
 
@@ -61,21 +55,14 @@ class ExchangeRatesFragment : Fragment() {
 
         ratesView.layoutManager = LinearLayoutManager(requireContext())
 
-        uiScope.launch {
-            model.selectedPair.collect { pair ->
-                toolbar.menu.findItem(R.id.currency).title = pair.toString()
-            }
+        model.selectedPair.onEach {
+            toolbar.menu.findItem(R.id.currency).title = it.toString()
+        }.launchIn(lifecycleScope)
 
-            model.rows.collect { rows ->
-                ratesView.adapter = ExchangeRatesAdapter(rows)
-            }
-        }
+        model.rows.onEach {
+            ratesView.adapter = ExchangeRatesAdapter(it)
+        }.launchIn(lifecycleScope)
 
-        model.selectCurrencyPair(CurrencyPair.BTC_USD)
-    }
-
-    override fun onDestroyView() {
-        rootJob.cancel()
-        super.onDestroyView()
+        model.setSelectedPair(CurrencyPair.BTC_USD)
     }
 }

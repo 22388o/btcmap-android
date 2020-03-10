@@ -77,6 +77,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_kotlin}"
     testImplementation "com.squareup.sqldelight:sqlite-driver:${versions.sqldelight}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}"
 
     androidTestImplementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"

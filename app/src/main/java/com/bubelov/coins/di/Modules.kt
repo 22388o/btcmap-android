@@ -17,6 +17,7 @@ import com.bubelov.coins.notificationarea.NotificationAreaViewModel
 import com.bubelov.coins.permissions.PermissionsViewModel
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import com.bubelov.coins.placedetails.PlaceDetailsViewModel
+import com.bubelov.coins.profile.ProfileViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.area.NotificationAreaRepository
@@ -108,7 +109,7 @@ val appModule = module {
     single { Coinbase(get()) }
 
     single { PlacesRepository(get(), get(), get(), get()) }
-    single { ExchangeRatesRepository(get(), get(), get()) }
+    single { ExchangeRatesRepository(get(), get()) }
     single { UserRepository(get(), get(), get()) }
     single { LocationRepository(get(), get(named("default_location"))) }
     single { NotificationAreaRepository(get(), get()) }
@@ -129,9 +130,10 @@ val appModule = module {
     viewModel { AuthViewModel(get()) }
     viewModel { AuthResultViewModel() }
     viewModel { PickLocationResultViewModel() }
-    viewModel { PlaceDetailsViewModel(get(), get(), get()) }
+    viewModel { PlaceDetailsViewModel(get(), get()) }
     viewModel { LauncherViewModel(get()) }
     viewModel { PermissionsViewModel(get()) }
+    viewModel { ProfileViewModel(get()) }
 }
 
 val apiModule = module {
