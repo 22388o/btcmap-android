@@ -1,0 +1,22 @@
+CREATE TABLE Preference (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+insertOrReplace:
+INSERT OR REPLACE
+INTO Preference
+VALUES ?;
+
+selectAll:
+SELECT *
+FROM Preference;
+
+selectByKey:
+SELECT *
+FROM Preference
+WHERE key = ?;
+
+selectCount:
+SELECT COUNT(*)
+FROM Preference;
