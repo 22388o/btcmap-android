@@ -20,6 +20,7 @@ import com.bubelov.coins.placedetails.PlaceDetailsViewModel
 import com.bubelov.coins.profile.ProfileViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.repository.LocationRepository
+import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
 import com.bubelov.coins.repository.currency.CurrenciesRepository
@@ -34,7 +35,7 @@ import com.bubelov.coins.repository.rate.Bitstamp
 import com.bubelov.coins.repository.rate.Coinbase
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
 import com.bubelov.coins.repository.settings.SettingsRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.search.PlacesSearchViewModel
@@ -69,6 +70,8 @@ val appModule = module {
     single { get<Database>().currencyPlaceQueries }
     single { get<Database>().placeQueries }
     single { get<Database>().placeCategoryQueries }
+    single { get<Database>().preferenceQueries }
+    single { get<Database>().logEntryQueries }
 
     single<SqlDriver> {
         AndroidSqliteDriver(
@@ -112,10 +115,11 @@ val appModule = module {
     single { NotificationAreaRepository(get(), get()) }
     single { PlaceIconsRepository(get()) }
     single { PlaceCategoriesRepository(get(), get(), get()) }
-    single { SyncLogsRepository(get(), get()) }
+    single { LogsRepository(get()) }
     single { CurrenciesRepository(get(), get(), get()) }
     single { CurrenciesPlacesRepository(get(), get(), get()) }
     single { SettingsRepository(get()) }
+    single { PreferencesRepository(get()) }
 
     viewModel { EditPlaceViewModel(get()) }
     viewModel { ExchangeRatesViewModel(get()) }

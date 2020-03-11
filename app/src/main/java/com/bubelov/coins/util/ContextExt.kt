@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import timber.log.Timber
 
 fun Context.openUrl(url: String): Boolean {
     val urlBuilder = StringBuilder()
@@ -24,7 +23,6 @@ fun Context.openUrl(url: String): Boolean {
         customTabsIntent.launchUrl(this, Uri.parse(urlBuilder.toString()))
         true
     } catch (e : Exception) {
-        Timber.e(e)
         false
     }
 }

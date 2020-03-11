@@ -69,7 +69,6 @@ dependencies {
     implementation "org.osmdroid:osmdroid-android:${versions.osmdroid}"
     implementation "com.google.code.gson:gson:${versions.gson}"
     implementation "com.squareup.picasso:picasso:${versions.picasso}"
-    implementation "com.jakewharton.timber:timber:${versions.timber}"
     implementation "joda-time:joda-time:${versions.joda_time}"
 
     testImplementation "junit:junit:${versions.junit}"

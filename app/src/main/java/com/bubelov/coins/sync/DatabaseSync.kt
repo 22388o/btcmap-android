@@ -1,11 +1,10 @@
 package com.bubelov.coins.sync
 
-import com.bubelov.coins.model.SyncLogEntry
 import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
 
 class DatabaseSync(
@@ -14,19 +13,17 @@ class DatabaseSync(
     private val currenciesPlacesRepository: CurrenciesPlacesRepository,
     private val placeCategoriesRepository: PlaceCategoriesRepository,
     private val placeNotificationManager: PlaceNotificationManager,
-    private val syncLogsRepository: SyncLogsRepository
+    private val logsRepository: LogsRepository
 ) {
     suspend fun sync() {
         val currenciesSyncResult = currenciesRepository.sync()
         val placesSyncResult = placesRepository.sync()
         val currenciesPlacesSyncResult = currenciesPlacesRepository.sync()
-        val placeCategoriesSyncResutt = placeCategoriesRepository.sync()
+        val placeCategoriesSyncResult = placeCategoriesRepository.sync()
 
-        syncLogsRepository.insert(
-            SyncLogEntry(
-                System.currentTimeMillis(),
-                placesSyncResult.newPlaces.size
-            )
+        logsRepository.append(
+            tag = "database_sync",
+            message = "Got ${placesSyncResult.newPlaces.size} new places"
         )
 
         placeNotificationManager.issueNotificationsIfInArea(placesSyncResult.newPlaces)

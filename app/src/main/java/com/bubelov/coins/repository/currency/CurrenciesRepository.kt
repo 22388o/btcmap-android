@@ -6,7 +6,6 @@ import com.bubelov.coins.data.Currency
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
-import timber.log.Timber
 
 class CurrenciesRepository(
     private val api: CoinsApi,
@@ -59,8 +58,6 @@ class CurrenciesRepository(
                 affectedRecords = response.size
             )
         } catch (t: Throwable) {
-            Timber.e(t, "Couldn't sync currencies")
-
             TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),

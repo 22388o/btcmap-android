@@ -4,19 +4,23 @@ import android.app.Application
 import com.bubelov.coins.di.apiModule
 import com.bubelov.coins.di.appModule
 import com.bubelov.coins.di.mockApiModule
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.sync.DatabaseSync
-import com.bubelov.coins.sync.DatabaseSyncScheduler
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 class App : Application() {
 
-    private val databaseSyncScheduler: DatabaseSyncScheduler by inject()
+    //private val databaseSyncScheduler: DatabaseSyncScheduler by inject()
 
     val databaseSync: DatabaseSync by inject()
+
+    private val logsRepository: LogsRepository by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -32,10 +36,10 @@ class App : Application() {
             }
         }
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+        runBlocking {
+            logsRepository.append("app", "onCreate")
         }
 
-        databaseSyncScheduler.schedule()
+        //databaseSyncScheduler.schedule() TODO
     }
 }

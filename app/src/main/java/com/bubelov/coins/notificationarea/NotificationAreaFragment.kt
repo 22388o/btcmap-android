@@ -8,11 +8,13 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.util.OnSeekBarChangeAdapter
 import kotlinx.android.synthetic.main.fragment_notification_area.*
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -53,7 +55,9 @@ class NotificationAreaFragment : Fragment() {
 //            map.isMyLocationEnabled = true
 //        }
 
-        showArea(model.getNotificationArea())
+        lifecycleScope.launch {
+            showArea(model.getNotificationArea())
+        }
     }
 
     private fun showArea(area: NotificationArea) {
@@ -79,7 +83,8 @@ class NotificationAreaFragment : Fragment() {
         areaCircle = Polygon(map).apply {
             points = circlePoints
             fillPaint.color = ContextCompat.getColor(requireContext(), R.color.notification_area)
-            outlinePaint.color = ContextCompat.getColor(requireContext(), R.color.notification_area_border)
+            outlinePaint.color =
+                ContextCompat.getColor(requireContext(), R.color.notification_area_border)
             outlinePaint.strokeWidth = 4f
             map.overlays.add(0, this)
         }

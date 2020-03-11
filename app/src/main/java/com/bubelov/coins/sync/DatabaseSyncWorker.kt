@@ -5,7 +5,6 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bubelov.coins.App
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 
 class DatabaseSyncWorker(
     context: Context,
@@ -17,7 +16,6 @@ class DatabaseSyncWorker(
             (applicationContext as App).databaseSync.sync()
             Result.success()
         } catch (t: Throwable) {
-            Timber.e(t)
             Result.retry()
         }
     }

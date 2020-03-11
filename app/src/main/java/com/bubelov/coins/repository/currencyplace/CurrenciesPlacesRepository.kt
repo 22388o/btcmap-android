@@ -1,28 +1,28 @@
 package com.bubelov.coins.repository.currencyplace
 
-import com.bubelov.coins.Database
 import com.bubelov.coins.api.coins.CoinsApi
+import com.bubelov.coins.data.CurrencyPlaceQueries
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
-import timber.log.Timber
 
 class CurrenciesPlacesRepository(
     private val api: CoinsApi,
-    val db: Database,
+    private val db: CurrencyPlaceQueries,
     private val builtInCache: BuiltInCurrenciesPlacesCache
 ) {
-    private val queries = db.currencyPlaceQueries
 
     private var builtInCacheInitialized = false
 
     init {
-        GlobalScope.launch { initBuiltInCache() }
+        runBlocking {
+            initBuiltInCache()
+        }
     }
 
     suspend fun findByPlaceId(placeId: String) = withContext(Dispatchers.IO) {
         waitTillCacheIsReady()
-        queries.selectByPlaceId(placeId).executeAsList()
+        db.selectByPlaceId(placeId).executeAsList()
     }
 
     suspend fun sync() = withContext(Dispatchers.IO) {
@@ -31,16 +31,16 @@ class CurrenciesPlacesRepository(
         try {
             waitTillCacheIsReady()
 
-            val maxUpdatedAt = queries.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
+            val maxUpdatedAt = db.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
                 ?: DateTime(0).toString()
 
             val response = api.getCurrenciesPlaces(
                 createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt)
             )
 
-            queries.transaction {
+            db.transaction {
                 response.forEach {
-                    queries.insertOrReplace(it)
+                    db.insertOrReplace(it)
                 }
             }
 
@@ -51,8 +51,6 @@ class CurrenciesPlacesRepository(
                 affectedRecords = response.size
             )
         } catch (t: Throwable) {
-            Timber.e(t, "Couldn't sync currencies to places mapping")
-
             TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
@@ -64,10 +62,10 @@ class CurrenciesPlacesRepository(
 
     private suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
-            if (queries.selectCount().executeAsOne() == 0L) {
-                queries.transaction {
+            if (db.selectCount().executeAsOne() == 0L) {
+                db.transaction {
                     builtInCache.getCurrenciesPlaces().forEach {
-                        queries.insertOrReplace(it)
+                        db.insertOrReplace(it)
                     }
                 }
             }

@@ -7,6 +7,9 @@ import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -34,31 +37,33 @@ class NotificationAreaViewModelTest {
     }
 
     @Test
-    fun getNotificationArea_withEmptyCache_returnsDefaultArea() {
+    fun getNotificationArea_withEmptyCache_returnsDefaultArea() = runBlocking {
+        val defaultArea = NotificationArea(
+            latitude = defaultLocation.latitude,
+            longitude = defaultLocation.longitude,
+            radius = NotificationAreaRepository.DEFAULT_RADIUS_METERS
+        )
+
+        whenever(notificationAreaRepository.getNotificationArea()).thenReturn(flowOf(null))
+
         val area = model.getNotificationArea()
 
-        verify(notificationAreaRepository).notificationArea
+        verify(notificationAreaRepository).getNotificationArea()
         verifyNoMoreInteractions(notificationAreaRepository)
 
-        assert(
-            area == NotificationArea(
-                latitude = defaultLocation.latitude,
-                longitude = defaultLocation.longitude,
-                radius = NotificationAreaRepository.DEFAULT_RADIUS_METERS
-            )
-        )
+        assert(area == defaultArea)
     }
 
     @Test
-    fun getNotificationArea_withSavedArea_returnsSavedArea() {
+    fun getNotificationArea_withSavedArea_returnsSavedArea() = runBlocking {
         val area = NotificationArea(10.0, 20.0, 30.0)
-        whenever(notificationAreaRepository.notificationArea).thenReturn(area)
+        whenever(notificationAreaRepository.getNotificationArea()).thenReturn(flowOf(area))
 
         assert(
             area == model.getNotificationArea()
         )
 
-        verify(notificationAreaRepository).notificationArea
+        verify(notificationAreaRepository).getNotificationArea()
         verifyNoMoreInteractions(notificationAreaRepository)
     }
 }

@@ -5,7 +5,7 @@ import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
-import com.bubelov.coins.repository.synclogs.SyncLogsRepository
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.TableSyncResult
 import com.nhaarman.mockitokotlin2.any
@@ -28,7 +28,7 @@ class DatabaseSyncTest {
     @Mock private lateinit var currenciesPlacesRepository: CurrenciesPlacesRepository
     @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
     @Mock private lateinit var placeNotificationManager: PlaceNotificationManager
-    @Mock private lateinit var syncLogsRepository: SyncLogsRepository
+    @Mock private lateinit var logsRepository: LogsRepository
 
     private lateinit var databaseSync: DatabaseSync
 
@@ -42,7 +42,7 @@ class DatabaseSyncTest {
             currenciesPlacesRepository,
             placeCategoriesRepository,
             placeNotificationManager,
-            syncLogsRepository
+            logsRepository
         )
     }
 
@@ -69,7 +69,7 @@ class DatabaseSyncTest {
         databaseSync.sync()
 
         verify(placeNotificationManager).issueNotificationsIfInArea(newPlaces)
-        verify(syncLogsRepository).insert(any())
+        verify(logsRepository).append(any(), any())
     }
 
     @Test
@@ -83,6 +83,6 @@ class DatabaseSyncTest {
         }
 
         verifyZeroInteractions(placeNotificationManager)
-        verifyZeroInteractions(syncLogsRepository)
+        verifyZeroInteractions(logsRepository)
     }
 }

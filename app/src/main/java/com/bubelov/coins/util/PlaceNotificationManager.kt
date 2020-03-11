@@ -11,6 +11,7 @@ import com.bubelov.coins.data.Place
 import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
+import kotlinx.coroutines.flow.first
 
 class PlaceNotificationManager(
     private val context: Context,
@@ -21,13 +22,13 @@ class PlaceNotificationManager(
         registerNotificationChannel()
     }
 
-    fun issueNotificationsIfInArea(newPlaces: Collection<Place>) {
+    suspend fun issueNotificationsIfInArea(newPlaces: Collection<Place>) {
         newPlaces.forEach { place ->
             if (!place.visible) {
                 return
             }
 
-            val notificationArea = notificationAreaRepository.notificationArea
+            val notificationArea = notificationAreaRepository.getNotificationArea().first()
 
             if (notificationArea != null && place.inside(notificationArea)) {
                 issueNotification(place)

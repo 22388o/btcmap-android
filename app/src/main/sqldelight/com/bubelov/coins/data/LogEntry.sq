@@ -1,0 +1,29 @@
+CREATE TABLE LogEntry (
+    datetime TEXT NOT NULL,
+    tag TEXT NOT NULL,
+    message TEXT NOT NULL
+);
+
+CREATE INDEX log_entry_datetime_idx
+ON LogEntry(datetime);
+
+CREATE INDEX log_entry_tag_idx
+ON LogEntry(tag);
+
+insert:
+INSERT OR REPLACE
+INTO LogEntry
+VALUES ?;
+
+selectAll:
+SELECT *
+FROM LogEntry;
+
+selectByTag:
+SELECT *
+FROM LogEntry
+WHERE tag = ?;
+
+selectCount:
+SELECT COUNT(*)
+FROM LogEntry;

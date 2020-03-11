@@ -18,7 +18,6 @@ import com.bubelov.coins.util.openUrl
 import kotlinx.android.synthetic.main.fragment_place_details.*
 import kotlinx.coroutines.runBlocking
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class PlaceDetailsFragment : Fragment() {
 
@@ -33,8 +32,6 @@ class PlaceDetailsFragment : Fragment() {
     }
 
     fun setScrollProgress(progress: Float) {
-        Timber.e(progress.toString())
-
         headerShadow.alpha = 1 - progress
         headerShadow.isVisible = progress <= 0.9
 

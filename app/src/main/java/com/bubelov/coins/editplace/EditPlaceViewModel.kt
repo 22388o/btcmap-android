@@ -8,7 +8,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
-import timber.log.Timber
 
 class EditPlaceViewModel(
     private val placesRepository: PlacesRepository
@@ -18,9 +17,6 @@ class EditPlaceViewModel(
         originalPlace: Place?,
         updatedPlace: Place
     ): Flow<BasicTaskState> {
-        Timber.d("Original place: $originalPlace")
-        Timber.d("Updated place: $updatedPlace")
-
         return flow {
             emit(BasicTaskState.Progress)
 

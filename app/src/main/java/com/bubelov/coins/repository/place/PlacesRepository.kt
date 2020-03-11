@@ -12,7 +12,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
-import timber.log.Timber
 
 class PlacesRepository(
     private val api: CoinsApi,
@@ -89,8 +88,6 @@ class PlacesRepository(
 
             PlacesSyncResult(tableSyncResult, newPlaces)
         } catch (t: Throwable) {
-            Timber.e(t, "Couldn't sync places")
-
             val tableSyncResult = TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),

@@ -1,30 +1,29 @@
 package com.bubelov.coins.repository.placecategory
 
-import com.bubelov.coins.Database
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.data.PlaceCategory
+import com.bubelov.coins.data.PlaceCategoryQueries
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
-import timber.log.Timber
 
 class PlaceCategoriesRepository(
     private val api: CoinsApi,
-    val db: Database,
+    private val db: PlaceCategoryQueries,
     private val builtInCache: BuiltInPlaceCategoriesCache
 ) {
-
-    private val queries = db.placeCategoryQueries
 
     private var builtInCacheInitialized = false
 
     init {
-        GlobalScope.launch { initBuiltInCache() }
+        runBlocking {
+            initBuiltInCache()
+        }
     }
 
     suspend fun findById(id: String): PlaceCategory? {
         return withContext(Dispatchers.IO) {
-            queries.selectById(id).executeAsOneOrNull()
+            db.selectById(id).executeAsOneOrNull()
         }
     }
 
@@ -34,16 +33,16 @@ class PlaceCategoriesRepository(
         try {
             waitTillCacheIsReady()
 
-            val maxUpdatedAt = queries.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
+            val maxUpdatedAt = db.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
                 ?: DateTime(0).toString()
 
             val response = api.getPlaceCategories(
                 createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt)
             )
 
-            queries.transaction {
+            db.transaction {
                 response.forEach {
-                    queries.insertOrReplace(it)
+                    db.insertOrReplace(it)
                 }
             }
 
@@ -54,8 +53,6 @@ class PlaceCategoriesRepository(
                 affectedRecords = response.size
             )
         } catch (t: Throwable) {
-            Timber.e(t, "Couldn't sync place categories")
-
             TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
@@ -67,10 +64,10 @@ class PlaceCategoriesRepository(
 
     private suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
-            if (queries.selectCount().executeAsOne() == 0L) {
-                queries.transaction {
+            if (db.selectCount().executeAsOne() == 0L) {
+                db.transaction {
                     builtInCache.getPlaceCategories().forEach {
-                        queries.insertOrReplace(it)
+                        db.insertOrReplace(it)
                     }
                 }
             }

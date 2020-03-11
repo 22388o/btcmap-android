@@ -1,9 +1,9 @@
 package com.bubelov.coins.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import android.content.SharedPreferences
 import android.content.res.Resources
 import com.bubelov.coins.data.Place
+import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
@@ -33,7 +33,7 @@ class PlacesSearchViewModelTest {
     @Mock private lateinit var placesRepository: PlacesRepository
     @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
     @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
-    @Mock private lateinit var preferences: SharedPreferences
+    @Mock private lateinit var preferencesRepository: PreferencesRepository
     @Mock private lateinit var resources: Resources
 
     private lateinit var model: PlacesSearchViewModel
@@ -46,7 +46,7 @@ class PlacesSearchViewModelTest {
             placesRepository,
             placeCategoriesRepository,
             placeIconsRepository,
-            preferences,
+            preferencesRepository,
             resources
         )
 

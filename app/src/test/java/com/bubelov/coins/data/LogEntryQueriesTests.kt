@@ -2,21 +2,22 @@ package com.bubelov.coins.data
 
 import com.bubelov.coins.Database
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import org.joda.time.DateTime
 import org.junit.Before
 import org.junit.Test
 import java.util.*
 import kotlin.random.Random
 
-class PreferenceQueriesTests {
+class LogEntryQueriesTests {
 
-    lateinit var queries: PreferenceQueries
+    lateinit var queries: LogEntryQueries
 
     @Before
     fun setUp() {
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         Database.Schema.create(driver)
         val database = Database(driver)
-        queries = database.preferenceQueries
+        queries = database.logEntryQueries
     }
 
     @Test
@@ -25,24 +26,12 @@ class PreferenceQueriesTests {
     }
 
     @Test
-    fun insertOrReplace_insertsItem() {
+    fun insert_insertsItem() {
         val item = testItem()
-        queries.insertOrReplace(item)
+        queries.insert(item)
 
         assert(queries.selectCount().executeAsOne() == 1L)
-        assert(queries.selectByKey(item.key).executeAsOne() == item)
-    }
-
-    @Test
-    fun insertOrReplace_replacesItem() {
-        val item = testItem()
-        queries.insertOrReplace(item)
-
-        val updatedItem = item.copy(value = "Changed")
-        queries.insertOrReplace(updatedItem)
-
-        assert(queries.selectCount().executeAsOne() == 1L)
-        assert(queries.selectByKey(item.key).executeAsOne() == updatedItem)
+        assert(queries.selectByTag(item.tag).executeAsOne() == item)
     }
 
     @Test
@@ -51,7 +40,7 @@ class PreferenceQueriesTests {
 
         queries.transaction {
             items.forEach {
-                queries.insertOrReplace(it)
+                queries.insert(it)
             }
         }
 
@@ -60,8 +49,8 @@ class PreferenceQueriesTests {
 
     @Test
     @ExperimentalStdlibApi
-    fun selectByKey_selectsCorrectItem() {
-        val items = buildList<Preference> {
+    fun selectByTag_selectsCorrectItem() {
+        val items = buildList<LogEntry> {
             repeat(100) {
                 add(testItem())
             }
@@ -69,13 +58,13 @@ class PreferenceQueriesTests {
 
         queries.transaction {
             items.forEach {
-                queries.insertOrReplace(it)
+                queries.insert(it)
             }
         }
 
         val randomItem = items.random()
 
-        assert(queries.selectByKey(randomItem.key).executeAsOne() == randomItem)
+        assert(queries.selectByTag(randomItem.tag).executeAsOne() == randomItem)
     }
 
     @Test
@@ -85,15 +74,16 @@ class PreferenceQueriesTests {
 
         queries.transaction {
             repeat(count) {
-                queries.insertOrReplace(testItem())
+                queries.insert(testItem())
             }
         }
 
         assert(queries.selectCount().executeAsOne() == count.toLong())
     }
 
-    private fun testItem() = Preference.Impl(
-        key = "test_key_${UUID.randomUUID()}",
-        value = "test_value_${UUID.randomUUID()}"
+    private fun testItem() = LogEntry.Impl(
+        datetime = DateTime.now().toString(),
+        tag = "test_tag_${UUID.randomUUID()}",
+        message = "test_massage_${UUID.randomUUID()}"
     )
 }

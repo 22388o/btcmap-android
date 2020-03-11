@@ -7,6 +7,7 @@ import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
+import kotlinx.coroutines.flow.first
 import kotlin.math.ln
 
 class NotificationAreaViewModel(
@@ -15,16 +16,16 @@ class NotificationAreaViewModel(
     private val defaultLocation: Location
 ) : ViewModel() {
 
-    fun getNotificationArea(): NotificationArea {
-        return areaRepository.notificationArea ?: NotificationArea(
+    suspend fun getNotificationArea(): NotificationArea {
+        return areaRepository.getNotificationArea().first() ?: NotificationArea(
             defaultLocation.latitude,
             defaultLocation.longitude,
             NotificationAreaRepository.DEFAULT_RADIUS_METERS
         )
     }
 
-    fun setNotificationArea(notificationArea: NotificationArea) {
-        areaRepository.notificationArea = notificationArea
+    suspend fun setNotificationArea(notificationArea: NotificationArea) {
+        areaRepository.setNotificationArea(notificationArea)
     }
 
     fun getZoomLevel(area: Double): Int {
