@@ -18,7 +18,9 @@ import com.bubelov.coins.util.openUrl
 import kotlinx.android.synthetic.main.fragment_place_details.*
 import kotlinx.coroutines.runBlocking
 import org.koin.android.viewmodel.ext.android.viewModel
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class PlaceDetailsFragment : Fragment() {
 
     private val model: PlaceDetailsViewModel by viewModel()

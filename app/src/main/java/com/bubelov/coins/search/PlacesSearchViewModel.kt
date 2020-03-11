@@ -20,7 +20,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class PlacesSearchViewModel(
     private val placesRepository: PlacesRepository,
     private val placeCategoriesRepository: PlaceCategoriesRepository,

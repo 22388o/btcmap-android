@@ -5,6 +5,7 @@ import com.bubelov.coins.api.coins.CreatePlaceArgs
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.data.PlaceQueries
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.TableSyncResult
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -12,31 +13,17 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
+@ExperimentalTime
 class PlacesRepository(
     private val api: CoinsApi,
     private val db: PlaceQueries,
     private val builtInCache: BuiltInPlacesCache,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val logsRepository: LogsRepository
 ) {
-
-    init {
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                val empty = db.selectCount().executeAsOne() == 0L
-
-                if (!empty) {
-                    return@withContext
-                }
-
-                db.transaction {
-                    builtInCache.getPlaces().forEach {
-                        db.insertOrReplace(it)
-                    }
-                }
-            }
-        }
-    }
 
     suspend fun find(id: String): Place? {
         return withContext(Dispatchers.IO) {
@@ -121,6 +108,36 @@ class PlacesRepository(
 
             db.insertOrReplace(response)
             response
+        }
+    }
+
+    suspend fun initBuiltInCache() {
+        withContext(Dispatchers.IO) {
+            val empty = db.selectCount().executeAsOne() == 0L
+
+            if (!empty) {
+                return@withContext
+            }
+
+            logsRepository.append(
+                tag = "cache",
+                message = "Initializing built-in places cache"
+            )
+
+            val places = builtInCache.getPlaces()
+
+            val insertDuration = measureTime {
+                db.transaction {
+                    places.forEach {
+                        db.insertOrReplace(it)
+                    }
+                }
+            }
+
+            logsRepository.append(
+                tag = "cache",
+                message = "Inserted ${places.size} places in ${insertDuration.inMilliseconds.toInt()} ms"
+            )
         }
     }
 

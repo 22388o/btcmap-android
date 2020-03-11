@@ -9,7 +9,9 @@ import com.bubelov.coins.util.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import org.joda.time.DateTime
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class SettingsViewModel(
     private val placesRepository: PlacesRepository,
     distanceUnitsLiveData: DistanceUnitsLiveData,

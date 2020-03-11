@@ -14,7 +14,9 @@ import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import kotlinx.android.synthetic.main.fragment_edit_place.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class EditPlaceFragment : Fragment() {
 
     private val model: EditPlaceViewModel by viewModel()

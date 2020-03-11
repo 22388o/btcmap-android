@@ -15,7 +15,9 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.util.*
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class EditPlaceViewModelTest {
 
     @Mock private lateinit var placesRepository: PlacesRepository

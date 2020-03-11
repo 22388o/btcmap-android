@@ -1,34 +1,32 @@
 package com.bubelov.coins.repository.currency
 
-import com.bubelov.coins.Database
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.data.Currency
+import com.bubelov.coins.data.CurrencyQueries
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
+@ExperimentalTime
 class CurrenciesRepository(
     private val api: CoinsApi,
-    db: Database,
-    private val builtInCache: BuiltInCurrenciesCache
+    private val db: CurrencyQueries,
+    private val builtInCache: BuiltInCurrenciesCache,
+    private val logsRepository: LogsRepository
 ) {
-    private val queries = db.currencyQueries;
-
-    private var builtInCacheInitialized = false
-
-    init {
-        GlobalScope.launch { initBuiltInCache() }
-    }
 
     suspend fun all(): List<Currency> {
         return withContext(Dispatchers.IO) {
-            queries.selectAll().executeAsList()
+            db.selectAll().executeAsList()
         }
     }
 
     suspend fun find(id: String): Currency? {
         return withContext(Dispatchers.IO) {
-            queries.selectById(id).executeAsOneOrNull()
+            db.selectById(id).executeAsOneOrNull()
         }
     }
 
@@ -36,18 +34,16 @@ class CurrenciesRepository(
         val syncStartDate = DateTime.now()
 
         try {
-            waitTillCacheIsReady()
-
-            val maxUpdatedAt = queries.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
+            val maxUpdatedAt = db.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
                 ?: DateTime(0).toString()
 
             val response = api.getCurrencies(
                 createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt)
             )
 
-            queries.transaction {
+            db.transaction {
                 response.forEach {
-                    queries.insertOrReplace(it)
+                    db.insertOrReplace(it)
                 }
             }
 
@@ -67,23 +63,29 @@ class CurrenciesRepository(
         }
     }
 
-    private suspend fun initBuiltInCache() {
+    suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
-            if (queries.selectCount().executeAsOne() == 0L) {
-                queries.transaction {
-                    builtInCache.getCurrencies().forEach {
-                        queries.insertOrReplace(it)
+            if (db.selectCount().executeAsOne() == 0L) {
+                logsRepository.append(
+                    tag = "cache",
+                    message = "Initializing built-in currencies cache"
+                )
+
+                val currencies = builtInCache.getCurrencies()
+
+                val insertDuration = measureTime {
+                    db.transaction {
+                        currencies.forEach {
+                            db.insertOrReplace(it)
+                        }
                     }
                 }
+
+                logsRepository.append(
+                    tag = "cache",
+                    message = "Inserted ${currencies.size} currencies in ${insertDuration.inMilliseconds.toInt()} ms"
+                )
             }
-
-            builtInCacheInitialized = true
-        }
-    }
-
-    private suspend fun waitTillCacheIsReady() {
-        while (!builtInCacheInitialized) {
-            delay(100)
         }
     }
 }

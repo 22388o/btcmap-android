@@ -17,7 +17,8 @@ VALUES ?;
 
 selectAll:
 SELECT *
-FROM LogEntry;
+FROM LogEntry
+ORDER BY datetime DESC;
 
 selectByTag:
 SELECT *

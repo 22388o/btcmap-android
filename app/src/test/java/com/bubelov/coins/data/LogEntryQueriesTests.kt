@@ -44,7 +44,7 @@ class LogEntryQueriesTests {
             }
         }
 
-        assert(queries.selectAll().executeAsList() == items)
+        assert(queries.selectAll().executeAsList().size == items.size)
     }
 
     @Test

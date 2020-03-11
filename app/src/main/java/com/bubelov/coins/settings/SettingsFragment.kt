@@ -13,7 +13,9 @@ import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class SettingsFragment : Fragment() {
 
     private val model: SettingsViewModel by viewModel()
@@ -58,16 +60,16 @@ class SettingsFragment : Fragment() {
         }
 
         showSyncLog.setOnClickListener {
-            model.showSyncLogs()
+            findNavController().navigate(R.id.action_settingsFragment_to_logsFragment)
         }
 
-        model.syncLogs.observe(viewLifecycleOwner, Observer {
-            it?.let { logs ->
-                AlertDialog.Builder(requireContext())
-                    .setItems(logs.toTypedArray(), null)
-                    .show()
-            }
-        })
+//        model.syncLogs.observe(viewLifecycleOwner, Observer {
+//            it?.let { logs ->
+//                AlertDialog.Builder(requireContext())
+//                    .setItems(logs.toTypedArray(), null)
+//                    .show()
+//            }
+//        })
 
         testNotification.setOnClickListener {
             lifecycleScope.launch {

@@ -20,7 +20,9 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.util.*
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class DatabaseSyncTest {
 
     @Mock private lateinit var currenciesRepository: CurrenciesRepository

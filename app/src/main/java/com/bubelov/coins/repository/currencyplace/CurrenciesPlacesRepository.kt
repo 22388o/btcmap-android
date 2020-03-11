@@ -2,26 +2,22 @@ package com.bubelov.coins.repository.currencyplace
 
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.data.CurrencyPlaceQueries
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
+@ExperimentalTime
 class CurrenciesPlacesRepository(
     private val api: CoinsApi,
     private val db: CurrencyPlaceQueries,
-    private val builtInCache: BuiltInCurrenciesPlacesCache
+    private val builtInCache: BuiltInCurrenciesPlacesCache,
+    private val logsRepository: LogsRepository
 ) {
 
-    private var builtInCacheInitialized = false
-
-    init {
-        runBlocking {
-            initBuiltInCache()
-        }
-    }
-
     suspend fun findByPlaceId(placeId: String) = withContext(Dispatchers.IO) {
-        waitTillCacheIsReady()
         db.selectByPlaceId(placeId).executeAsList()
     }
 
@@ -29,8 +25,6 @@ class CurrenciesPlacesRepository(
         val syncStartDate = DateTime.now()
 
         try {
-            waitTillCacheIsReady()
-
             val maxUpdatedAt = db.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
                 ?: DateTime(0).toString()
 
@@ -60,23 +54,29 @@ class CurrenciesPlacesRepository(
         }
     }
 
-    private suspend fun initBuiltInCache() {
+    suspend fun initBuiltInCache() {
         withContext(Dispatchers.IO) {
             if (db.selectCount().executeAsOne() == 0L) {
-                db.transaction {
-                    builtInCache.getCurrenciesPlaces().forEach {
-                        db.insertOrReplace(it)
+                logsRepository.append(
+                    tag = "cache",
+                    message = "Initializing built-in currencies-places cache"
+                )
+
+                val currenciesPlaces = builtInCache.getCurrenciesPlaces()
+
+                val insertDuration = measureTime {
+                    db.transaction {
+                        currenciesPlaces.forEach {
+                            db.insertOrReplace(it)
+                        }
                     }
                 }
+
+                logsRepository.append(
+                    tag = "cache",
+                    message = "Inserted ${currenciesPlaces.size} currencies-places in ${insertDuration.inMilliseconds.toInt()} ms"
+                )
             }
-
-            builtInCacheInitialized = true
-        }
-    }
-
-    private suspend fun waitTillCacheIsReady() {
-        while (!builtInCacheInitialized) {
-            delay(100)
         }
     }
 }

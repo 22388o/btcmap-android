@@ -40,7 +40,9 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 class MapFragment :
     Fragment(),
@@ -354,38 +356,40 @@ class MapFragment :
             mapController.setCenter(startPoint)
         }.launchIn(lifecycleScope)
 
-        model.placeMarkers.onEach {
+        lifecycleScope.launchWhenResumed {
             val items = mutableListOf<OverlayItem>()
 
-            it.forEach { place ->
-                if (place.latitude > map.boundingBox.latNorth) {
-                    return@forEach
+            model.placeMarkers.collect() {
+                it.forEach { place ->
+                    if (place.latitude > map.boundingBox.latNorth) {
+                        return@forEach
+                    }
+
+                    if (place.latitude < map.boundingBox.latSouth) {
+                        return@forEach
+                    }
+
+                    if (place.longitude < map.boundingBox.lonWest) {
+                        return@forEach
+                    }
+
+                    if (place.longitude > map.boundingBox.lonEast) {
+                        return@forEach
+                    }
+
+                    items += OverlayItem(
+                        "Title",
+                        "Description",
+                        GeoPoint(place.latitude, place.longitude)
+                    ).apply {
+                        setMarker(place.icon.toDrawable(resources))
+                    }
                 }
 
-                if (place.latitude < map.boundingBox.latSouth) {
-                    return@forEach
-                }
-
-                if (place.longitude < map.boundingBox.lonWest) {
-                    return@forEach
-                }
-
-                if (place.longitude > map.boundingBox.lonEast) {
-                    return@forEach
-                }
-
-                items += OverlayItem(
-                    "Title",
-                    "Description",
-                    GeoPoint(place.latitude, place.longitude)
-                ).apply {
-                    setMarker(place.icon.toDrawable(resources))
-                }
+                val overlay = ItemizedIconOverlay(requireContext(), items, null)
+                map.overlays.add(overlay)
             }
-
-            val overlay = ItemizedIconOverlay(requireContext(), items, null)
-            map.overlays.add(overlay)
-        }.launchIn(lifecycleScope)
+        }
     }
 
     private fun updateDrawerHeader() {

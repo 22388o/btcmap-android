@@ -9,8 +9,10 @@ import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.auth.AuthViewModel
+import com.bubelov.coins.cache.BuiltInCacheController
 import com.bubelov.coins.editplace.EditPlaceViewModel
 import com.bubelov.coins.launcher.LauncherViewModel
+import com.bubelov.coins.logs.LogsViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.notificationarea.NotificationAreaViewModel
@@ -59,7 +61,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.util.concurrent.TimeUnit
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 val appModule = module {
     single { PreferenceManager.getDefaultSharedPreferences(get()) } // TODO remove
@@ -87,6 +91,8 @@ val appModule = module {
             .create()
     }
 
+    single { BuiltInCacheController(get(), get(), get(), get()) }
+
     single { get<Context>().resources }
 
     single(named("default_location")) {
@@ -98,32 +104,32 @@ val appModule = module {
     single { DatabaseSync(get(), get(), get(), get(), get(), get()) }
     single { DatabaseSyncScheduler() }
 
-    single { BuiltInCurrenciesCache(get(), get()) }
-    single { BuiltInPlacesCache(get(), get()) }
-    single { BuiltInCurrenciesPlacesCache(get(), get()) }
-    single { BuiltInPlaceCategoriesCache(get(), get()) }
+    single { BuiltInCurrenciesCache(get(), get(), get()) }
+    single { BuiltInPlacesCache(get(), get(), get()) }
+    single { BuiltInCurrenciesPlacesCache(get(), get(), get()) }
+    single { BuiltInPlaceCategoriesCache(get(), get(), get()) }
 
     single { Bitstamp(get()) }
     single { Coinbase(get()) }
 
     single { DistanceUnitsLiveData(get(), get()) } // TODO remove
 
-    single { PlacesRepository(get(), get(), get(), get()) }
+    single { PlacesRepository(get(), get(), get(), get(), get()) }
     single { ExchangeRatesRepository(get(), get()) }
     single { UserRepository(get(), get(), get()) }
     single { LocationRepository(get(), get(named("default_location"))) }
     single { NotificationAreaRepository(get(), get()) }
     single { PlaceIconsRepository(get()) }
-    single { PlaceCategoriesRepository(get(), get(), get()) }
+    single { PlaceCategoriesRepository(get(), get(), get(), get()) }
     single { LogsRepository(get()) }
-    single { CurrenciesRepository(get(), get(), get()) }
-    single { CurrenciesPlacesRepository(get(), get(), get()) }
+    single { CurrenciesRepository(get(), get(), get(), get()) }
+    single { CurrenciesPlacesRepository(get(), get(), get(), get()) }
     single { SettingsRepository(get()) }
     single { PreferencesRepository(get()) }
 
     viewModel { EditPlaceViewModel(get()) }
     viewModel { ExchangeRatesViewModel(get()) }
-    viewModel { MapViewModel(get(), get(), get() ,get(), get()) }
+    viewModel { MapViewModel(get(), get(), get(), get(), get()) }
     viewModel { NotificationAreaViewModel(get(), get(), get(named("default_location"))) }
     viewModel { PlacesSearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { PlacesSearchResultViewModel() }
@@ -135,6 +141,7 @@ val appModule = module {
     viewModel { LauncherViewModel(get()) }
     viewModel { PermissionsViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { LogsViewModel(get()) }
 }
 
 val apiModule = module {
@@ -165,6 +172,7 @@ val apiModule = module {
     }
 }
 
+@ExperimentalTime
 val mockApiModule = module {
     single<CoinsApi> {
         val retrofit = Retrofit.Builder()
@@ -182,6 +190,6 @@ val mockApiModule = module {
 
         val delegate = mockRetrofit.create(CoinsApi::class.java)
 
-        MockCoinsApi(delegate, get(), get(), get(), get())
+        MockCoinsApi(delegate, get(), get(), get(), get(), get())
     }
 }

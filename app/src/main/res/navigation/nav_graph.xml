@@ -111,7 +111,15 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.bubelov.coins.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment">
+        <action
+            android:id="@+id/action_settingsFragment_to_logsFragment"
+            app:destination="@id/logsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
 
     <fragment
         android:id="@+id/authFragment"
@@ -195,5 +203,10 @@
             app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/nav_graph" />
     </fragment>
+
+    <fragment
+        android:id="@+id/logsFragment"
+        android:name="com.bubelov.coins.logs.LogsFragment"
+        android:label="LogsFragment" />
 
 </navigation>

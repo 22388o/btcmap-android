@@ -9,16 +9,22 @@ import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
 import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
 import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
+import com.bubelov.coins.repository.synclogs.LogsRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import retrofit2.mock.BehaviorDelegate
 import java.util.*
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class MockCoinsApi(
     private val delegate: BehaviorDelegate<CoinsApi>,
     currenciesCache: BuiltInCurrenciesCache,
     placesCache: BuiltInPlacesCache,
     currenciesPlacesCache: BuiltInCurrenciesPlacesCache,
-    placeCategoriesCache: BuiltInPlaceCategoriesCache
+    placeCategoriesCache: BuiltInPlaceCategoriesCache,
+    logsRepository: LogsRepository
 ) : CoinsApi {
     private val currencies = mutableListOf<Currency>()
     private val places = mutableListOf<Place>()
@@ -41,10 +47,13 @@ class MockCoinsApi(
     private val users = mutableListOf(user1)
 
     init {
-        currencies.addAll(currenciesCache.getCurrencies())
-        places.addAll(placesCache.getPlaces())
-        currenciesPlaces.addAll(currenciesPlacesCache.getCurrenciesPlaces())
-        placeCategories.addAll(placeCategoriesCache.getPlaceCategories())
+        GlobalScope.launch {
+            logsRepository.append("api", "Initializing mock API")
+            currencies.addAll(currenciesCache.getCurrencies())
+            places.addAll(placesCache.getPlaces())
+            currenciesPlaces.addAll(currenciesPlacesCache.getCurrenciesPlaces())
+            placeCategories.addAll(placeCategoriesCache.getPlaceCategories())
+        }
     }
 
     override suspend fun getToken(authorization: String): TokenResponse {
