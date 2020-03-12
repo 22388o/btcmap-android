@@ -1,12 +1,13 @@
 package com.bubelov.coins.settings
 
+import android.content.res.Resources
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bubelov.coins.data.LogEntry
 import com.bubelov.coins.emptyPlace
+import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.sync.DatabaseSync
-import com.bubelov.coins.util.DistanceUnitsLiveData
 import com.bubelov.coins.util.PlaceNotificationManager
 import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.verify
@@ -34,11 +35,12 @@ class SettingsViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var distanceUnitsLiveData: DistanceUnitsLiveData
     @Mock private lateinit var databaseSync: DatabaseSync
     @Mock private lateinit var logsRepository: LogsRepository
     @Mock private lateinit var placesRepository: PlacesRepository
     @Mock private lateinit var notificationManager: PlaceNotificationManager
+    @Mock private lateinit var preferencesRepository: PreferencesRepository
+    @Mock private lateinit var resources: Resources
 
     private lateinit var model: SettingsViewModel
 
@@ -48,10 +50,11 @@ class SettingsViewModelTest {
 
         model = SettingsViewModel(
             placesRepository,
-            distanceUnitsLiveData,
             databaseSync,
             logsRepository,
-            notificationManager
+            notificationManager,
+            preferencesRepository,
+            resources
         )
     }
 

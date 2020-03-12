@@ -3,7 +3,6 @@
 <resources>
     <string name="pref_currency_key" translatable="false">pref_currency</string>
     <string name="pref_currency_btc" translatable="false">BTC</string>
-    <string name="pref_distance_units_key" translatable="false">pref_distance_units</string>
     <string name="pref_distance_units_automatic" translatable="false">AUTOMATIC</string>
     <string name="pref_sync_database_key" translatable="false">pref_sync_database</string>
     <string name="pref_show_sync_log_key" translatable="false">pref_show_sync_log</string>

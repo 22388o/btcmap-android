@@ -1,6 +1,7 @@
 package com.bubelov.coins.map
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.place.PlacesRepository
@@ -56,7 +57,7 @@ class MapViewModel(
         selectedPlace = placesRepository.find(id)
     }
 
-    fun onAddPlaceClick(): AddPlaceClickResult {
+    suspend fun onAddPlaceClick(): AddPlaceClickResult {
         return if (userRepository.getToken().isNotBlank()) {
             AddPlaceClickResult.ALLOWED
         } else {
@@ -65,7 +66,7 @@ class MapViewModel(
         }
     }
 
-    fun onEditPlaceClick(): EditPlaceClickResult {
+    suspend fun onEditPlaceClick(): EditPlaceClickResult {
         return if (userRepository.getToken().isNotBlank()) {
             EditPlaceClickResult.ALLOWED
         } else {
@@ -74,7 +75,7 @@ class MapViewModel(
         }
     }
 
-    fun onDrawerHeaderClick(): DrawerHeaderClickResult {
+    suspend fun onDrawerHeaderClick(): DrawerHeaderClickResult {
         return if (userRepository.getToken().isNotBlank()) {
             DrawerHeaderClickResult.SHOW_USER_PROFILE
         } else {

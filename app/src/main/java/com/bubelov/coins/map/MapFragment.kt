@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -100,7 +101,9 @@ class MapFragment :
         }
 
         editPlaceFab.setOnClickListener {
-            model.onEditPlaceClick()
+            lifecycleScope.launchWhenResumed {
+                model.onEditPlaceClick()
+            }
         }
 
         toolbar.apply {
@@ -145,7 +148,9 @@ class MapFragment :
 
         drawerLayout.addDrawerListener(drawerToggle)
 
-        updateDrawerHeader()
+        lifecycleScope.launchWhenResumed {
+            updateDrawerHeader()
+        }
 
         placeDetails.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -179,7 +184,9 @@ class MapFragment :
         })
 
         authResultModel.authorized.observe(viewLifecycleOwner, Observer {
-            updateDrawerHeader()
+            runBlocking {
+                updateDrawerHeader()
+            }
 
             when (model.postAuthAction) {
                 PostAuthAction.ADD_PLACE -> {
@@ -247,7 +254,11 @@ class MapFragment :
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_add -> model.onAddPlaceClick()
+            R.id.action_add -> {
+                lifecycleScope.launchWhenResumed {
+                    model.onAddPlaceClick()
+                }
+            }
 
             R.id.action_search -> {
                 lifecycleScope.launch {
@@ -392,7 +403,7 @@ class MapFragment :
         }
     }
 
-    private fun updateDrawerHeader() {
+    private suspend fun updateDrawerHeader() {
         val user = model.userRepository.getUser()
 
         if (user != null) {
@@ -416,8 +427,10 @@ class MapFragment :
         }
 
         drawerHeader.setOnClickListener {
-            drawerLayout.closeDrawer(navigationView)
-            model.onDrawerHeaderClick()
+            lifecycleScope.launchWhenResumed {
+                drawerLayout.closeDrawer(navigationView)
+                model.onDrawerHeaderClick()
+            }
         }
     }
 

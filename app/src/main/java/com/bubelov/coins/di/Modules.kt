@@ -2,7 +2,6 @@ package com.bubelov.coins.di
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.preference.PreferenceManager
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.Database
 import com.bubelov.coins.api.coins.CoinsApi
@@ -65,7 +64,6 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 @ExperimentalCoroutinesApi
 val appModule = module {
-    single { PreferenceManager.getDefaultSharedPreferences(get()) } // TODO remove
 
     single { Database(get()) }
 
@@ -110,8 +108,6 @@ val appModule = module {
 
     single { Bitstamp(get()) }
     single { Coinbase(get()) }
-
-    single { DistanceUnitsLiveData(get(), get()) } // TODO remove
 
     single { PlacesRepository(get(), get(), get(), get(), get()) }
     single { ExchangeRatesRepository(get(), get()) }

@@ -1,34 +1,43 @@
 package com.bubelov.coins.repository.user
 
-import android.content.SharedPreferences
 import android.util.Base64
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreateUserArgs
 import com.bubelov.coins.model.User
+import com.bubelov.coins.repository.PreferencesRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
+@ExperimentalCoroutinesApi
 class UserRepository(
     private val api: CoinsApi,
-    private val preferences: SharedPreferences,
+    private val preferencesRepository: PreferencesRepository,
     private val gson: Gson
 ) {
 
-    fun getUser(): User? {
-        return gson.fromJson(preferences.getString(USER_KEY, null), User::class.java)
+    suspend fun getUser(): User? {
+        return gson.fromJson(preferencesRepository.get(USER_KEY).first(), User::class.java)
     }
 
-    private fun setUser(user: User) {
-        preferences.edit().putString(USER_KEY, gson.toJson(user)).apply()
+    private suspend fun setUser(user: User) {
+        preferencesRepository.put(
+            key = USER_KEY,
+            value = gson.toJson(user)
+        )
     }
 
-    fun getToken(): String {
-        return preferences.getString(TOKEN_KEY, null) ?: ""
+    suspend fun getToken(): String {
+        return preferencesRepository.get(TOKEN_KEY).first()
     }
 
-    private fun setToken(token: String) {
-        preferences.edit().putString(TOKEN_KEY, token).apply()
+    private suspend fun setToken(token: String) {
+        preferencesRepository.put(
+            key = TOKEN_KEY,
+            value = token
+        )
     }
 
     suspend fun signIn(email: String, password: String) {
@@ -60,8 +69,9 @@ class UserRepository(
         }
     }
 
-    fun clear() {
-        preferences.edit().remove(USER_KEY).remove(TOKEN_KEY).apply()
+    suspend fun clear() {
+        preferencesRepository.put(USER_KEY, "") // TODO remove
+        preferencesRepository.put(TOKEN_KEY, "") // TODO remove
     }
 
     private fun getBasicAuthHeader(email: String, password: String): String {

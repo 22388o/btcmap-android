@@ -2,6 +2,7 @@ package com.bubelov.coins.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.sync.DatabaseSync
@@ -11,19 +12,29 @@ import kotlinx.coroutines.flow.first
 import org.joda.time.DateTime
 import kotlin.time.ExperimentalTime
 
+@ExperimentalCoroutinesApi
 @ExperimentalTime
 class SettingsViewModel(
     private val placesRepository: PlacesRepository,
-    distanceUnitsLiveData: DistanceUnitsLiveData,
     private val databaseSync: DatabaseSync,
     private val logsRepository: LogsRepository,
-    private val placeNotificationsManager: PlaceNotificationManager
+    private val placeNotificationsManager: PlaceNotificationManager,
+    private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
-
-    val distanceUnits = distanceUnitsLiveData
 
     private val _syncLogs = LiveEvent<List<String>>()
     val syncLogs = _syncLogs.toSingleEvent()
+
+    fun getDistanceUnits() = preferencesRepository.get(
+        key = PreferencesRepository.DISTANCE_UNITS_KEY
+    )
+
+    suspend fun setDistanceUnits(value: String) {
+        preferencesRepository.put(
+            key = PreferencesRepository.DISTANCE_UNITS_KEY,
+            value = value
+        )
+    }
 
     suspend fun syncDatabase() = databaseSync.sync()
 

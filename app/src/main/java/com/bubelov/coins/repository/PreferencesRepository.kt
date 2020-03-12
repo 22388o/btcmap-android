@@ -6,7 +6,6 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -34,5 +33,6 @@ class PreferencesRepository(
     companion object {
         const val PERMISSIONS_EXPLAINED_KEY = "permissions_explained"
         const val NOTIFICATION_AREA_KEY = "notification_area"
+        const val DISTANCE_UNITS_KEY = "distance_units"
     }
 }

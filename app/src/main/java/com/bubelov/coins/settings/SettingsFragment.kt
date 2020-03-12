@@ -1,6 +1,5 @@
 package com.bubelov.coins.settings
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
@@ -11,10 +10,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.time.ExperimentalTime
 
+@ExperimentalCoroutinesApi
 @ExperimentalTime
 class SettingsFragment : Fragment() {
 
@@ -32,26 +35,32 @@ class SettingsFragment : Fragment() {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         distanceUnitsButton.setOnClickListener {
-            val labels = resources.getStringArray(R.array.distance_units)
-            val values = resources.getStringArray(R.array.distance_units_values)
+            lifecycleScope.launchWhenResumed {
+                val labels = resources.getStringArray(R.array.distance_units)
+                val values = resources.getStringArray(R.array.distance_units_values)
 
-            val selectedUnits = model.distanceUnits.value ?: return@setOnClickListener
-            val selectedValueIndex = values.indexOf(selectedUnits)
+                val selectedUnits = model.getDistanceUnits().first()
+                val selectedValueIndex = values.indexOf(selectedUnits)
 
-            AlertDialog.Builder(requireContext())
-                .setTitle(R.string.pref_distance_units)
-                .setSingleChoiceItems(labels, selectedValueIndex) { dialog, index ->
-                    model.distanceUnits.setValue(values[index])
-                    dialog.dismiss()
-                }
-                .show()
+                AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.pref_distance_units)
+                    .setSingleChoiceItems(labels, selectedValueIndex) { dialog, index ->
+                        lifecycleScope.launch {
+                            model.setDistanceUnits(values[index])
+                            dialog.dismiss()
+                        }
+                    }
+                    .show()
+            }
         }
 
-        model.distanceUnits.observe(viewLifecycleOwner, Observer {
-            val labels = resources.getStringArray(R.array.distance_units)
-            val values = resources.getStringArray(R.array.distance_units_values)
-            distanceUnits.text = labels[values.indexOf(it)]
-        })
+        lifecycleScope.launchWhenResumed {
+            model.getDistanceUnits().collect {
+                val labels = resources.getStringArray(R.array.distance_units)
+                val values = resources.getStringArray(R.array.distance_units_values)
+                distanceUnits.text = labels[values.indexOf(it)]
+            }
+        }
 
         syncDatabase.setOnClickListener {
             lifecycleScope.launch {

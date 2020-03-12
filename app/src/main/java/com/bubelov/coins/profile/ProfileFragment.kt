@@ -8,13 +8,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.CircleTransformation
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.ext.android.viewModel
 
+@ExperimentalCoroutinesApi
 class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private val model: ProfileViewModel by viewModel()
@@ -34,26 +37,28 @@ class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             setOnMenuItemClickListener(this@ProfileFragment)
         }
 
-        val user = model.getUser()
+        lifecycleScope.launchWhenResumed {
+            val user = model.getUser()
 
-        if (user == null) {
-            findNavController().popBackStack()
-            return
-        }
+            if (user == null) {
+                findNavController().popBackStack()
+                return@launchWhenResumed
+            }
 
-        if (!TextUtils.isEmpty(user.avatarUrl)) {
-            Picasso.get()
-                .load(user.avatarUrl)
-                .transform(CircleTransformation())
-                .into(avatar)
-        } else {
-            avatar.setImageResource(R.drawable.ic_no_avatar)
-        }
+            if (!TextUtils.isEmpty(user.avatarUrl)) {
+                Picasso.get()
+                    .load(user.avatarUrl)
+                    .transform(CircleTransformation())
+                    .into(avatar)
+            } else {
+                avatar.setImageResource(R.drawable.ic_no_avatar)
+            }
 
-        if (!TextUtils.isEmpty(user.firstName)) {
-            userName.text = String.format("%s %s", user.firstName, user.lastName)
-        } else {
-            userName.text = user.email
+            if (!TextUtils.isEmpty(user.firstName)) {
+                userName.text = String.format("%s %s", user.firstName, user.lastName)
+            } else {
+                userName.text = user.email
+            }
         }
     }
 
@@ -67,7 +72,9 @@ class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun signOut() {
-        model.signOut()
-        findNavController().popBackStack()
+        lifecycleScope.launchWhenResumed {
+            model.signOut()
+            findNavController().popBackStack()
+        }
     }
 }

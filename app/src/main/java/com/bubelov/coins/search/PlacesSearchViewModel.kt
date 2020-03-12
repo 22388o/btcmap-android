@@ -15,6 +15,7 @@ import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.DistanceUnits
 import com.bubelov.coins.util.DistanceUtils
 import com.bubelov.coins.util.distanceTo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import kotlin.time.ExperimentalTime
 
+@ExperimentalCoroutinesApi
 @ExperimentalTime
 class PlacesSearchViewModel(
     private val placesRepository: PlacesRepository,
@@ -99,7 +101,7 @@ class PlacesSearchViewModel(
     }
 
     private suspend fun getDistanceUnits(): DistanceUnits {
-        val key = resources.getString(R.string.pref_distance_units_key)
+        val key = PreferencesRepository.DISTANCE_UNITS_KEY
         val value = preferencesRepository.get(key).first()
         val defaultValue = resources.getString(R.string.pref_distance_units_automatic)
 
