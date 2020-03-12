@@ -36,7 +36,6 @@ import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.rate.Bitstamp
 import com.bubelov.coins.repository.rate.Coinbase
 import com.bubelov.coins.repository.rate.ExchangeRatesRepository
-import com.bubelov.coins.repository.settings.SettingsRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.search.PlacesSearchResultViewModel
@@ -124,7 +123,6 @@ val appModule = module {
     single { LogsRepository(get()) }
     single { CurrenciesRepository(get(), get(), get(), get()) }
     single { CurrenciesPlacesRepository(get(), get(), get(), get()) }
-    single { SettingsRepository(get()) }
     single { PreferencesRepository(get()) }
 
     viewModel { EditPlaceViewModel(get()) }

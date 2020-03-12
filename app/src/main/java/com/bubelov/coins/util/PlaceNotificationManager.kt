@@ -11,9 +11,11 @@ import com.bubelov.coins.data.Place
 import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlin.time.ExperimentalTime
 
+@ExperimentalCoroutinesApi
 @ExperimentalTime
 class PlaceNotificationManager(
     private val context: Context,

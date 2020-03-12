@@ -5,6 +5,7 @@ import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.google.gson.Gson
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -15,6 +16,7 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 class NotificationAreaRepositoryTest {
 
     @Mock private lateinit var preferencesRepository: PreferencesRepository
@@ -46,7 +48,7 @@ class NotificationAreaRepositoryTest {
         repository.setNotificationArea(area)
 
         verify(preferencesRepository).put(
-            key = NotificationAreaRepository.NOTIFICATION_AREA_KEY,
+            key = PreferencesRepository.NOTIFICATION_AREA_KEY,
             value = Gson().toJson(area)
         )
     }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.fragment_permissions.*
@@ -40,8 +41,10 @@ class PermissionsFragment : Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        model.setPermissionsExplained(true)
-        findNavController().navigate(R.id.action_permissionsFragment_to_mapFragment)
+        lifecycleScope.launchWhenStarted {
+            model.setPermissionsExplained(true)
+            findNavController().navigate(R.id.action_permissionsFragment_to_mapFragment)
+        }
     }
 
     companion object {

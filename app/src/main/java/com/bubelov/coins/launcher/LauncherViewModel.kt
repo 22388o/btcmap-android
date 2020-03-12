@@ -1,19 +1,21 @@
 package com.bubelov.coins.launcher
 
 import androidx.lifecycle.ViewModel
-import com.bubelov.coins.repository.settings.SettingsRepository
+import com.bubelov.coins.repository.PreferencesRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
 
+@ExperimentalCoroutinesApi
 class LauncherViewModel(
-    private val settingsRepository: SettingsRepository
+    private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    fun getPermissionsExplained() = settingsRepository.getBoolean(
-        key = SettingsRepository.PERMISSIONS_EXPLAINED_KEY,
-        defaultValue = false
-    )
+    fun getPermissionsExplained() = preferencesRepository.get(
+        key = PreferencesRepository.PERMISSIONS_EXPLAINED_KEY
+    ).map { it.toBoolean() }
 
-    fun setPermissionsExplained(value: Boolean) = settingsRepository.setBoolean(
-        key = SettingsRepository.PERMISSIONS_EXPLAINED_KEY,
-        value = value
+    suspend fun setPermissionsExplained(value: Boolean) = preferencesRepository.put(
+        key = PreferencesRepository.PERMISSIONS_EXPLAINED_KEY,
+        value = value.toString()
     )
 }

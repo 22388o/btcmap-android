@@ -7,6 +7,7 @@ import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -15,6 +16,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 class NotificationAreaViewModelTest {
 
     @Mock private lateinit var notificationAreaRepository: NotificationAreaRepository

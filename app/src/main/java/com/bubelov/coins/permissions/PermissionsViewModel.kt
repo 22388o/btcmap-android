@@ -1,14 +1,16 @@
 package com.bubelov.coins.permissions
 
 import androidx.lifecycle.ViewModel
-import com.bubelov.coins.repository.settings.SettingsRepository
+import com.bubelov.coins.repository.PreferencesRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class PermissionsViewModel(
-    private val settingsRepository: SettingsRepository
+    private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    fun setPermissionsExplained(value: Boolean) = settingsRepository.setBoolean(
-        key = SettingsRepository.PERMISSIONS_EXPLAINED_KEY,
-        value = value
+    suspend fun setPermissionsExplained(value: Boolean) = preferencesRepository.put(
+        key = PreferencesRepository.PERMISSIONS_EXPLAINED_KEY,
+        value = value.toString()
     )
 }

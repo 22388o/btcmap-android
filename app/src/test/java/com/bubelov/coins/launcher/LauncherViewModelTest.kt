@@ -1,45 +1,48 @@
 package com.bubelov.coins.launcher
 
-import com.bubelov.coins.repository.settings.SettingsRepository
+import com.bubelov.coins.repository.PreferencesRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 class LauncherViewModelTest {
 
-    @Mock private lateinit var settingsRepository: SettingsRepository
+    @Mock
+    private lateinit var preferencesRepository: PreferencesRepository
 
     private lateinit var model: LauncherViewModel
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        model = LauncherViewModel(settingsRepository)
+        model = LauncherViewModel(preferencesRepository)
     }
 
     @Test
-    fun getPermissionsExplained() {
+    fun getPermissionsExplained() = runBlocking {
         model.getPermissionsExplained()
 
-        verify(settingsRepository).getBoolean(
-            key = SettingsRepository.PERMISSIONS_EXPLAINED_KEY,
-            defaultValue = false
+        verify(preferencesRepository).get(
+            key = PreferencesRepository.PERMISSIONS_EXPLAINED_KEY
         )
 
-        verifyNoMoreInteractions(settingsRepository)
+        verifyNoMoreInteractions(preferencesRepository)
     }
 
     @Test
-    fun setPermissionsExplained() {
+    fun setPermissionsExplained() = runBlocking {
         val explained = true
         model.setPermissionsExplained(explained)
 
-        verify(settingsRepository).setBoolean(
-            key = SettingsRepository.PERMISSIONS_EXPLAINED_KEY,
-            value = explained
+        verify(preferencesRepository).put(
+            key = PreferencesRepository.PERMISSIONS_EXPLAINED_KEY,
+            value = explained.toString()
         )
     }
 }

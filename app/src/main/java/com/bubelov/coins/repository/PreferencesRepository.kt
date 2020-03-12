@@ -4,10 +4,13 @@ import com.bubelov.coins.data.Preference
 import com.bubelov.coins.data.PreferenceQueries
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
+@ExperimentalCoroutinesApi
 class PreferencesRepository(
     private val queries: PreferenceQueries
 ) {
@@ -27,4 +30,9 @@ class PreferencesRepository(
     fun getAll() = queries.selectAll().asFlow().map { it.executeAsList() }
 
     fun getCount() = queries.selectCount().asFlow().map { it.executeAsOne() }
+
+    companion object {
+        const val PERMISSIONS_EXPLAINED_KEY = "permissions_explained"
+        const val NOTIFICATION_AREA_KEY = "notification_area"
+    }
 }

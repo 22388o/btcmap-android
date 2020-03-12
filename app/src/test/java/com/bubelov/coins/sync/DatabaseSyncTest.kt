@@ -12,6 +12,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
 import org.junit.Assert.assertFalse
@@ -22,6 +23,7 @@ import org.mockito.MockitoAnnotations
 import java.util.*
 import kotlin.time.ExperimentalTime
 
+@ExperimentalCoroutinesApi
 @ExperimentalTime
 class DatabaseSyncTest {
 

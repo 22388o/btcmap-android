@@ -14,6 +14,7 @@ import com.bubelov.coins.R
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.util.OnSeekBarChangeAdapter
 import kotlinx.android.synthetic.main.fragment_notification_area.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.osmdroid.util.GeoPoint
@@ -21,6 +22,7 @@ import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
 
+@ExperimentalCoroutinesApi
 class NotificationAreaFragment : Fragment() {
 
     private val model: NotificationAreaViewModel by viewModel()
@@ -104,7 +106,7 @@ class NotificationAreaFragment : Fragment() {
         val areaCenter = GeoPoint(area.latitude, area.longitude)
 
         val mapController = map.controller
-        mapController.setZoom(model.getZoomLevel(area.radius))
+        mapController.setZoom(model.getZoomLevel(area.radius).toDouble())
         mapController.setCenter(areaCenter)
     }
 
