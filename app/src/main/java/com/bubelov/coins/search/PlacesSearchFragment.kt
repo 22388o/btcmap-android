@@ -2,9 +2,11 @@ package com.bubelov.coins.search
 
 import androidx.lifecycle.Observer
 import android.os.Bundle
+import android.text.Editable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +17,12 @@ import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.*
 import kotlinx.android.synthetic.main.fragment_places_search.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.time.ExperimentalTime
 
+@ExperimentalCoroutinesApi
 @ExperimentalTime
 class PlacesSearchFragment : Fragment() {
 
@@ -99,5 +103,11 @@ class PlacesSearchFragment : Fragment() {
         }
 
         super.onPause()
+    }
+
+    abstract class TextWatcherAdapter : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        override fun afterTextChanged(s: Editable) {}
     }
 }

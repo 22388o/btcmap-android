@@ -14,7 +14,6 @@ import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.DistanceUnits
 import com.bubelov.coins.util.DistanceUtils
-import com.bubelov.coins.util.distanceTo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -116,6 +115,20 @@ class PlacesSearchViewModel(
         return when (this) {
             DistanceUnits.KILOMETERS -> resources.getString(R.string.kilometers_short)
             DistanceUnits.MILES -> resources.getString(R.string.miles_short)
+        }
+    }
+
+    private fun Location.distanceTo(anotherLocation: Location, units: DistanceUnits): Double {
+        val distanceInKilometers = DistanceUtils.getDistance(
+            latitude,
+            longitude,
+            anotherLocation.latitude,
+            anotherLocation.longitude
+        ) / 1000.0
+
+        return when (units) {
+            DistanceUnits.KILOMETERS -> distanceInKilometers
+            DistanceUnits.MILES -> DistanceUtils.toMiles(distanceInKilometers)
         }
     }
 

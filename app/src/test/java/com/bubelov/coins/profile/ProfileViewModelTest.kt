@@ -5,6 +5,8 @@ import com.bubelov.coins.repository.user.UserRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
 import org.junit.Before
 import org.junit.Test
@@ -12,7 +14,9 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.util.*
 
+@ExperimentalCoroutinesApi
 class ProfileViewModelTest {
+
     @Mock private lateinit var userRepository: UserRepository
 
     private lateinit var model: ProfileViewModel
@@ -24,7 +28,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun getUser() {
+    fun getUser() = runBlocking {
         val user = User(
             id = UUID.randomUUID().toString(),
             email = "test@test.test",
@@ -45,7 +49,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun signOut() {
+    fun signOut() = runBlocking {
         model.signOut()
         verify(userRepository).clear()
         verifyNoMoreInteractions(userRepository)

@@ -8,7 +8,7 @@ import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.sync.DatabaseSync
-import com.bubelov.coins.util.PlaceNotificationManager
+import com.bubelov.coins.notifications.PlaceNotificationManager
 import com.bubelov.coins.util.blockingObserve
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
@@ -53,8 +53,7 @@ class SettingsViewModelTest {
             databaseSync,
             logsRepository,
             notificationManager,
-            preferencesRepository,
-            resources
+            preferencesRepository
         )
     }
 

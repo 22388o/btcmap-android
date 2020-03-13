@@ -6,7 +6,7 @@ import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
-import com.bubelov.coins.util.PlaceNotificationManager
+import com.bubelov.coins.notifications.PlaceNotificationManager
 import com.bubelov.coins.util.TableSyncResult
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify

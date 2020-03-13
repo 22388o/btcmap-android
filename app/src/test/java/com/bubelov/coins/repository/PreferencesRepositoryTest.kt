@@ -4,6 +4,7 @@ import com.bubelov.coins.data.Preference
 import com.bubelov.coins.data.PreferenceQueries
 import com.nhaarman.mockitokotlin2.*
 import com.squareup.sqldelight.Query
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -11,6 +12,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 class PreferencesRepositoryTest {
 
     @Mock private lateinit var queries: PreferenceQueries

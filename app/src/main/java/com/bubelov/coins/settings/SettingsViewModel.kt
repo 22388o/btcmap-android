@@ -2,6 +2,7 @@ package com.bubelov.coins.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bubelov.coins.notifications.PlaceNotificationManager
 import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository

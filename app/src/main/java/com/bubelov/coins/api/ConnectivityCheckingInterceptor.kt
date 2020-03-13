@@ -1,4 +1,4 @@
-package com.bubelov.coins.util
+package com.bubelov.coins.api
 
 import android.net.ConnectivityManager
 import android.net.Network

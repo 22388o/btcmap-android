@@ -94,4 +94,6 @@ class LocationLiveData(
         val lastGpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         return lastGpsLocation?.toLocation() ?: lastNetworkLocation?.toLocation()
     }
+
+    private fun android.location.Location.toLocation() = Location(latitude, longitude)
 }

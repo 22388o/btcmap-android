@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.model.NotificationArea
-import com.bubelov.coins.util.OnSeekBarChangeAdapter
 import kotlinx.android.synthetic.main.fragment_notification_area.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -150,6 +149,20 @@ class NotificationAreaFragment : Fragment() {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 //            val circle = areaCircle ?: return
 //            circle.radius = progress.toDouble()
+        }
+    }
+
+    abstract class OnSeekBarChangeAdapter : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            // Nothing to do here
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar) {
+            // Nothing to do here
+        }
+
+        override fun onStopTrackingTouch(seekBar: SeekBar) {
+            // Nothing to do here
         }
     }
 }

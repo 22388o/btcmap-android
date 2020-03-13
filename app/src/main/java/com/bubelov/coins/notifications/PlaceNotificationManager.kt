@@ -1,4 +1,4 @@
-package com.bubelov.coins.util
+package com.bubelov.coins.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,6 +11,7 @@ import com.bubelov.coins.data.Place
 import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
+import com.bubelov.coins.util.DistanceUtils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlin.time.ExperimentalTime
@@ -41,7 +42,9 @@ class PlaceNotificationManager(
     }
 
     fun issueNotification(place: Place) {
-        val builder = NotificationCompat.Builder(context, NEW_PLACE_NOTIFICATIONS_CHANNEL)
+        val builder = NotificationCompat.Builder(context,
+                NEW_PLACE_NOTIFICATIONS_CHANNEL
+            )
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(context.getString(R.string.notification_new_place))
             .setContentText(place.name)

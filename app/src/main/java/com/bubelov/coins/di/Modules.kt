@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.Database
+import com.bubelov.coins.api.ConnectivityCheckingInterceptor
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.auth.AuthResultViewModel
@@ -15,6 +16,7 @@ import com.bubelov.coins.logs.LogsViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.notificationarea.NotificationAreaViewModel
+import com.bubelov.coins.notifications.PlaceNotificationManager
 import com.bubelov.coins.permissions.PermissionsViewModel
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import com.bubelov.coins.placedetails.PlaceDetailsViewModel
@@ -96,7 +98,12 @@ val appModule = module {
         Location(40.7141667, -74.0063889)
     }
 
-    single { PlaceNotificationManager(get(), get()) }
+    single {
+        PlaceNotificationManager(
+            get(),
+            get()
+        )
+    }
 
     single { DatabaseSync(get(), get(), get(), get(), get(), get()) }
     single { DatabaseSyncScheduler() }
@@ -151,7 +158,11 @@ val apiModule = module {
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor(ConnectivityCheckingInterceptor(connectivityManager))
+            .addInterceptor(
+                ConnectivityCheckingInterceptor(
+                    connectivityManager
+                )
+            )
             .addInterceptor(logging)
             .build()
 
