@@ -124,7 +124,7 @@ class PlacesRepository(
                 message = "Initializing built-in places cache"
             )
 
-            val places = builtInCache.getPlaces()
+            val places = builtInCache.places
 
             val insertDuration = measureTime {
                 db.transaction {

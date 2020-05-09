@@ -5,8 +5,6 @@ import com.bubelov.coins.data.Currency
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.InputStreamReader
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -15,9 +13,14 @@ import kotlin.time.measureTime
 class BuiltInCurrenciesCache(
     private val context: Context,
     private val gson: Gson,
-    private val logsRepository: LogsRepository
+    private val log: LogsRepository
 ) {
-    fun getCurrencies(): List<Currency> {
+
+    val currencies by lazy {
+        parseCurrencies()
+    }
+
+    private fun parseCurrencies(): List<Currency> {
         val result: List<Currency>
         val fileName = "currencies.json"
 
@@ -27,12 +30,10 @@ class BuiltInCurrenciesCache(
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }
 
-        GlobalScope.launch {
-            logsRepository.append(
-                tag = "cache",
-                message = "Parsed $fileName in ${duration.inMilliseconds.toInt()} ms"
-            )
-        }
+        log.appendBlocking(
+            tag = "cache",
+            message = "Parsed $fileName in ${duration.inMilliseconds.toInt()} ms"
+        )
 
         return result
     }

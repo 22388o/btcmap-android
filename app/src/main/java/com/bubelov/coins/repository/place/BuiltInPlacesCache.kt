@@ -5,8 +5,6 @@ import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.InputStreamReader
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -15,10 +13,14 @@ import kotlin.time.measureTime
 class BuiltInPlacesCache(
     private val context: Context,
     private val gson: Gson,
-    private val logsRepository: LogsRepository
+    private val log: LogsRepository
 ) {
 
-    fun getPlaces(): List<Place> {
+    val places by lazy {
+        loadPlaces()
+    }
+
+    private fun loadPlaces(): List<Place> {
         val result: List<Place>
         val fileName = "places.json"
 
@@ -28,12 +30,10 @@ class BuiltInPlacesCache(
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }
 
-        GlobalScope.launch {
-            logsRepository.append(
-                tag = "cache",
-                message = "Parsed $fileName in ${duration.inMilliseconds.toInt()} ms"
-            )
-        }
+        log.appendBlocking(
+            tag = "cache",
+            message = "Parsed $fileName in ${duration.inMilliseconds.toInt()} ms"
+        )
 
         return result
     }

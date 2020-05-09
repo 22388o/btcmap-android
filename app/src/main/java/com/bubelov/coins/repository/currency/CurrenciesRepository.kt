@@ -71,7 +71,7 @@ class CurrenciesRepository(
                     message = "Initializing built-in currencies cache"
                 )
 
-                val currencies = builtInCache.getCurrencies()
+                val currencies = builtInCache.currencies
 
                 val insertDuration = measureTime {
                     db.transaction {

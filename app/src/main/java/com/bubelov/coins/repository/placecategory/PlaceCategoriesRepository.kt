@@ -65,7 +65,7 @@ class PlaceCategoriesRepository(
                     message = "Initializing built-in place categories cache"
                 )
 
-                val placeCategories = builtInCache.getPlaceCategories()
+                val placeCategories = builtInCache.placeCategories
 
                 val insertDuration = measureTime {
                     db.transaction {

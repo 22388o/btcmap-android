@@ -49,10 +49,10 @@ class MockCoinsApi(
     init {
         GlobalScope.launch {
             logsRepository.append("api", "Initializing mock API")
-            currencies.addAll(currenciesCache.getCurrencies())
-            places.addAll(placesCache.getPlaces())
-            currenciesPlaces.addAll(currenciesPlacesCache.getCurrenciesPlaces())
-            placeCategories.addAll(placeCategoriesCache.getPlaceCategories())
+            currencies.addAll(currenciesCache.currencies)
+            places.addAll(placesCache.places)
+            currenciesPlaces.addAll(currenciesPlacesCache.currenciesPlaces)
+            placeCategories.addAll(placeCategoriesCache.placeCategories)
         }
     }
 
