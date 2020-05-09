@@ -4,12 +4,10 @@ import com.bubelov.coins.data.Preference
 import com.bubelov.coins.data.PreferenceQueries
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-@ExperimentalCoroutinesApi
 class PreferencesRepository(
     private val queries: PreferenceQueries
 ) {

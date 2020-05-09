@@ -2,7 +2,7 @@ ext.versions = [
         android_plugin   : '3.6.2',
         safe_args_plugin : '1.0.0',
         kotlin           : '1.3.70',
-        coroutines       : '1.3.4',
+        coroutines       : '1.3.6',
         koin             : "2.1.3",
         lifecycle        : '2.2.0',
         navigation       : '2.2.2',

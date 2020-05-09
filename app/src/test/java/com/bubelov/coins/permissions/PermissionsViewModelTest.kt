@@ -2,14 +2,12 @@ package com.bubelov.coins.permissions
 
 import com.bubelov.coins.repository.PreferencesRepository
 import com.nhaarman.mockitokotlin2.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-@ExperimentalCoroutinesApi
 class PermissionsViewModelTest {
 
     @Mock private lateinit var preferencesRepository: PreferencesRepository

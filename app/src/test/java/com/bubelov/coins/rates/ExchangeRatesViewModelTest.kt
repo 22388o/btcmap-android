@@ -6,7 +6,6 @@ import com.bubelov.coins.repository.rate.ExchangeRatesRepository
 import com.bubelov.coins.repository.rate.ExchangeRatesSource
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
@@ -17,7 +16,6 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-@ExperimentalCoroutinesApi
 class ExchangeRatesViewModelTest {
 
     @Mock

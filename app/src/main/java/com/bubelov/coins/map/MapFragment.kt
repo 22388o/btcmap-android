@@ -28,7 +28,6 @@ import com.bubelov.coins.util.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -44,7 +43,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@ExperimentalCoroutinesApi
 class MapFragment :
     Fragment(),
     Toolbar.OnMenuItemClickListener {

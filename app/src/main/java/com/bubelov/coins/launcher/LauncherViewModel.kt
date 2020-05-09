@@ -2,10 +2,8 @@ package com.bubelov.coins.launcher
 
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.repository.PreferencesRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.map
 
-@ExperimentalCoroutinesApi
 class LauncherViewModel(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {

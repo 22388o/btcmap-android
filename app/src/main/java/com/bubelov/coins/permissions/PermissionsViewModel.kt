@@ -2,9 +2,7 @@ package com.bubelov.coins.permissions
 
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.repository.PreferencesRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 class PermissionsViewModel(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {

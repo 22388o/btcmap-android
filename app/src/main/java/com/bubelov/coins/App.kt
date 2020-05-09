@@ -7,7 +7,6 @@ import com.bubelov.coins.di.appModule
 import com.bubelov.coins.di.mockApiModule
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.sync.DatabaseSync
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -18,7 +17,6 @@ import org.koin.core.context.startKoin
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@ExperimentalCoroutinesApi
 class App : Application() {
 
     //private val databaseSyncScheduler: DatabaseSyncScheduler by inject()

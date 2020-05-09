@@ -10,14 +10,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.fragment_settings.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.time.ExperimentalTime
 
-@ExperimentalCoroutinesApi
 @ExperimentalTime
 class SettingsFragment : Fragment() {
 
@@ -55,7 +54,13 @@ class SettingsFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenResumed {
-            model.getDistanceUnits().collect {
+            model.getDistanceUnits().map {
+                if (it.isBlank()) {
+                    resources.getString(R.string.pref_distance_units_automatic)
+                } else {
+                    it
+                }
+            }.collect {
                 val labels = resources.getStringArray(R.array.distance_units)
                 val values = resources.getStringArray(R.array.distance_units_values)
                 distanceUnits.text = labels[values.indexOf(it)]

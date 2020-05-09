@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.first
 import org.joda.time.DateTime
 import kotlin.time.ExperimentalTime
 
-@ExperimentalCoroutinesApi
 @ExperimentalTime
 class SettingsViewModel(
     private val placesRepository: PlacesRepository,

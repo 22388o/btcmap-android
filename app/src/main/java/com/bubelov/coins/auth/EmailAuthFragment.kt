@@ -11,9 +11,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.fragment_email_auth.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 class EmailAuthFragment : Fragment() {
 
     override fun onCreateView(
@@ -30,7 +28,6 @@ class EmailAuthFragment : Fragment() {
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
     }
 
-    @ExperimentalCoroutinesApi
     private inner class TabsAdapter internal constructor(fragmentManager: FragmentManager) :
         FragmentPagerAdapter(fragmentManager) {
 

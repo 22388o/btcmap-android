@@ -5,7 +5,6 @@ import com.bubelov.coins.repository.user.UserRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
 import org.junit.Before
@@ -14,7 +13,6 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.util.*
 
-@ExperimentalCoroutinesApi
 class ProfileViewModelTest {
 
     @Mock private lateinit var userRepository: UserRepository

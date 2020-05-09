@@ -7,11 +7,9 @@ import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.PreferencesRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-@ExperimentalCoroutinesApi
 class UserRepository(
     private val api: CoinsApi,
     private val preferencesRepository: PreferencesRepository,

@@ -7,11 +7,9 @@ import com.bubelov.coins.model.Location
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlin.math.ln
 
-@ExperimentalCoroutinesApi
 class NotificationAreaViewModel(
     private val areaRepository: NotificationAreaRepository,
     private val placeIconsRepository: PlaceIconsRepository,

@@ -9,7 +9,6 @@ import com.bubelov.coins.repository.user.UserRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.take
@@ -21,7 +20,6 @@ import org.mockito.MockitoAnnotations
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@ExperimentalCoroutinesApi
 class MapViewModelTest {
 
     @Mock private lateinit var placesRepository: PlacesRepository

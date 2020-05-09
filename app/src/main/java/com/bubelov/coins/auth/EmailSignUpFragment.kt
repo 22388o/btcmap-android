@@ -16,13 +16,11 @@ import com.bubelov.coins.R
 import com.bubelov.coins.util.BasicTaskState
 import com.bubelov.coins.util.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_email_sign_up.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
-@ExperimentalCoroutinesApi
 class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
 
     private val model: AuthViewModel by viewModel()
