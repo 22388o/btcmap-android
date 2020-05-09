@@ -45,6 +45,20 @@ class PlacesRepository(
         return db.selectAll().asFlow().map { it.executeAsList() }
     }
 
+    fun get(
+        minLat: Double,
+        maxLat: Double,
+        minLon: Double,
+        maxLon: Double
+    ): Flow<List<Place>> {
+        return db.selectByBoundingBox(
+            minLat = minLat,
+            maxLat = maxLat,
+            minLon = minLon,
+            maxLon = maxLon
+        ).asFlow().map { it.executeAsList() }
+    }
+
     suspend fun sync() = withContext(Dispatchers.IO) {
         val syncStartDate = DateTime.now()
 

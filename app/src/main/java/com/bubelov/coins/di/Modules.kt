@@ -128,7 +128,7 @@ val appModule = module {
 
     viewModel { EditPlaceViewModel(get()) }
     viewModel { ExchangeRatesViewModel(get()) }
-    viewModel { MapViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MapViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { NotificationAreaViewModel(get(), get(), get(named("default_location"))) }
     viewModel { PlacesSearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { PlacesSearchResultViewModel() }

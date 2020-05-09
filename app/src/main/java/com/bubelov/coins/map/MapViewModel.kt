@@ -6,6 +6,7 @@ import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -17,7 +18,8 @@ class MapViewModel(
     val userRepository: UserRepository,
     locationRepository: LocationRepository,
     private val placeIconsRepository: PlaceIconsRepository,
-    private val placeCategoriesRepository: PlaceCategoriesRepository
+    private val placeCategoriesRepository: PlaceCategoriesRepository,
+    val log: LogsRepository
 ) : ViewModel() {
 
     val selectedPlaceFlow = flow {
@@ -33,13 +35,36 @@ class MapViewModel(
 
     val allPlaces = placesRepository.getAll()
 
+    fun getMarkers(
+        minLat: Double,
+        maxLat: Double,
+        minLon: Double,
+        maxLon: Double
+    ) = placesRepository.get(
+        minLat = minLat,
+        maxLat = maxLat,
+        minLon = minLon,
+        maxLon = maxLon
+    ).map { places ->
+        places.map {
+            PlaceMarker(
+                placeId = it.id,
+//                icon = placeIconsRepository.getMarker(
+//                    ""
+//                ),
+                latitude = it.latitude,
+                longitude = it.longitude
+            )
+        }
+    }
+
     val placeMarkers = allPlaces.map { places ->
         places.map {
             PlaceMarker(
                 placeId = it.id,
-                icon = placeIconsRepository.getMarker(
-                    placeCategoriesRepository.findById(it.categoryId)?.name ?: ""
-                ),
+//                icon = placeIconsRepository.getMarker(
+//                    ""
+//                ),
                 latitude = it.latitude,
                 longitude = it.longitude
             )

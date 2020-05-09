@@ -12,7 +12,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -23,16 +22,19 @@ import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -40,6 +42,8 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -48,6 +52,8 @@ class MapFragment :
     Toolbar.OnMenuItemClickListener {
 
     private val model: MapViewModel by viewModel()
+
+    private val log by lazy { model.log }
 
     private val placesSearchResultModel: PlacesSearchResultViewModel by sharedViewModel()
 
@@ -299,6 +305,8 @@ class MapFragment :
 
     @SuppressLint("MissingPermission")
     private fun initMap() {
+        log += "initMap()"
+
         if (view == null) {
             return
         }
@@ -318,7 +326,7 @@ class MapFragment :
         //initClustering(map)
 
 //        lifecycleScope.launch {
-            //model.onMapReady()
+        //model.onMapReady()
 
 //            model.selectedPlaceFlow.collect { place ->
 //                if (place != null && model.navigateToNextSelectedPlace) {
@@ -365,40 +373,53 @@ class MapFragment :
             mapController.setCenter(startPoint)
         }.launchIn(lifecycleScope)
 
-        lifecycleScope.launchWhenResumed {
-            val items = mutableListOf<OverlayItem>()
+        var showPlacesJob: Job? = null
 
-            model.placeMarkers.collect() {
-                it.forEach { place ->
-                    if (place.latitude > map.boundingBox.latNorth) {
-                        return@forEach
-                    }
+        map.addMapListener(object : MapListener {
+            override fun onScroll(event: ScrollEvent?): Boolean {
+                map.overlays.clear()
 
-                    if (place.latitude < map.boundingBox.latSouth) {
-                        return@forEach
-                    }
+                showPlacesJob?.cancel()
 
-                    if (place.longitude < map.boundingBox.lonWest) {
-                        return@forEach
-                    }
+                showPlacesJob = lifecycleScope.launch {
+                    delay(100)
 
-                    if (place.longitude > map.boundingBox.lonEast) {
-                        return@forEach
-                    }
+                    val items = mutableListOf<OverlayItem>()
 
-                    items += OverlayItem(
-                        "Title",
-                        "Description",
-                        GeoPoint(place.latitude, place.longitude)
-                    ).apply {
-                        setMarker(place.icon.toDrawable(resources))
+                    model.getMarkers(
+                        minLat = min(map.boundingBox.latNorth, map.boundingBox.latSouth),
+                        maxLat = max(map.boundingBox.latNorth, map.boundingBox.latSouth),
+                        minLon = min(map.boundingBox.lonEast, map.boundingBox.lonWest),
+                        maxLon = max(map.boundingBox.lonEast, map.boundingBox.lonWest)
+                    ).collect {
+                        log += "Loaded ${it.size} markers from cache"
+
+                        it.forEach { place ->
+                            items += OverlayItem(
+                                "Title",
+                                "Description",
+                                GeoPoint(place.latitude, place.longitude)
+                            ).apply {
+                                //setMarker(place.icon.toDrawable(resources))
+                            }
+                        }
+
+                        val overlay = ItemizedIconOverlay(requireContext(), items, null)
+
+                        if (isActive) {
+                            map.overlays.add(overlay)
+                            map.invalidate()
+                            log += "Added ${items.size} markers"
+                        }
                     }
                 }
 
-                val overlay = ItemizedIconOverlay(requireContext(), items, null)
-                map.overlays.add(overlay)
+                return false
             }
-        }
+
+            override fun onZoom(event: ZoomEvent?) = false
+        })
+
     }
 
     private suspend fun updateDrawerHeader() {
@@ -487,6 +508,10 @@ class MapFragment :
 //            return true
 //        }
 //    }
+
+    private operator fun LogsRepository.plusAssign(message: String) {
+        log.appendBlocking("MapFragment", message)
+    }
 
     companion object {
         private const val REQUEST_ACCESS_LOCATION = 10

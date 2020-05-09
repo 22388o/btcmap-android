@@ -30,7 +30,7 @@ class LogsAdapter : RecyclerView.Adapter<LogsAdapter.ViewHolder>() {
         val item = items[position]
 
         holder.itemView.apply {
-            meta.text = "${DateTimeFormat.shortDateTime()
+            meta.text = "${DateTimeFormat.longDateTime()
                 .print(DateTime.parse(item.datetime))} · ${item.tag}"
             message.text = item.message
         }
