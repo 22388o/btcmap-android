@@ -175,11 +175,13 @@ class MapFragment :
             }
         }
 
-//        model.userLocation.observe(viewLifecycleOwner, Observer {
-//            locationFab.setOnClickListener {
-//                model.onLocationButtonClick()
-//            }
-//        })
+        locationFab.setOnClickListener {
+            val location = model.location.value
+            val mapController = map.controller
+            mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+            val startPoint = GeoPoint(location.latitude, location.longitude)
+            mapController.setCenter(startPoint)
+        }
 
         placesSearchResultModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
             lifecycleScope.launch {
@@ -266,15 +268,11 @@ class MapFragment :
 
             R.id.action_search -> {
                 lifecycleScope.launch {
-                    val location = model.locationFlow.take(1).singleOrNull()
+                    val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
+                        model.location.value
+                    )
 
-                    if (location != null) {
-                        val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
-                            location
-                        )
-
-                        findNavController().navigate(action)
-                    }
+                    findNavController().navigate(action)
                 }
             }
 
@@ -357,21 +355,22 @@ class MapFragment :
 //            }
 //        })
 
-        model.locationFlow.onEach {
-            if (locationOverlay == null) {
-                locationOverlay =
-                    MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
-                        enableMyLocation()
-                        map.overlays += this
-                    }
+        lifecycleScope.launchWhenResumed {
+            model.location.collect {
+                if (locationOverlay == null) {
+                    locationOverlay =
+                        MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
+                            enableMyLocation()
+                            map.overlays += this
+                        }
+                }
+
+                val mapController = map.controller
+                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+                val startPoint = GeoPoint(it.latitude, it.longitude)
+                mapController.setCenter(startPoint)
             }
-
-            val mapController = map.controller
-            mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
-
-            val startPoint = GeoPoint(it.latitude, it.longitude)
-            mapController.setCenter(startPoint)
-        }.launchIn(lifecycleScope)
+        }
 
         var showPlacesJob: Job? = null
 

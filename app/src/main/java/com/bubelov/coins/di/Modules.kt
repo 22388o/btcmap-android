@@ -117,7 +117,7 @@ val appModule = module {
     single { PlacesRepository(get(), get(), get(), get(), get()) }
     single { ExchangeRatesRepository(get(), get()) }
     single { UserRepository(get(), get(), get()) }
-    single { LocationRepository(get(), get(named("default_location"))) }
+    single { LocationRepository(get(), get(named("default_location")), get()) }
     single { NotificationAreaRepository(get(), get()) }
     single { PlaceIconsRepository(get()) }
     single { PlaceCategoriesRepository(get(), get(), get(), get()) }

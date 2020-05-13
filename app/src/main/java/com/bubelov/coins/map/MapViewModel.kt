@@ -31,7 +31,7 @@ class MapViewModel(
 
     private var selectedPlace: Place? = null
 
-    val locationFlow = locationRepository.location
+    val location = locationRepository.location
 
     val allPlaces = placesRepository.getAll()
 
