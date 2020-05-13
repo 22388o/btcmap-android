@@ -5,6 +5,7 @@ import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
+import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
@@ -27,6 +28,7 @@ class MapViewModelTest {
     @Mock private lateinit var locationRepository: LocationRepository
     @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
     @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
+    @Mock private lateinit var logsRepository: LogsRepository
 
     private lateinit var model: MapViewModel
 
@@ -39,7 +41,8 @@ class MapViewModelTest {
             userRepository,
             locationRepository,
             placeIconsRepository,
-            placeCategoriesRepository
+            placeCategoriesRepository,
+            logsRepository
         )
     }
 

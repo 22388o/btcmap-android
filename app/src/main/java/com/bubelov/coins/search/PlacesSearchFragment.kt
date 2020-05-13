@@ -37,7 +37,7 @@ class PlacesSearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val args = PlacesSearchFragmentArgs.fromBundle(arguments!!)
+        val args = PlacesSearchFragmentArgs.fromBundle(requireArguments())
         model.setUp(args.location)
 
         toolbar.setNavigationOnClickListener { findNavController().popBackStack() }

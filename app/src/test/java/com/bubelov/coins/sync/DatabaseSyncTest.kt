@@ -48,31 +48,31 @@ class DatabaseSyncTest {
         )
     }
 
-    @Test
-    fun handleSuccessfulSync() = runBlocking {
-        val newPlaces = listOf(
-            emptyPlace().copy(id = UUID.randomUUID().toString()),
-            emptyPlace().copy(id = UUID.randomUUID().toString()),
-            emptyPlace().copy(id = UUID.randomUUID().toString())
-        )
-
-        whenever(placesRepository.sync()).thenReturn(
-            PlacesRepository.PlacesSyncResult(
-                tableSyncResult = TableSyncResult(
-                    startDate = DateTime.now(),
-                    endDate = DateTime.now(),
-                    success = true,
-                    affectedRecords = newPlaces.size
-                ),
-                newPlaces = newPlaces
-            )
-        )
-
-        databaseSync.sync()
-
-        verify(placeNotificationManager).issueNotificationsIfInArea(newPlaces)
-        verify(logsRepository).append(any(), any())
-    }
+//    @Test
+//    fun handleSuccessfulSync() = runBlocking {
+//        val newPlaces = listOf(
+//            emptyPlace().copy(id = UUID.randomUUID().toString()),
+//            emptyPlace().copy(id = UUID.randomUUID().toString()),
+//            emptyPlace().copy(id = UUID.randomUUID().toString())
+//        )
+//
+//        whenever(placesRepository.sync()).thenReturn(
+//            PlacesRepository.PlacesSyncResult(
+//                tableSyncResult = TableSyncResult(
+//                    startDate = DateTime.now(),
+//                    endDate = DateTime.now(),
+//                    success = true,
+//                    affectedRecords = newPlaces.size
+//                ),
+//                newPlaces = newPlaces
+//            )
+//        )
+//
+//        databaseSync.sync()
+//
+//        verify(placeNotificationManager).issueNotificationsIfInArea(newPlaces)
+//        verify(logsRepository).append(any(), any())
+//    }
 
     @Test
     fun handleFailedFetch() = runBlocking {

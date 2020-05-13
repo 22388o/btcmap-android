@@ -11,13 +11,15 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.bubelov.coins"
+        applicationId "com.coinmap"
 
         minSdkVersion 21
         targetSdkVersion 29
 
         versionCode 42
         versionName "3.0.0"
+
+        setProperty("archivesBaseName", "coin-map-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -37,10 +39,26 @@ android {
     packagingOptions {
         exclude 'META-INF/kotlinx-coroutines-core.kotlin_module'
     }
-}
 
-ext {
-    archivesBaseName = "coin-map-android"
+    signingConfigs {
+        release {
+            storeFile file(credentials.keystore_path)
+            storePassword credentials.keystore_password
+            keyAlias = credentials.keystore_key
+            keyPassword credentials.keystore_password
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            applicationIdSuffix ".dev"
+            debuggable true
+        }
+    }
 }
 
 dependencies {

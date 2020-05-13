@@ -15,7 +15,7 @@ class PickLocationFragment : Fragment() {
     private val resultModel: PickLocationResultViewModel by sharedViewModel()
 
     private val initialLocation by lazy {
-        PickLocationFragmentArgs.fromBundle(arguments!!).initialLocation
+        PickLocationFragmentArgs.fromBundle(requireArguments()).initialLocation
     }
 
 //    private var map: GoogleMap? = null

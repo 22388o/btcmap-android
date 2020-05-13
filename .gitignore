@@ -1,3 +1,5 @@
+.env.gradle
+
 # built application files
 *.apk
 *.ap_

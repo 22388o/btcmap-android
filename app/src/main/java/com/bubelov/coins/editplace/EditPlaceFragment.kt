@@ -24,11 +24,11 @@ class EditPlaceFragment : Fragment() {
     private val locationResultModel: PickLocationResultViewModel by sharedViewModel()
 
     private val placeId by lazy {
-        EditPlaceFragmentArgs.fromBundle(arguments!!).placeId
+        EditPlaceFragmentArgs.fromBundle(requireArguments()).placeId
     }
 
     private val passedLocation by lazy {
-        EditPlaceFragmentArgs.fromBundle(arguments!!).mapLocation
+        EditPlaceFragmentArgs.fromBundle(requireArguments()).mapLocation
     }
 
 //    private var map: GoogleMap? = null
