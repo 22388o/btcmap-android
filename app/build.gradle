@@ -34,6 +34,7 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
 
     packagingOptions {
@@ -58,6 +59,10 @@ android {
             applicationIdSuffix ".dev"
             debuggable true
         }
+    }
+
+    lintOptions {
+        disable 'VectorPath'
     }
 }
 

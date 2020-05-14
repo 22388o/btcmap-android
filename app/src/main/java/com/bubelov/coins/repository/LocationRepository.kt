@@ -65,7 +65,7 @@ class LocationRepository(
             return defaultLocation
         } else {
             val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            log("Last known location: ${lastKnownLocation.latitude}, ${lastKnownLocation.longitude}")
+            log("Last known location: ${lastKnownLocation?.latitude}, ${lastKnownLocation?.longitude}")
             log("Enabled providers: ${locationManager.getProviders(true)}")
 
             return if (lastKnownLocation != null) {

@@ -36,7 +36,7 @@
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:layout_insetEdge="bottom">
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/placeDetailsFragment"
                 android:name="com.bubelov.coins.placedetails.PlaceDetailsFragment"
                 android:layout_width="match_parent"

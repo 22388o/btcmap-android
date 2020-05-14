@@ -14,6 +14,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toColorFilter
 import androidx.core.graphics.toRect
 import com.bubelov.coins.R
+import java.util.*
 
 class PlaceIconsRepository(
     private val context: Context
@@ -56,7 +57,7 @@ class PlaceIconsRepository(
     }
 
     private fun getIconResId(category: String): Int? {
-        return when (category.toLowerCase()) {
+        return when (category.toLowerCase(Locale.ROOT)) {
             "atm" -> R.drawable.ic_atm
             "restaurant" -> R.drawable.ic_restaurant
             "café" -> R.drawable.ic_cafe

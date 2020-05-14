@@ -1,5 +1,6 @@
 package com.bubelov.coins.util
 
+import android.annotation.SuppressLint
 import java.util.*
 
 enum class DistanceUnits {
@@ -7,6 +8,7 @@ enum class DistanceUnits {
     MILES;
 
     companion object {
+        @SuppressLint("ConstantLocale")
         val default = Locale.getDefault().toDistanceUnits()
 
         private fun Locale.toDistanceUnits() = when(country) {
