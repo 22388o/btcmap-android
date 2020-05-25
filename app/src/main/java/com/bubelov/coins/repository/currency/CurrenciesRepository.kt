@@ -26,7 +26,7 @@ class CurrenciesRepository(
 
     suspend fun find(id: String): Currency? {
         return withContext(Dispatchers.IO) {
-            db.selectById(id).executeAsOneOrNull()
+            db.select(id).executeAsOneOrNull()
         }
     }
 

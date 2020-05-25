@@ -16,7 +16,7 @@ selectAll:
 SELECT *
 FROM Currency;
 
-selectById:
+select:
 SELECT *
 FROM Currency
 WHERE id = ?;
@@ -28,3 +28,13 @@ FROM Currency;
 selectMaxUpdatedAt:
 SELECT MAX(updatedAt)
 FROM Currency;
+
+updateName:
+UPDATE Currency
+SET name = ?
+WHERE id = ?;
+
+delete:
+DELETE
+FROM Currency
+WHERE id = ?;

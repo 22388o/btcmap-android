@@ -1,9 +1,6 @@
 buildscript {
-    try {
-        apply from: ".env.gradle"
-    } catch (ignored) { }
-
-    apply from: "dependencies.gradle"
+    try { apply from: ".env.gradle"} catch (ignored) {}
+    apply from: "versions.gradle"
 
     repositories {
         jcenter()
