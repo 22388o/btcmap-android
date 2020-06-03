@@ -2,7 +2,6 @@ package com.bubelov.coins.di
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.bubelov.coins.BuildConfig
 import com.bubelov.coins.Database
 import com.bubelov.coins.api.ConnectivityCheckingInterceptor
 import com.bubelov.coins.api.coins.CoinsApi
@@ -167,7 +166,7 @@ val apiModule = module {
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addConverterFactory(JsonStringConverterFactory(GsonConverterFactory.create()))
-            .baseUrl(BuildConfig.API_URL)
+            .baseUrl("https://api.coin-map.com/v1/")
             .client(client)
             .build()
 
@@ -179,7 +178,7 @@ val apiModule = module {
 val mockApiModule = module {
     single<CoinsApi> {
         val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.API_URL)
+            .baseUrl("https://api.coin-map.com/v1/")
             .build()
 
         val networkBehavior = NetworkBehavior.create()

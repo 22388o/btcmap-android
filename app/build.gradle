@@ -20,11 +20,6 @@ android {
         versionName "3.0.0"
 
         setProperty("archivesBaseName", "coin-map-$versionName")
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", "API_URL", "\"https://api.coin-map.com/v1/\"" // TODO remove
-        buildConfigField "Boolean", "MOCK_API", "true" // TODO remove
     }
 
     compileOptions {
@@ -100,10 +95,4 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_kotlin}"
     testImplementation "com.squareup.sqldelight:sqlite-driver:${versions.sqldelight}"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}"
-
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:${versions.espresso}"
-    androidTestImplementation "androidx.test:runner:${versions.test_runner}"
-    androidTestImplementation "androidx.test:rules:${versions.test_rules}"
 }

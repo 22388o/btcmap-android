@@ -2,7 +2,6 @@ package com.bubelov.coins
 
 import android.app.Application
 import com.bubelov.coins.cache.BuiltInCacheController
-import com.bubelov.coins.di.apiModule
 import com.bubelov.coins.di.appModule
 import com.bubelov.coins.di.mockApiModule
 import com.bubelov.coins.repository.synclogs.LogsRepository
@@ -33,12 +32,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-
-            if (BuildConfig.MOCK_API) {
-                modules(listOf(appModule, mockApiModule))
-            } else {
-                modules(listOf(appModule, apiModule))
-            }
+            modules(listOf(appModule, mockApiModule))
         }
 
         runBlocking {

@@ -1,5 +1,5 @@
 buildscript {
-    try { apply from: ".env.gradle"} catch (ignored) {}
+    try { apply from: ".credentials.gradle"} catch (ignored) {}
     apply from: "versions.gradle"
 
     repositories {

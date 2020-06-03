@@ -1,4 +1,4 @@
-.env.gradle
+.credentials.gradle
 
 # built application files
 *.apk
