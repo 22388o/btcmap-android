@@ -1,6 +1,6 @@
 package com.bubelov.coins.repository.placecategory
 
-import android.content.Context
+import android.content.res.AssetManager
 import com.bubelov.coins.data.PlaceCategory
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.google.gson.Gson
@@ -9,7 +9,7 @@ import java.io.InputStreamReader
 import kotlin.time.measureTime
 
 class BuiltInPlaceCategoriesCache(
-    private val context: Context,
+    private val assets: AssetManager,
     private val gson: Gson,
     private val log: LogsRepository
 ) {
@@ -23,7 +23,7 @@ class BuiltInPlaceCategoriesCache(
         val fileName = "place_categories.json"
 
         val duration = measureTime {
-            val input = context.assets.open(fileName)
+            val input = assets.open(fileName)
             val typeToken = object : TypeToken<List<PlaceCategory.Impl>>() {}
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }

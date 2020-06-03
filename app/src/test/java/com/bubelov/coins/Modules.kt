@@ -22,6 +22,12 @@ val mockAndroidModule = module(override = true) {
         mock {
             given(it.open("currencies.json"))
                 .willReturn(File("./src/main/assets/currencies.json").inputStream())
+            given(it.open("places.json"))
+                .willReturn(File("./src/main/assets/places.json").inputStream())
+            given(it.open("currencies_places.json"))
+                .willReturn(File("./src/main/assets/currencies_places.json").inputStream())
+            given(it.open("place_categories.json"))
+                .willReturn(File("./src/main/assets/place_categories.json").inputStream())
         }
     }
 
