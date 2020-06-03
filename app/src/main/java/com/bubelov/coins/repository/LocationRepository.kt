@@ -16,15 +16,12 @@ import kotlinx.coroutines.flow.StateFlow
 @SuppressLint("MissingPermission")
 class LocationRepository(
     private val context: Context,
+    private val locationManager: LocationManager,
     private val defaultLocation: Location,
     private val log: LogsRepository
 ) {
     private val _location by lazy { MutableStateFlow(getDefaultOrLastKnownLocation()) }
     val location: StateFlow<Location> get() = _location
-
-    private val locationManager by lazy {
-        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    }
 
     private val listener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: android.location.Location) {

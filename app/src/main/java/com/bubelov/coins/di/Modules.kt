@@ -1,6 +1,7 @@
 package com.bubelov.coins.di
 
 import android.content.Context
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import com.bubelov.coins.Database
 import com.bubelov.coins.api.ConnectivityCheckingInterceptor
@@ -51,9 +52,9 @@ import com.squareup.sqldelight.db.SqlDriver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.joda.time.DateTime
-import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
+import org.koin.android.experimental.dsl.viewModel
 import org.koin.dsl.module
+import org.koin.experimental.builder.single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.mock.MockRetrofit
@@ -62,16 +63,71 @@ import java.util.concurrent.TimeUnit
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-val appModule = module {
+val mainModule = module {
+    viewModel<EditPlaceViewModel>()
+    viewModel<ExchangeRatesViewModel>()
+    viewModel<MapViewModel>()
+    viewModel<NotificationAreaViewModel>()
+    viewModel<PlacesSearchViewModel>()
+    viewModel<PlacesSearchResultViewModel>()
+    viewModel<SettingsViewModel>()
+    viewModel<AuthViewModel>()
+    viewModel<AuthResultViewModel>()
+    viewModel<PickLocationResultViewModel>()
+    viewModel<PlaceDetailsViewModel>()
+    viewModel<LauncherViewModel>()
+    viewModel<PermissionsViewModel>()
+    viewModel<ProfileViewModel>()
+    viewModel<LogsViewModel>()
+
+    single<PlacesRepository>()
+    single<ExchangeRatesRepository>()
+    single<UserRepository>()
+    single<LocationRepository>()
+    single<NotificationAreaRepository>()
+    single<PlaceIconsRepository>()
+    single<PlaceCategoriesRepository>()
+    single<LogsRepository>()
+    single<CurrenciesRepository>()
+    single<CurrenciesPlacesRepository>()
+    single<PreferencesRepository>()
 
     single { Database(get()) }
-
     single { get<Database>().currencyQueries }
     single { get<Database>().currencyPlaceQueries }
     single { get<Database>().placeQueries }
     single { get<Database>().placeCategoryQueries }
     single { get<Database>().preferenceQueries }
     single { get<Database>().logEntryQueries }
+
+    single<BuiltInCacheController>()
+
+    single<PlaceNotificationManager>()
+
+    single<DatabaseSync>()
+    single<DatabaseSyncScheduler>()
+
+    single<BuiltInCurrenciesCache>()
+    single<BuiltInPlacesCache>()
+    single<BuiltInCurrenciesPlacesCache>()
+    single<BuiltInPlaceCategoriesCache>()
+
+    single<Bitstamp>()
+    single<Coinbase>()
+
+    single { Location(40.7141667, -74.0063889) } // TODO remove
+
+    single {
+        GsonBuilder()
+            .registerTypeAdapter(DateTime::class.java, DateTimeAdapter())
+            .create()
+    }
+}
+
+val androidModule = module {
+    single { get<Context>().resources }
+    single { get<Context>().assets }
+    single { get<Context>().getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
     single<SqlDriver> {
         AndroidSqliteDriver(
@@ -80,66 +136,6 @@ val appModule = module {
             name = "data.db"
         )
     }
-
-    single {
-        GsonBuilder()
-            .registerTypeAdapter(DateTime::class.java, DateTimeAdapter())
-            .create()
-    }
-
-    single { BuiltInCacheController(get(), get(), get(), get()) }
-
-    single { get<Context>().resources }
-
-    single(named("default_location")) {
-        Location(40.7141667, -74.0063889)
-    }
-
-    single {
-        PlaceNotificationManager(
-            get(),
-            get()
-        )
-    }
-
-    single { DatabaseSync(get(), get(), get(), get(), get(), get()) }
-    single { DatabaseSyncScheduler() }
-
-    single { BuiltInCurrenciesCache(get(), get(), get()) }
-    single { BuiltInPlacesCache(get(), get(), get()) }
-    single { BuiltInCurrenciesPlacesCache(get(), get(), get()) }
-    single { BuiltInPlaceCategoriesCache(get(), get(), get()) }
-
-    single { Bitstamp(get()) }
-    single { Coinbase(get()) }
-
-    single { PlacesRepository(get(), get(), get(), get(), get()) }
-    single { ExchangeRatesRepository(get(), get()) }
-    single { UserRepository(get(), get(), get()) }
-    single { LocationRepository(get(), get(named("default_location")), get()) }
-    single { NotificationAreaRepository(get(), get()) }
-    single { PlaceIconsRepository(get()) }
-    single { PlaceCategoriesRepository(get(), get(), get(), get()) }
-    single { LogsRepository(get()) }
-    single { CurrenciesRepository(get(), get(), get(), get()) }
-    single { CurrenciesPlacesRepository(get(), get(), get(), get()) }
-    single { PreferencesRepository(get()) }
-
-    viewModel { EditPlaceViewModel(get()) }
-    viewModel { ExchangeRatesViewModel(get()) }
-    viewModel { MapViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { NotificationAreaViewModel(get(), get(), get(named("default_location"))) }
-    viewModel { PlacesSearchViewModel(get(), get(), get(), get(), get()) }
-    viewModel { PlacesSearchResultViewModel() }
-    viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
-    viewModel { AuthViewModel(get()) }
-    viewModel { AuthResultViewModel() }
-    viewModel { PickLocationResultViewModel() }
-    viewModel { PlaceDetailsViewModel(get(), get()) }
-    viewModel { LauncherViewModel(get()) }
-    viewModel { PermissionsViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
-    viewModel { LogsViewModel(get()) }
 }
 
 val apiModule = module {
