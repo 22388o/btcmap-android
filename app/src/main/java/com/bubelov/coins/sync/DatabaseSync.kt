@@ -6,9 +6,7 @@ import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.notifications.PlaceNotificationManager
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class DatabaseSync(
     private val currenciesRepository: CurrenciesRepository,
     private val placesRepository: PlacesRepository,

@@ -60,9 +60,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.util.concurrent.TimeUnit
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 val mainModule = module {
     viewModel<EditPlaceViewModel>()
     viewModel<ExchangeRatesViewModel>()
@@ -170,7 +168,6 @@ val apiModule = module {
     }
 }
 
-@ExperimentalTime
 val mockApiModule = module {
     single<CoinsApi> {
         val retrofit = Retrofit.Builder()

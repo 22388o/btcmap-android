@@ -10,9 +10,7 @@ import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class MapViewModel(
     private val placesRepository: PlacesRepository,
     val userRepository: UserRepository,

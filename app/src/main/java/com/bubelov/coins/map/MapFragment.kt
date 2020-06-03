@@ -44,9 +44,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class MapFragment :
     Fragment(),
     Toolbar.OnMenuItemClickListener {

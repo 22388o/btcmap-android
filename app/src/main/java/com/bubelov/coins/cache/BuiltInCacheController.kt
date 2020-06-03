@@ -4,9 +4,7 @@ import com.bubelov.coins.repository.currency.CurrenciesRepository
 import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class BuiltInCacheController(
     private val currenciesRepository: CurrenciesRepository,
     private val placesRepository: PlacesRepository,

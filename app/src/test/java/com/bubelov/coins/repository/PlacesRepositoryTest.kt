@@ -15,9 +15,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.util.*
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class PlacesRepositoryTest {
 
     @Mock private lateinit var api: CoinsApi

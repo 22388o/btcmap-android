@@ -5,9 +5,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bubelov.coins.App
 import kotlinx.coroutines.runBlocking
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class DatabaseSyncWorker(
     context: Context,
     params: WorkerParameters

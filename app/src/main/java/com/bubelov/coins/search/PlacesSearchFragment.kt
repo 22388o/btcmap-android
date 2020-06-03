@@ -19,9 +19,7 @@ import com.bubelov.coins.util.*
 import kotlinx.android.synthetic.main.fragment_places_search.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class PlacesSearchFragment : Fragment() {
 
     private val model: PlacesSearchViewModel by viewModel()

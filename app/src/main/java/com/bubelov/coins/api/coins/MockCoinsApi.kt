@@ -15,9 +15,7 @@ import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import retrofit2.mock.BehaviorDelegate
 import java.util.*
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class MockCoinsApi(
     private val delegate: BehaviorDelegate<CoinsApi>,
     currenciesCache: BuiltInCurrenciesCache,

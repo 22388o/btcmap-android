@@ -15,9 +15,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class SettingsFragment : Fragment() {
 
     private val model: SettingsViewModel by viewModel()

@@ -6,10 +6,8 @@ import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.util.TableSyncResult
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-@ExperimentalTime
 class CurrenciesPlacesRepository(
     private val api: CoinsApi,
     private val db: CurrencyPlaceQueries,

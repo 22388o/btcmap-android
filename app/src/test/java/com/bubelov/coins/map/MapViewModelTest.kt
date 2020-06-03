@@ -18,9 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class MapViewModelTest {
 
     @Mock private lateinit var placesRepository: PlacesRepository

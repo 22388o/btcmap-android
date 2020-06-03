@@ -6,10 +6,8 @@ import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.InputStreamReader
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-@ExperimentalTime
 class BuiltInCurrenciesPlacesCache(
     private val context: Context,
     private val gson: Gson,
