@@ -1,35 +1,29 @@
 package com.bubelov.coins.repository
 
+import com.bubelov.coins.TestSuite
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.google.gson.Gson
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
+import org.koin.core.inject
+import org.koin.test.mock.declareMock
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.mockito.BDDMockito.*
 
-class NotificationAreaRepositoryTest {
+class NotificationAreaRepositoryTests : TestSuite() {
 
-    @Mock private lateinit var preferencesRepository: PreferencesRepository
-
-    private lateinit var repository: NotificationAreaRepository
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        repository = NotificationAreaRepository(preferencesRepository, Gson())
-    }
+    val repository: NotificationAreaRepository by inject()
 
     @Test
     fun returnsNullIfNotSet() = runBlocking {
-        whenever(preferencesRepository.get(anyString())).thenReturn(flowOf(""))
+        val preferencesRepository = declareMock<PreferencesRepository> {
+            given(get(anyString())).willReturn(flowOf(""))
+        }
+
         Assert.assertTrue(repository.getNotificationArea().first() == null)
         verify(preferencesRepository).get(anyString())
         Unit
@@ -37,6 +31,8 @@ class NotificationAreaRepositoryTest {
 
     @Test
     fun setNotificationArea() = runBlocking {
+        val preferencesRepository = declareMock<PreferencesRepository>()
+
         val area = NotificationArea(
             latitude = 50.0,
             longitude = 0.0,

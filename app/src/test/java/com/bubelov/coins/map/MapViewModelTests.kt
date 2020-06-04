@@ -1,48 +1,21 @@
 package com.bubelov.coins.map
 
+import com.bubelov.coins.TestSuite
 import com.bubelov.coins.emptyPlace
-import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
-import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
-import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.koin.core.inject
+import org.koin.test.mock.declareMock
+import org.mockito.BDDMockito.*
 
-class MapViewModelTest {
+class MapViewModelTests : TestSuite() {
 
-    @Mock private lateinit var placesRepository: PlacesRepository
-    @Mock private lateinit var userRepository: UserRepository
-    @Mock private lateinit var locationRepository: LocationRepository
-    @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
-    @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
-    @Mock private lateinit var logsRepository: LogsRepository
-
-    private lateinit var model: MapViewModel
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-
-        model = MapViewModel(
-            placesRepository,
-            userRepository,
-            locationRepository,
-            placeIconsRepository,
-            placeCategoriesRepository,
-            logsRepository
-        )
-    }
+    val model: MapViewModel by inject()
 
     @Test
     fun getSelectedPlaceFlow_returnsNull() = runBlocking {
@@ -52,8 +25,9 @@ class MapViewModelTest {
 
     @Test
     fun setSelectedPlace() = runBlocking {
+        val placesRepository = declareMock<PlacesRepository>()
         val place = emptyPlace().copy(name = "Test")
-        whenever(placesRepository.find(place.id)).thenReturn(place)
+        given(placesRepository.find(place.id)).willReturn(place)
         model.selectPlace(place.id)
         verify(placesRepository).getAll()
         verify(placesRepository).find(place.id)
@@ -63,7 +37,8 @@ class MapViewModelTest {
 
     @Test
     fun onAddPlaceClick_returnsUnauthorized_whenUnauthorized() = runBlocking {
-        whenever(userRepository.getToken()).thenReturn("")
+        val userRepository = declareMock<UserRepository>()
+        given(userRepository.getToken()).willReturn("")
         val result = model.onAddPlaceClick()
         verify(userRepository).getToken()
         assert(result == MapViewModel.AddPlaceClickResult.UNAUTHORIZED)
@@ -71,7 +46,8 @@ class MapViewModelTest {
 
     @Test
     fun onEditPlaceClick_returnsUnauthorized_whenUnauthorized() = runBlocking<Unit> {
-        whenever(userRepository.getToken()).thenReturn("")
+        val userRepository = declareMock<UserRepository>()
+        given(userRepository.getToken()).willReturn("")
         val result = model.onEditPlaceClick()
         verify(userRepository).getToken()
         assert(result == MapViewModel.EditPlaceClickResult.UNAUTHORIZED)
@@ -79,7 +55,8 @@ class MapViewModelTest {
 
     @Test
     fun onDrawerHeaderClick_returnsUnauthorized_whenUnauthorized() = runBlocking {
-        whenever(userRepository.getToken()).thenReturn("")
+        val userRepository = declareMock<UserRepository>()
+        given(userRepository.getToken()).willReturn("")
         val result = model.onDrawerHeaderClick()
         verify(userRepository).getToken()
         assert(result == MapViewModel.DrawerHeaderClickResult.REQUIRE_AUTH)
@@ -87,7 +64,8 @@ class MapViewModelTest {
 
     @Test
     fun onAddPlaceClick_allowsAccess_whenAuthorized() = runBlocking {
-        whenever(userRepository.getToken()).thenReturn("token")
+        val userRepository = declareMock<UserRepository>()
+        given(userRepository.getToken()).willReturn("token")
         val result = model.onAddPlaceClick()
         verify(userRepository).getToken()
         assert(result == MapViewModel.AddPlaceClickResult.ALLOWED)
@@ -95,7 +73,8 @@ class MapViewModelTest {
 
     @Test
     fun onEditPlaceClick_allowsAccess_whenAuthorized() = runBlocking<Unit> {
-        whenever(userRepository.getToken()).thenReturn("token")
+        val userRepository = declareMock<UserRepository>()
+        given(userRepository.getToken()).willReturn("token")
         val result = model.onEditPlaceClick()
         verify(userRepository).getToken()
         assert(result == MapViewModel.EditPlaceClickResult.ALLOWED)
@@ -103,7 +82,8 @@ class MapViewModelTest {
 
     @Test
     fun onDrawerHeaderClick_allowsAccess_whenAuthorized() = runBlocking {
-        whenever(userRepository.getToken()).thenReturn("token")
+        val userRepository = declareMock<UserRepository>()
+        given(userRepository.getToken()).willReturn("token")
         val result = model.onDrawerHeaderClick()
         verify(userRepository).getToken()
         assert(result == MapViewModel.DrawerHeaderClickResult.SHOW_USER_PROFILE)

@@ -1,27 +1,21 @@
 package com.bubelov.coins.permissions
 
+import com.bubelov.coins.TestSuite
 import com.bubelov.coins.repository.PreferencesRepository
-import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.koin.core.inject
+import org.koin.test.mock.declareMock
+import org.mockito.BDDMockito.*
 
-class PermissionsViewModelTest {
+class PermissionsViewModelTests : TestSuite() {
 
-    @Mock private lateinit var preferencesRepository: PreferencesRepository
-
-    private lateinit var model: PermissionsViewModel
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        model = PermissionsViewModel(preferencesRepository)
-    }
+    val model: PermissionsViewModel by inject()
 
     @Test
     fun setPermissionsExplained() = runBlocking {
+        val preferencesRepository = declareMock<PreferencesRepository>()
+
         val explained = true
         model.setPermissionsExplained(explained)
 

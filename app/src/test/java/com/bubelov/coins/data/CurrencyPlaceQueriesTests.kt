@@ -1,24 +1,15 @@
 package com.bubelov.coins.data
 
-import com.bubelov.coins.Database
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import com.bubelov.coins.TestSuite
 import org.joda.time.DateTime
-import org.junit.Before
 import org.junit.Test
+import org.koin.test.inject
 import java.util.*
 import kotlin.random.Random
 
-class CurrencyPlaceQueriesTests {
+class CurrencyPlaceQueriesTests : TestSuite() {
 
-    lateinit var queries: CurrencyPlaceQueries
-
-    @Before
-    fun setUp() {
-        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        Database.Schema.create(driver)
-        val database = Database(driver)
-        queries = database.currencyPlaceQueries
-    }
+    private val queries: CurrencyPlaceQueries by inject()
 
     @Test
     fun emptyByDefault() {

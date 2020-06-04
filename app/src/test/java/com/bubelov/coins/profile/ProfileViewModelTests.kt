@@ -1,29 +1,19 @@
 package com.bubelov.coins.profile
 
+import com.bubelov.coins.TestSuite
 import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.user.UserRepository
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.koin.core.inject
+import org.koin.test.mock.declareMock
 import java.util.*
+import org.mockito.BDDMockito.*
 
-class ProfileViewModelTest {
+class ProfileViewModelTests : TestSuite() {
 
-    @Mock private lateinit var userRepository: UserRepository
-
-    private lateinit var model: ProfileViewModel
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        model = ProfileViewModel(userRepository)
-    }
+    val model: ProfileViewModel by inject()
 
     @Test
     fun getUser() = runBlocking {
@@ -38,7 +28,9 @@ class ProfileViewModelTest {
             updatedAt = DateTime.now()
         )
 
-        whenever(userRepository.getUser()).thenReturn(user)
+        val userRepository = declareMock<UserRepository> {
+            given(getUser()).willReturn(user)
+        }
 
         assert(model.getUser() == user)
 
@@ -48,6 +40,7 @@ class ProfileViewModelTest {
 
     @Test
     fun signOut() = runBlocking {
+        val userRepository = declareMock<UserRepository>()
         model.signOut()
         verify(userRepository).clear()
         verifyNoMoreInteractions(userRepository)

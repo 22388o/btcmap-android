@@ -96,7 +96,6 @@ dependencies {
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "androidx.arch.core:core-testing:${versions.arch_core_testing}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_kotlin}"
     testImplementation "com.squareup.sqldelight:sqlite-driver:${versions.sqldelight}"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}"
     testImplementation "org.koin:koin-test:${versions.koin}"

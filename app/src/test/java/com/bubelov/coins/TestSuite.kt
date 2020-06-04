@@ -8,7 +8,7 @@ import org.koin.test.KoinTestRule
 import org.koin.test.mock.MockProviderRule
 import org.mockito.Mockito
 
-open class UnitTest : KoinTest {
+open class TestSuite : KoinTest {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {

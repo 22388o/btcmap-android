@@ -1,74 +1,49 @@
 package com.bubelov.coins.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import android.content.res.Resources
+import com.bubelov.coins.TestSuite
 import com.bubelov.coins.data.Place
-import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.blockingObserve
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
 import org.joda.time.DateTime
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.inject
+import org.koin.test.mock.declareMock
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import java.util.*
+import org.mockito.BDDMockito.*
 
-class PlacesSearchViewModelTest {
+class PlacesSearchViewModelTests : TestSuite() {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var placesRepository: PlacesRepository
-    @Mock private lateinit var placeCategoriesRepository: PlaceCategoriesRepository
-    @Mock private lateinit var placeIconsRepository: PlaceIconsRepository
-    @Mock private lateinit var preferencesRepository: PreferencesRepository
-    @Mock private lateinit var resources: Resources
+    val model: PlacesSearchViewModel by inject()
 
-    private lateinit var model: PlacesSearchViewModel
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-
-        model = PlacesSearchViewModel(
-            placesRepository,
-            placeCategoriesRepository,
-            placeIconsRepository,
-            preferencesRepository,
-            resources
-        )
-
-        model.setUp(null)
-
-        runBlocking {
-            whenever(placesRepository.findBySearchQuery(anyString()))
-                .thenReturn(
+    @Test
+    fun searchBars() = runBlocking {
+        val placesRepository = declareMock<PlacesRepository> {
+            given(findBySearchQuery(anyString()))
+                .willReturn(
                     listOf(
                         generatePlace("Bar 1"),
                         generatePlace("Bar 2"),
                         generatePlace("Bar 3")
                     )
                 )
-
-            whenever(placeIconsRepository.getPlaceIcon(anyString()))
-                .thenReturn(mock())
         }
-    }
 
-    @Test
-    fun searchBars() = runBlocking {
+        declareMock<PlaceIconsRepository> {
+            given(getPlaceIcon(anyString()))
+                .willReturn(declareMock())
+        }
+
         Dispatchers.setMain(Dispatchers.Default)
         model.setQuery("bar")
         val rows = model.rows.blockingObserve()
@@ -79,14 +54,16 @@ class PlacesSearchViewModelTest {
 
     @Test
     fun emptyOnShortQuery() = runBlocking {
+        val placesRepository = declareMock<PlacesRepository>()
         model.setQuery("b")
         val results = model.rows.blockingObserve()
-        verifyZeroInteractions(placesRepository)
+        verifyNoInteractions(placesRepository)
         Assert.assertTrue(results.isEmpty())
     }
 
     @Test
     fun resetsLastSearch() = runBlocking {
+        Dispatchers.setMain(Dispatchers.Default)
         model.setQuery("bar")
         model.setQuery("")
         val results = model.rows.blockingObserve()

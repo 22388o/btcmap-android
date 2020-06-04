@@ -1,23 +1,14 @@
 package com.bubelov.coins.data
 
-import com.bubelov.coins.Database
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import org.junit.Before
+import com.bubelov.coins.TestSuite
 import org.junit.Test
+import org.koin.core.inject
 import java.util.*
 import kotlin.random.Random
 
-class PreferenceQueriesTests {
+class PreferenceQueriesTests : TestSuite() {
 
-    lateinit var queries: PreferenceQueries
-
-    @Before
-    fun setUp() {
-        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        Database.Schema.create(driver)
-        val database = Database(driver)
-        queries = database.preferenceQueries
-    }
+    private val queries: PreferenceQueries by inject()
 
     @Test
     fun emptyByDefault() {

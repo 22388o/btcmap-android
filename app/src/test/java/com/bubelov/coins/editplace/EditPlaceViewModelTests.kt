@@ -1,32 +1,22 @@
 package com.bubelov.coins.editplace
 
+import com.bubelov.coins.TestSuite
 import com.bubelov.coins.emptyPlace
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.util.BasicTaskState
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.koin.core.inject
+import org.koin.test.mock.declareMock
 import java.util.*
+import org.mockito.BDDMockito.*
 
-class EditPlaceViewModelTest {
+class EditPlaceViewModelTests : TestSuite() {
 
-    @Mock private lateinit var placesRepository: PlacesRepository
-
-    private lateinit var model: EditPlaceViewModel
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        model = EditPlaceViewModel(placesRepository)
-    }
+    val model: EditPlaceViewModel by inject()
 
     @Test
     fun submitChanges_withNewPlace_addsPlace() = runBlocking<Unit> {
@@ -35,7 +25,9 @@ class EditPlaceViewModelTest {
             name = "Crypto Library"
         )
 
-        whenever(placesRepository.addPlace(place)).thenReturn(place)
+        val placesRepository = declareMock<PlacesRepository> {
+            given(addPlace(place)).willReturn(place)
+        }
 
         model.submitChanges(null, place).collect()
 
@@ -52,23 +44,28 @@ class EditPlaceViewModelTest {
 
         val updatedPlace = originalPlace.copy(name = "Crypto Exchange")
 
-        whenever(placesRepository.updatePlace(updatedPlace)).thenReturn(updatedPlace)
+        val placesRepository = declareMock<PlacesRepository> {
+            given(updatePlace(updatedPlace)).willReturn(updatedPlace)
+        }
 
         model.submitChanges(originalPlace, updatedPlace).collect()
 
         verify(placesRepository).updatePlace(updatedPlace)
-        verify(placesRepository, never()).addPlace(any())
+        verifyNoMoreInteractions(placesRepository)
     }
 
     @Test
     fun submitChanges_handlesFailure() = runBlocking {
+        val place = emptyPlace()
         val exception = Exception("Test exception")
 
-        whenever(placesRepository.addPlace(any())).then {
-            throw exception
+        declareMock<PlacesRepository> {
+            given(addPlace(place)).will {
+                throw exception
+            }
         }
 
-        val lastState = model.submitChanges(null, emptyPlace()).toList().last()
-        assert(lastState is BasicTaskState.Error && lastState.message == exception.message)
+        val lastState = model.submitChanges(null, place).toList().last()
+        assertEquals(BasicTaskState.Error::class.java, lastState::class.java)
     }
 }

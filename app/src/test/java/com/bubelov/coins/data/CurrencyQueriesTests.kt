@@ -1,26 +1,17 @@
 package com.bubelov.coins.data
 
-import com.bubelov.coins.Database
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import com.bubelov.coins.TestSuite
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Before
 import org.junit.Test
+import org.koin.test.inject
 import java.util.*
 import kotlin.random.Random
 
-class CurrencyQueriesTests {
+class CurrencyQueriesTests : TestSuite() {
 
-    lateinit var queries: CurrencyQueries
-
-    @Before
-    fun setUp() {
-        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        Database.Schema.create(driver)
-        val database = Database(driver)
-        queries = database.currencyQueries
-    }
+    private val queries: CurrencyQueries by inject()
 
     @Test
     fun insertOrReplace_insertsItem() {
@@ -104,7 +95,7 @@ class CurrencyQueriesTests {
 
     private fun currency() = Currency.Impl(
         id = UUID.randomUUID().toString(),
-        name = "Testcoin",
+        name = "Test Coin",
         code = "TST",
         crypto = true,
         createdAt = DateTime.now().toString(),

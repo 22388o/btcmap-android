@@ -1,6 +1,6 @@
 package com.bubelov.coins.auth
 
-import com.bubelov.coins.UnitTest
+import com.bubelov.coins.TestSuite
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.BasicTaskState
 import kotlinx.coroutines.flow.first
@@ -12,7 +12,7 @@ import org.koin.test.inject
 import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
 
-class AuthViewModelTests : UnitTest() {
+class AuthViewModelTests : TestSuite() {
 
     private val model: AuthViewModel by inject()
 
