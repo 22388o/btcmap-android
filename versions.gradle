@@ -1,5 +1,5 @@
 ext.versions = [
-        android_plugin   : '3.6.2',
+        android_plugin   : '4.0.0',
         safe_args_plugin : '1.0.0',
         kotlin           : '1.3.72',
         coroutines       : '1.3.6',
