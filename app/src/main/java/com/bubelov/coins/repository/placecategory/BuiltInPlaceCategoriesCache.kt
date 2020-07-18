@@ -24,7 +24,7 @@ class BuiltInPlaceCategoriesCache(
 
         val duration = measureTime {
             val input = assets.open(fileName)
-            val typeToken = object : TypeToken<List<PlaceCategory.Impl>>() {}
+            val typeToken = object : TypeToken<List<PlaceCategory>>() {}
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }
 

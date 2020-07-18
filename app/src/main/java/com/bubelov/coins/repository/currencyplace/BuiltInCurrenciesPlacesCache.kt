@@ -24,7 +24,7 @@ class BuiltInCurrenciesPlacesCache(
 
         val duration = measureTime {
             val input = assets.open(fileName)
-            val typeToken = object : TypeToken<List<CurrencyPlace.Impl>>() {}
+            val typeToken = object : TypeToken<List<CurrencyPlace>>() {}
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }
 

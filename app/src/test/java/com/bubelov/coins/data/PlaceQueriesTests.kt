@@ -140,7 +140,7 @@ class PlaceQueriesTests : TestSuite() {
         assert(queries.selectMaxUpdatedAt().executeAsOne().MAX == updatedAt)
     }
 
-    private fun place() = Place.Impl(
+    private fun place() = Place(
         id = UUID.randomUUID().toString(),
         name = "Test",
         latitude = 50.0,

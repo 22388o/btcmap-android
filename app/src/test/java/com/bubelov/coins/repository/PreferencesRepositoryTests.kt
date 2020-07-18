@@ -23,8 +23,8 @@ class PreferencesRepositoryTests : TestSuite() {
     @Test
     fun all() = runBlocking {
         val preferences = listOf(
-            Preference.Impl("test_key_1", "test_value_1"),
-            Preference.Impl("test_key_2", "test_value_2")
+            Preference("test_key_1", "test_value_1"),
+            Preference("test_key_2", "test_value_2")
         )
 
         preferences.forEach { repository.put(it.key, it.value) }
@@ -35,8 +35,8 @@ class PreferencesRepositoryTests : TestSuite() {
     @Test
     fun count() = runBlocking {
         val preferences = listOf(
-            Preference.Impl("test_key_1", "test_value_1"),
-            Preference.Impl("test_key_2", "test_value_2")
+            Preference("test_key_1", "test_value_1"),
+            Preference("test_key_2", "test_value_2")
         )
 
         preferences.forEach { repository.put(it.key, it.value) }

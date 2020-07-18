@@ -14,7 +14,7 @@ class PreferencesRepository(
     suspend fun put(key: String, value: String) {
         withContext(Dispatchers.IO) {
             queries.insertOrReplace(
-                Preference.Impl(key, value)
+                Preference(key, value)
             )
         }
     }

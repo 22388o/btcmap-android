@@ -101,7 +101,7 @@ class PlaceCategoryQueriesTests : TestSuite() {
         assert(queries.selectMaxUpdatedAt().executeAsOne().MAX == updatedAt)
     }
 
-    private fun placeCategory() = PlaceCategory.Impl(
+    private fun placeCategory() = PlaceCategory(
         id = UUID.randomUUID().toString(),
         name = "Test",
         createdAt = DateTime.now().toString(),

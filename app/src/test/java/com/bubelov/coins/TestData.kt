@@ -4,8 +4,8 @@ import com.bubelov.coins.data.Place
 import org.joda.time.DateTime
 import java.util.*
 
-fun emptyPlace(): Place.Impl {
-    return Place.Impl(
+fun emptyPlace(): Place {
+    return Place(
         id = UUID.randomUUID().toString(),
         name = "",
         latitude = 0.0,

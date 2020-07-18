@@ -93,7 +93,7 @@ class CurrencyQueriesTests : TestSuite() {
         }
     }
 
-    private fun currency() = Currency.Impl(
+    private fun currency() = Currency(
         id = UUID.randomUUID().toString(),
         name = "Test Coin",
         code = "TST",

@@ -100,7 +100,7 @@ class CurrencyPlaceQueriesTests : TestSuite() {
         assert(queries.selectMaxUpdatedAt().executeAsOne().MAX == updatedAt)
     }
 
-    private fun currencyPlace() = CurrencyPlace.Impl(
+    private fun currencyPlace() = CurrencyPlace(
         currencyId = UUID.randomUUID().toString(),
         placeId = UUID.randomUUID().toString(),
         createdAt = DateTime.now().toString(),

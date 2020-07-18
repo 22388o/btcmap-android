@@ -21,7 +21,7 @@ class LogsRepository(
     suspend fun append(tag: String, message: String) {
         withContext(Dispatchers.IO) {
             queries.insert(
-                LogEntry.Impl(
+                LogEntry(
                     datetime = DateTime.now().toString(),
                     tag = tag,
                     message = message

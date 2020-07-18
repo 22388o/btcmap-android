@@ -1,6 +1,5 @@
 buildscript {
     try { apply from: ".credentials.gradle"} catch (ignored) {}
-    apply from: "versions.gradle"
 
     repositories {
         jcenter()
@@ -8,11 +7,11 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:${versions.android_plugin}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
-        classpath("android.arch.navigation:navigation-safe-args-gradle-plugin:${versions.safe_args_plugin}")
-        classpath "com.squareup.sqldelight:gradle-plugin:${versions.sqldelight}"
-        classpath "org.koin:koin-gradle-plugin:${versions.koin}"
+        classpath("com.android.tools.build:gradle:$plugin_versions_android")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$plugin_versions_kotlin")
+        classpath "org.koin:koin-gradle-plugin:$plugin_versions_koin"
+        classpath "com.squareup.sqldelight:gradle-plugin:$plugin_versions_sqldelight"
+        classpath("android.arch.navigation:navigation-safe-args-gradle-plugin:$plugin_versions_safe_args")
     }
 }
 

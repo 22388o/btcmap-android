@@ -24,7 +24,7 @@ class BuiltInPlacesCache(
 
         val duration = measureTime {
             val input = assets.open(fileName)
-            val typeToken = object : TypeToken<List<Place.Impl>>() {}
+            val typeToken = object : TypeToken<List<Place>>() {}
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }
 

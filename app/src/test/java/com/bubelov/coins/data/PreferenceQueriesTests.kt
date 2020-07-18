@@ -83,7 +83,7 @@ class PreferenceQueriesTests : TestSuite() {
         assert(queries.selectCount().executeAsOne() == count.toLong())
     }
 
-    private fun testItem() = Preference.Impl(
+    private fun testItem() = Preference(
         key = "test_key_${UUID.randomUUID()}",
         value = "test_value_${UUID.randomUUID()}"
     )

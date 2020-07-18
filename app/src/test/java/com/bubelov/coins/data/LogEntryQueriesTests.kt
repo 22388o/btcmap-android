@@ -72,7 +72,7 @@ class LogEntryQueriesTests : TestSuite() {
         assert(queries.selectCount().executeAsOne() == count.toLong())
     }
 
-    private fun testItem() = LogEntry.Impl(
+    private fun testItem() = LogEntry(
         datetime = DateTime.now().toString(),
         tag = "test_tag_${UUID.randomUUID()}",
         message = "test_massage_${UUID.randomUUID()}"
