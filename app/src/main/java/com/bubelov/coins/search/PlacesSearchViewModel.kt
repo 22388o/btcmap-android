@@ -87,7 +87,7 @@ class PlacesSearchViewModel(
             placeId = id,
             name = name,
             distance = distanceStringBuilder.toString(),
-            icon = placeIconsRepository.getPlaceIcon(categoryId)
+            icon = placeIconsRepository.getPlaceIcon(category)
         )
     }
 

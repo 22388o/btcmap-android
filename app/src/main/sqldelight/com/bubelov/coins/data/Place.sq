@@ -1,16 +1,19 @@
 CREATE TABLE Place (
     id TEXT PRIMARY KEY,
+    source TEXT NOT NULL,
+    external_id TEXT NOT NULL,
     name TEXT NOT NULL,
+    description TEXT NOT NULL,
     latitude REAL NOT NULL,
     longitude REAL NOT NULL,
-    categoryId TEXT NOT NULL,
-    description TEXT NOT NULL,
+    address TEXT NOT NULL,
+    category TEXT NOT NULL,
     phone TEXT NOT NULL,
     website TEXT NOT NULL,
-    openingHours TEXT NOT NULL,
-    visible INTEGER as Boolean NOT NULL,
-    createdAt TEXT NOT NULL,
-    updatedAt TEXT NOT NULL
+    opening_hours TEXT NOT NULL,
+    valid INTEGER as Boolean NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
 );
 
 insertOrReplace:
@@ -52,6 +55,6 @@ SELECT COUNT(*)
 FROM Place;
 
 selectMaxUpdatedAt:
-SELECT MAX(updatedAt)
+SELECT MAX(updated_at)
 FROM Place;
 

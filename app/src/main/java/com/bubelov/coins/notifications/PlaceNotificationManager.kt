@@ -25,7 +25,7 @@ class PlaceNotificationManager(
 
     suspend fun issueNotificationsIfInArea(newPlaces: Collection<Place>) {
         newPlaces.forEach { place ->
-            if (!place.visible) {
+            if (!place.valid) {
                 return
             }
 

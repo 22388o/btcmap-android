@@ -7,16 +7,19 @@ import java.util.*
 fun emptyPlace(): Place {
     return Place(
         id = UUID.randomUUID().toString(),
+        source = "test",
+        external_id = UUID.randomUUID().toString(),
         name = "",
+        description = "",
         latitude = 0.0,
         longitude = 0.0,
-        categoryId = UUID.randomUUID().toString(),
-        description = "",
+        address = "",
+        category = UUID.randomUUID().toString(),
         phone = "",
         website = "",
-        openingHours = "",
-        visible = true,
-        createdAt = DateTime.now().toString(),
-        updatedAt = DateTime.now().toString()
+        opening_hours = "",
+        valid = true,
+        created_at = DateTime.now().toString(),
+        updated_at = DateTime.now().toString()
     )
 }

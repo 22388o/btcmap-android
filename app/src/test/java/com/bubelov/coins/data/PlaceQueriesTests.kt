@@ -134,24 +134,27 @@ class PlaceQueriesTests : TestSuite() {
         }
 
         val item = place()
-        val updatedAt = DateTime.parse(item.updatedAt).plusYears(5).toString()
-        queries.insertOrReplace(item.copy(updatedAt = updatedAt))
+        val updatedAt = DateTime.parse(item.updated_at).plusYears(5).toString()
+        queries.insertOrReplace(item.copy(updated_at = updatedAt))
 
         assert(queries.selectMaxUpdatedAt().executeAsOne().MAX == updatedAt)
     }
 
     private fun place() = Place(
         id = UUID.randomUUID().toString(),
-        name = "Test",
-        latitude = 50.0,
-        longitude = 1.0,
-        categoryId = UUID.randomUUID().toString(),
-        description = "Test",
-        phone = "1234",
-        website = "www.test.com",
-        openingHours = "24/7",
-        visible = true,
-        createdAt = DateTime.now().toString(),
-        updatedAt = DateTime.now().toString()
+        source = "test",
+        external_id = UUID.randomUUID().toString(),
+        name = "",
+        description = "",
+        latitude = 0.0,
+        longitude = 0.0,
+        address = "",
+        category = UUID.randomUUID().toString(),
+        phone = "",
+        website = "",
+        opening_hours = "",
+        valid = true,
+        created_at = DateTime.now().toString(),
+        updated_at = DateTime.now().toString()
     )
 }

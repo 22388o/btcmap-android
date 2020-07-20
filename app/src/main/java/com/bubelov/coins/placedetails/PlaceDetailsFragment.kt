@@ -81,10 +81,10 @@ class PlaceDetailsFragment : Fragment() {
             }
         }
 
-        if (TextUtils.isEmpty(place.openingHours)) {
+        if (TextUtils.isEmpty(place.opening_hours)) {
             openingHours.setText(R.string.not_provided)
         } else {
-            openingHours.text = place.openingHours
+            openingHours.text = place.opening_hours
         }
     }
 
