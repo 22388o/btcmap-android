@@ -10,7 +10,6 @@ import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.DistanceUnits
 import com.bubelov.coins.util.DistanceUtils
@@ -22,7 +21,6 @@ import java.text.NumberFormat
 
 class PlacesSearchViewModel(
     private val placesRepository: PlacesRepository,
-    private val placeCategoriesRepository: PlaceCategoriesRepository,
     private val placeIconsRepository: PlaceIconsRepository,
     private val preferencesRepository: PreferencesRepository,
     private val resources: Resources
@@ -89,9 +87,7 @@ class PlacesSearchViewModel(
             placeId = id,
             name = name,
             distance = distanceStringBuilder.toString(),
-            icon = placeIconsRepository.getPlaceIcon(
-                placeCategoriesRepository.findById(categoryId)?.name ?: ""
-            )
+            icon = placeIconsRepository.getPlaceIcon(categoryId)
         )
     }
 
@@ -100,7 +96,7 @@ class PlacesSearchViewModel(
         val value = preferencesRepository.get(key).first()
         val defaultValue = resources.getString(R.string.pref_distance_units_automatic)
 
-        return if (value.isBlank() || value  == defaultValue) {
+        return if (value.isBlank() || value == defaultValue) {
             DistanceUnits.default
         } else {
             DistanceUnits.valueOf(value)

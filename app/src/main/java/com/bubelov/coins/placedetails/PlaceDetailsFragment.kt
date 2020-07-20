@@ -16,12 +16,8 @@ import com.bubelov.coins.R
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.util.openUrl
 import kotlinx.android.synthetic.main.fragment_place_details.*
-import kotlinx.coroutines.runBlocking
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class PlaceDetailsFragment : Fragment() {
-
-    private val model: PlaceDetailsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -90,25 +86,6 @@ class PlaceDetailsFragment : Fragment() {
         } else {
             openingHours.text = place.openingHours
         }
-
-        val acceptedCurrencies = runBlocking {
-            model.currenciesPlacesRepository.findByPlaceId(place.id).map {
-                model.currenciesRepository.find(it.currencyId)
-            }
-        }
-            .filterNotNull()
-
-        val acceptedCurrenciesString = StringBuilder().apply {
-            for (currency in acceptedCurrencies) {
-                append(currency.name)
-
-                if (currency != acceptedCurrencies.last()) {
-                    append(", ")
-                }
-            }
-        }
-
-        currencies.text = acceptedCurrenciesString
     }
 
     private fun sharePlace(place: Place) {

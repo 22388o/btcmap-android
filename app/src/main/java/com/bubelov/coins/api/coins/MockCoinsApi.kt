@@ -1,33 +1,19 @@
 package com.bubelov.coins.api.coins
 
-import com.bubelov.coins.data.Currency
-import com.bubelov.coins.data.CurrencyPlace
 import com.bubelov.coins.data.Place
-import com.bubelov.coins.data.PlaceCategory
 import com.bubelov.coins.model.User
-import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
-import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
-import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
 import com.bubelov.coins.repository.synclogs.LogsRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
-import retrofit2.mock.BehaviorDelegate
 import java.util.*
 
 class MockCoinsApi(
-    private val delegate: BehaviorDelegate<CoinsApi>,
-    currenciesCache: BuiltInCurrenciesCache,
     placesCache: BuiltInPlacesCache,
-    currenciesPlacesCache: BuiltInCurrenciesPlacesCache,
-    placeCategoriesCache: BuiltInPlaceCategoriesCache,
     logsRepository: LogsRepository
 ) : CoinsApi {
-    private val currencies = mutableListOf<Currency>()
+
     private val places = mutableListOf<Place>()
-    private val currenciesPlaces = mutableListOf<CurrencyPlace>()
-    private val placeCategories = mutableListOf<PlaceCategory>()
 
     private val date1 = DateTime.parse("2019-03-01T20:10:14+07:00")
 
@@ -45,12 +31,9 @@ class MockCoinsApi(
     private val users = mutableListOf(user1)
 
     init {
-        GlobalScope.launch {
+        runBlocking {
             logsRepository.append("api", "Initializing mock API")
-            currencies.addAll(currenciesCache.currencies)
-            places.addAll(placesCache.places)
-            currenciesPlaces.addAll(currenciesPlacesCache.currenciesPlaces)
-            placeCategories.addAll(placeCategoriesCache.placeCategories)
+            places.addAll(placesCache.loadPlaces())
         }
     }
 
@@ -81,14 +64,6 @@ class MockCoinsApi(
         return users.firstOrNull { it.id == id } ?: throw Exception("No user with id: $id")
     }
 
-    override suspend fun getCurrencies(createdOrUpdatedAfter: DateTime): List<Currency> {
-        return emptyList()
-    }
-
-    override suspend fun getCurrenciesPlaces(createdOrUpdatedAfter: DateTime): List<CurrencyPlace> {
-        return emptyList()
-    }
-
     override suspend fun getPlaces(createdOrUpdatedAfter: DateTime): List<Place> {
         return emptyList()
     }
@@ -107,9 +82,5 @@ class MockCoinsApi(
         places.remove(existingPlace)
         places += args.place
         return args.place
-    }
-
-    override suspend fun getPlaceCategories(createdOrUpdatedAfter: DateTime): List<PlaceCategory> {
-        return emptyList()
     }
 }

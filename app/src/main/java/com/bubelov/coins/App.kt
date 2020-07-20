@@ -1,14 +1,12 @@
 package com.bubelov.coins
 
 import android.app.Application
-import com.bubelov.coins.cache.BuiltInCacheController
 import com.bubelov.coins.di.androidModule
 import com.bubelov.coins.di.mainModule
 import com.bubelov.coins.di.mockApiModule
+import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.sync.DatabaseSync
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -19,7 +17,7 @@ class App : Application() {
 
     //private val databaseSyncScheduler: DatabaseSyncScheduler by inject()
 
-    private val builtInCacheController: BuiltInCacheController by inject()
+    private val placesRepository: PlacesRepository by inject()
 
     val databaseSync: DatabaseSync by inject()
 
@@ -38,8 +36,8 @@ class App : Application() {
             logsRepository.append("app", "onCreate")
         }
 
-        GlobalScope.launch {
-            builtInCacheController.initBuiltInCaches()
+        runBlocking {
+            placesRepository.initBuiltInCache()
         }
 
         //databaseSyncScheduler.schedule() TODO

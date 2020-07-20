@@ -9,7 +9,6 @@ import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.auth.AuthViewModel
-import com.bubelov.coins.cache.BuiltInCacheController
 import com.bubelov.coins.editplace.EditPlaceViewModel
 import com.bubelov.coins.launcher.LauncherViewModel
 import com.bubelov.coins.logs.LogsViewModel
@@ -19,20 +18,14 @@ import com.bubelov.coins.notificationarea.NotificationAreaViewModel
 import com.bubelov.coins.notifications.PlaceNotificationManager
 import com.bubelov.coins.permissions.PermissionsViewModel
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
-import com.bubelov.coins.placedetails.PlaceDetailsViewModel
 import com.bubelov.coins.profile.ProfileViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
 import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.area.NotificationAreaRepository
-import com.bubelov.coins.repository.currency.BuiltInCurrenciesCache
-import com.bubelov.coins.repository.currency.CurrenciesRepository
-import com.bubelov.coins.repository.currencyplace.BuiltInCurrenciesPlacesCache
-import com.bubelov.coins.repository.currencyplace.CurrenciesPlacesRepository
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
+import com.bubelov.coins.repository.place.BuiltInPlacesCacheImpl
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategory.BuiltInPlaceCategoriesCache
-import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.rate.Bitstamp
 import com.bubelov.coins.repository.rate.Coinbase
@@ -57,8 +50,6 @@ import org.koin.dsl.module
 import org.koin.experimental.builder.single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.mock.MockRetrofit
-import retrofit2.mock.NetworkBehavior
 import java.util.concurrent.TimeUnit
 
 val mainModule = module {
@@ -72,7 +63,6 @@ val mainModule = module {
     viewModel<AuthViewModel>()
     viewModel<AuthResultViewModel>()
     viewModel<PickLocationResultViewModel>()
-    viewModel<PlaceDetailsViewModel>()
     viewModel<LauncherViewModel>()
     viewModel<PermissionsViewModel>()
     viewModel<ProfileViewModel>()
@@ -84,31 +74,22 @@ val mainModule = module {
     single<LocationRepository>()
     single<NotificationAreaRepository>()
     single<PlaceIconsRepository>()
-    single<PlaceCategoriesRepository>()
     single<LogsRepository>()
-    single<CurrenciesRepository>()
-    single<CurrenciesPlacesRepository>()
     single<PreferencesRepository>()
 
     single { Database(get()) }
-    single { get<Database>().currencyQueries }
-    single { get<Database>().currencyPlaceQueries }
     single { get<Database>().placeQueries }
-    single { get<Database>().placeCategoryQueries }
     single { get<Database>().preferenceQueries }
     single { get<Database>().logEntryQueries }
-
-    single<BuiltInCacheController>()
 
     single<PlaceNotificationManager>()
 
     single<DatabaseSync>()
     single<DatabaseSyncScheduler>()
 
-    single<BuiltInCurrenciesCache>()
-    single<BuiltInPlacesCache>()
-    single<BuiltInCurrenciesPlacesCache>()
-    single<BuiltInPlaceCategoriesCache>()
+    single<BuiltInPlacesCache> {
+        BuiltInPlacesCacheImpl(get(), get(), get())
+    }
 
     single<Bitstamp>()
     single<Coinbase>()
@@ -170,21 +151,6 @@ val apiModule = module {
 
 val mockApiModule = module {
     single<CoinsApi> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.coin-map.com/v1/")
-            .build()
-
-        val networkBehavior = NetworkBehavior.create()
-
-        networkBehavior.setDelay(0, TimeUnit.MILLISECONDS)
-        networkBehavior.setErrorPercent(0)
-
-        val mockRetrofit = MockRetrofit.Builder(retrofit)
-            .networkBehavior(networkBehavior)
-            .build()
-
-        val delegate = mockRetrofit.create(CoinsApi::class.java)
-
-        MockCoinsApi(delegate, get(), get(), get(), get(), get())
+        MockCoinsApi(get(), get())
     }
 }

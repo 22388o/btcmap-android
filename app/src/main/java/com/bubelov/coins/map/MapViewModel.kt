@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.place.PlacesRepository
-import com.bubelov.coins.repository.placecategory.PlaceCategoriesRepository
-import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import kotlinx.coroutines.delay
@@ -15,8 +13,6 @@ class MapViewModel(
     private val placesRepository: PlacesRepository,
     val userRepository: UserRepository,
     locationRepository: LocationRepository,
-    private val placeIconsRepository: PlaceIconsRepository,
-    private val placeCategoriesRepository: PlaceCategoriesRepository,
     val log: LogsRepository
 ) : ViewModel() {
 
