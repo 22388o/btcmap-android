@@ -60,15 +60,13 @@ class PlaceIconsRepository(
         return when (category.toLowerCase(Locale.ROOT)) {
             "atm" -> R.drawable.ic_atm
             "restaurant" -> R.drawable.ic_restaurant
-            "café" -> R.drawable.ic_cafe
-            "bar" -> R.drawable.ic_bar
+            "cafe" -> R.drawable.ic_cafe
             "hotel" -> R.drawable.ic_hotel
-            "pizza" -> R.drawable.ic_pizza
             "fast food" -> R.drawable.ic_fast_food
             "hospital" -> R.drawable.ic_hospital
             "pharmacy" -> R.drawable.ic_pharmacy
             "taxi" -> R.drawable.ic_taxi
-            "gas station" -> R.drawable.ic_gas_station
+            "gas" -> R.drawable.ic_gas_station
             else -> null
         }
     }

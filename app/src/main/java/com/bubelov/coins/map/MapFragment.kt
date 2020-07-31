@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -361,12 +362,12 @@ class MapFragment :
                             enableMyLocation()
                             map.overlays += this
                         }
-                }
 
-                val mapController = map.controller
-                mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
-                val startPoint = GeoPoint(it.latitude, it.longitude)
-                mapController.setCenter(startPoint)
+                    val mapController = map.controller
+                    mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
+                    val startPoint = GeoPoint(it.latitude, it.longitude)
+                    mapController.setCenter(startPoint)
+                }
             }
         }
 
@@ -397,7 +398,7 @@ class MapFragment :
                                 "Description",
                                 GeoPoint(place.latitude, place.longitude)
                             ).apply {
-                                //setMarker(place.icon.toDrawable(resources))
+                                setMarker(place.icon.toDrawable(resources))
                             }
                         }
 
