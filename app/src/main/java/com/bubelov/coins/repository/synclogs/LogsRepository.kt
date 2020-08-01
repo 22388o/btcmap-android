@@ -14,11 +14,7 @@ class LogsRepository(
 ) {
     fun getAll() = queries.selectAll().asFlow().map { it.executeAsList() }
 
-    fun appendBlocking(tag: String, message: String) = runBlocking {
-        append(tag, message)
-    }
-
-    suspend fun append(tag: String, message: String) {
+    fun append(tag: String = "", message: String) = runBlocking {
         withContext(Dispatchers.IO) {
             queries.insert(
                 LogEntry(
@@ -28,5 +24,9 @@ class LogsRepository(
                 )
             )
         }
+    }
+
+    operator fun plusAssign(message: String) {
+        append("", message)
     }
 }

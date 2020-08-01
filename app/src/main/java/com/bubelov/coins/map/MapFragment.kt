@@ -23,7 +23,6 @@ import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
-import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
 import com.squareup.picasso.Picasso
@@ -506,10 +505,6 @@ class MapFragment :
 //            return true
 //        }
 //    }
-
-    private operator fun LogsRepository.plusAssign(message: String) {
-        log.appendBlocking("MapFragment", message)
-    }
 
     companion object {
         private const val REQUEST_ACCESS_LOCATION = 10

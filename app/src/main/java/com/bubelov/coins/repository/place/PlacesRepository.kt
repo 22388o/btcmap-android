@@ -1,5 +1,6 @@
 package com.bubelov.coins.repository.place
 
+import android.util.Log
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreatePlaceArgs
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
@@ -13,6 +14,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
+import java.lang.Exception
 import kotlin.time.measureTime
 
 class PlacesRepository(
@@ -20,7 +22,7 @@ class PlacesRepository(
     private val db: PlaceQueries,
     private val builtInCache: BuiltInPlacesCache,
     private val userRepository: UserRepository,
-    private val logsRepository: LogsRepository
+    private val log: LogsRepository
 ) {
 
     suspend fun find(id: String): Place? {
@@ -58,6 +60,8 @@ class PlacesRepository(
     }
 
     suspend fun sync() = withContext(Dispatchers.IO) {
+        initBuiltInCache()
+
         val syncStartDate = DateTime.now()
 
         try {
@@ -65,7 +69,7 @@ class PlacesRepository(
                 ?: DateTime(0).toString()
 
             val response = api.getPlaces(
-                createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt)
+                createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt).toString().substringBefore(".") // TODO
             )
 
             val newPlaces = response.filter {
@@ -86,7 +90,9 @@ class PlacesRepository(
             )
 
             PlacesSyncResult(tableSyncResult, newPlaces)
-        } catch (t: Throwable) {
+        } catch (e: Exception) {
+            Log.e("PlacesRepository", "Sync failed", e)
+
             val tableSyncResult = TableSyncResult(
                 startDate = syncStartDate,
                 endDate = DateTime.now(),
@@ -131,10 +137,7 @@ class PlacesRepository(
                 return@withContext
             }
 
-            logsRepository.append(
-                tag = "cache",
-                message = "Initializing built-in places cache"
-            )
+            log += "Initializing built-in places cache"
 
             val places = builtInCache.loadPlaces()
 
@@ -146,10 +149,7 @@ class PlacesRepository(
                 }
             }
 
-            logsRepository.append(
-                tag = "cache",
-                message = "Inserted ${places.size} places in ${insertDuration.inMilliseconds.toInt()} ms"
-            )
+            log += "Inserted ${places.size} places in ${insertDuration.inMilliseconds.toInt()} ms"
         }
     }
 

@@ -24,10 +24,7 @@ class BuiltInPlacesCacheImpl(
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }
 
-        log.appendBlocking(
-            tag = "cache",
-            message = "Parsed $fileName in ${duration.inMilliseconds.toInt()} ms"
-        )
+        log += "Parsed $fileName in ${duration.inMilliseconds.toInt()} ms"
 
         return result
     }

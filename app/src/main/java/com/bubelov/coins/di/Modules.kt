@@ -121,7 +121,7 @@ val apiModule = module {
     single<CoinsApi> {
         val context: Context = get()
         val gson: Gson = get()
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.NONE }
+        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

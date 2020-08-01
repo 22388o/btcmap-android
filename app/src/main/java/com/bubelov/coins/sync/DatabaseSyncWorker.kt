@@ -15,7 +15,7 @@ class DatabaseSyncWorker(
         try {
             (applicationContext as App).databaseSync.sync()
             Result.success()
-        } catch (t: Throwable) {
+        } catch (e: Exception) {
             Result.retry()
         }
     }

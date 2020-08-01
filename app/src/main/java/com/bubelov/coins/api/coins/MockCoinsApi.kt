@@ -15,7 +15,7 @@ class MockCoinsApi(
 
     private val places = mutableListOf<Place>()
 
-    private val date1 = DateTime.parse("2019-03-01T20:10:14+07:00")
+    private val date1 = DateTime.parse("2019-03-01T20:10:14")
 
     private val user1 = User(
         id = "E5B65104-60FF-4EE4-8A38-36144F479A93",
@@ -64,7 +64,7 @@ class MockCoinsApi(
         return users.firstOrNull { it.id == id } ?: throw Exception("No user with id: $id")
     }
 
-    override suspend fun getPlaces(createdOrUpdatedAfter: DateTime): List<Place> {
+    override suspend fun getPlaces(createdOrUpdatedAfter: String): List<Place> {
         return emptyList()
     }
 

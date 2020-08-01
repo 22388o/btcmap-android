@@ -7,17 +7,12 @@ import com.bubelov.coins.notifications.PlaceNotificationManager
 class DatabaseSync(
     private val placesRepository: PlacesRepository,
     private val placeNotificationManager: PlaceNotificationManager,
-    private val logsRepository: LogsRepository
+    private val log: LogsRepository
 ) {
 
     suspend fun sync() {
         val placesSyncResult = placesRepository.sync()
-
-        logsRepository.append(
-            tag = "database_sync",
-            message = "Got ${placesSyncResult.newPlaces.size} new places"
-        )
-
+        log += "Got ${placesSyncResult.newPlaces.size} new places"
         placeNotificationManager.issueNotificationsIfInArea(placesSyncResult.newPlaces)
     }
 }

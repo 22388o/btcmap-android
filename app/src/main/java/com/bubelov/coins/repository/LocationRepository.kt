@@ -25,7 +25,7 @@ class LocationRepository(
 
     private val listener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: android.location.Location) {
-            log("New location: ${location.latitude}, ${location.longitude}")
+            log += "New location: ${location.latitude}, ${location.longitude}"
             _location.value = Location(
                 latitude = location.latitude,
                 longitude = location.longitude
@@ -43,9 +43,9 @@ class LocationRepository(
     }
 
     init {
-        log("Init")
+        log += "LocationRepository.init"
         if (locationPermissionsGranted()) {
-            log("Permissions granted")
+            log += "Permissions granted"
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 10_000,
@@ -53,7 +53,7 @@ class LocationRepository(
                 listener
             )
         } else {
-            log("No permissions!")
+            log += "No permissions!"
         }
     }
 
@@ -62,8 +62,8 @@ class LocationRepository(
             return defaultLocation
         } else {
             val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            log("Last known location: ${lastKnownLocation?.latitude}, ${lastKnownLocation?.longitude}")
-            log("Enabled providers: ${locationManager.getProviders(true)}")
+            log += "Last known location: ${lastKnownLocation?.latitude}, ${lastKnownLocation?.longitude}"
+            log += "Enabled providers: ${locationManager.getProviders(true)}"
 
             return if (lastKnownLocation != null) {
                 Location(
@@ -80,8 +80,4 @@ class LocationRepository(
         context,
         Manifest.permission.ACCESS_FINE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
-
-    private fun log(message: String) {
-        log.appendBlocking("location", message)
-    }
 }

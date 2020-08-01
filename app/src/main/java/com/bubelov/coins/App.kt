@@ -2,12 +2,13 @@ package com.bubelov.coins
 
 import android.app.Application
 import com.bubelov.coins.di.androidModule
+import com.bubelov.coins.di.apiModule
 import com.bubelov.coins.di.mainModule
-import com.bubelov.coins.di.mockApiModule
-import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.sync.DatabaseSync
-import kotlinx.coroutines.runBlocking
+import com.bubelov.coins.sync.DatabaseSyncScheduler
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -15,13 +16,11 @@ import org.koin.core.context.startKoin
 
 class App : Application() {
 
-    //private val databaseSyncScheduler: DatabaseSyncScheduler by inject()
-
-    private val placesRepository: PlacesRepository by inject()
-
     val databaseSync: DatabaseSync by inject()
 
-    private val logsRepository: LogsRepository by inject()
+    private val databaseSyncScheduler: DatabaseSyncScheduler by inject()
+
+    private val log: LogsRepository by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -29,17 +28,14 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(mainModule, androidModule, mockApiModule))
+            modules(listOf(mainModule, androidModule, apiModule))
         }
 
-        runBlocking {
-            logsRepository.append("app", "onCreate")
-        }
+        log += "app.onCreate"
 
-        runBlocking {
-            placesRepository.initBuiltInCache()
+        GlobalScope.launch {
+            databaseSync.sync()
+            databaseSyncScheduler.schedule()
         }
-
-        //databaseSyncScheduler.schedule() TODO
     }
 }

@@ -26,7 +26,7 @@ interface CoinsApi {
 
     @GET("places")
     suspend fun getPlaces(
-        @Query("createdOrUpdatedAfter") createdOrUpdatedAfter: DateTime
+        @Query("created_or_updated_since") createdOrUpdatedAfter: String
     ): List<Place>
 
     @POST("places")
