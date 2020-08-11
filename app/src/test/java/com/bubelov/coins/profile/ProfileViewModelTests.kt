@@ -4,12 +4,12 @@ import com.bubelov.coins.TestSuite
 import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.user.UserRepository
 import kotlinx.coroutines.runBlocking
-import org.joda.time.DateTime
 import org.junit.Test
 import org.koin.core.inject
 import org.koin.test.mock.declareMock
 import java.util.*
 import org.mockito.BDDMockito.*
+import java.time.LocalDateTime
 
 class ProfileViewModelTests : TestSuite() {
 
@@ -24,8 +24,8 @@ class ProfileViewModelTests : TestSuite() {
             firstName = "Test",
             lastName = "Data",
             avatarUrl = "",
-            createdAt = DateTime.now(),
-            updatedAt = DateTime.now()
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
         )
 
         val userRepository = declareMock<UserRepository> {

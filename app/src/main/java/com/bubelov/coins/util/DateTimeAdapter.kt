@@ -5,24 +5,24 @@ import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
-class DateTimeAdapter : TypeAdapter<DateTime>() {
-    override fun read(`in`: JsonReader): DateTime? {
+class DateTimeAdapter : TypeAdapter<LocalDateTime>() {
+    override fun read(`in`: JsonReader): LocalDateTime? {
         return try {
             when (`in`.peek()) {
                 JsonToken.NULL -> {
                     `in`.nextNull()
                     null
                 }
-                else -> DateTime.parse(`in`.nextString())
+                else -> LocalDateTime.parse(`in`.nextString())
             }
-        } catch (t: Throwable) {
-            throw JsonParseException(t)
+        } catch (e: Exception) {
+            throw JsonParseException(e)
         }
     }
 
-    override fun write(out: JsonWriter, value: DateTime?) {
+    override fun write(out: JsonWriter, value: LocalDateTime?) {
         if (value == null) {
             out.nullValue()
         } else {

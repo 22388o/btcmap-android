@@ -1,7 +1,7 @@
 package com.bubelov.coins
 
 import com.bubelov.coins.data.Place
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 import java.util.*
 
 fun emptyPlace(): Place {
@@ -19,7 +19,7 @@ fun emptyPlace(): Place {
         website = "",
         opening_hours = "",
         valid = true,
-        created_at = DateTime.now().toString(),
-        updated_at = DateTime.now().toString()
+        created_at = LocalDateTime.now().toString(),
+        updated_at = LocalDateTime.now().toString()
     )
 }

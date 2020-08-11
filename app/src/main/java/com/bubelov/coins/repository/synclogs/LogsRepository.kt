@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
 class LogsRepository(
     private val queries: LogEntryQueries
@@ -18,7 +18,7 @@ class LogsRepository(
         withContext(Dispatchers.IO) {
             queries.insert(
                 LogEntry(
-                    datetime = DateTime.now().toString(),
+                    datetime = LocalDateTime.now().toString(),
                     tag = tag,
                     message = message
                 )

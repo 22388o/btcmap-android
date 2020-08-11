@@ -8,10 +8,17 @@ import android.view.ViewGroup
 import com.bubelov.coins.R
 import com.bubelov.coins.data.LogEntry
 import kotlinx.android.synthetic.main.row_log_entry.view.*
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class LogsAdapter : RecyclerView.Adapter<LogsAdapter.ViewHolder>() {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    companion object {
+        val DATE_TIME_FORMATTER: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    }
 
     private val items = mutableListOf<LogEntry>()
 
@@ -30,8 +37,14 @@ class LogsAdapter : RecyclerView.Adapter<LogsAdapter.ViewHolder>() {
         val item = items[position]
 
         holder.itemView.apply {
-            meta.text = "${DateTimeFormat.longDateTime()
-                .print(DateTime.parse(item.datetime))} · ${item.tag}"
+            meta.text = buildString {
+                append(LocalDateTime.parse(item.datetime).format(DATE_TIME_FORMATTER))
+
+                if (item.tag.isNotBlank()) {
+                    append(" · ${item.tag}")
+                }
+            }
+
             message.text = item.message
         }
     }
@@ -43,6 +56,4 @@ class LogsAdapter : RecyclerView.Adapter<LogsAdapter.ViewHolder>() {
         items.addAll(newItems)
         notifyDataSetChanged()
     }
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }

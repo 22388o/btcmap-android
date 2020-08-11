@@ -1,9 +1,9 @@
 package com.bubelov.coins.data
 
 import com.bubelov.coins.TestSuite
-import org.joda.time.DateTime
 import org.junit.Test
 import org.koin.core.inject
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.random.Random
 
@@ -73,7 +73,7 @@ class LogEntryQueriesTests : TestSuite() {
     }
 
     private fun testItem() = LogEntry(
-        datetime = DateTime.now().toString(),
+        datetime = LocalDateTime.now().toString(),
         tag = "test_tag_${UUID.randomUUID()}",
         message = "test_massage_${UUID.randomUUID()}"
     )

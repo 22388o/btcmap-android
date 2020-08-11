@@ -5,7 +5,7 @@ import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import kotlinx.coroutines.runBlocking
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 import java.util.*
 
 class MockCoinsApi(
@@ -15,7 +15,7 @@ class MockCoinsApi(
 
     private val places = mutableListOf<Place>()
 
-    private val date1 = DateTime.parse("2019-03-01T20:10:14")
+    private val date1 = LocalDateTime.parse("2019-03-01T20:10:14")
 
     private val user1 = User(
         id = "E5B65104-60FF-4EE4-8A38-36144F479A93",
@@ -52,8 +52,8 @@ class MockCoinsApi(
             firstName = args.firstName,
             lastName = args.lastName,
             avatarUrl = "",
-            createdAt = DateTime.now(),
-            updatedAt = DateTime.now()
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
         )
 
         users += user
@@ -64,7 +64,7 @@ class MockCoinsApi(
         return users.firstOrNull { it.id == id } ?: throw Exception("No user with id: $id")
     }
 
-    override suspend fun getPlaces(createdOrUpdatedAfter: String): List<Place> {
+    override suspend fun getPlaces(createdOrUpdatedAfter: LocalDateTime): List<Place> {
         return emptyList()
     }
 

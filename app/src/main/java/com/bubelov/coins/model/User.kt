@@ -1,6 +1,6 @@
 package com.bubelov.coins.model
 
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
 data class User(
     val id: String,
@@ -9,6 +9,6 @@ data class User(
     val firstName: String,
     val lastName: String,
     val avatarUrl: String,
-    val createdAt: DateTime,
-    val updatedAt: DateTime
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime
 )

@@ -1,9 +1,9 @@
 package com.bubelov.coins.data
 
 import com.bubelov.coins.TestSuite
-import org.joda.time.DateTime
 import org.junit.Test
 import org.koin.core.inject
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.random.Random
 
@@ -134,7 +134,7 @@ class PlaceQueriesTests : TestSuite() {
         }
 
         val item = place()
-        val updatedAt = DateTime.parse(item.updated_at).plusYears(5).toString()
+        val updatedAt = LocalDateTime.parse(item.updated_at).plusYears(5).toString()
         queries.insertOrReplace(item.copy(updated_at = updatedAt))
 
         assert(queries.selectMaxUpdatedAt().executeAsOne().MAX == updatedAt)
@@ -154,7 +154,7 @@ class PlaceQueriesTests : TestSuite() {
         website = "",
         opening_hours = "",
         valid = true,
-        created_at = DateTime.now().toString(),
-        updated_at = DateTime.now().toString()
+        created_at = LocalDateTime.now().toString(),
+        updated_at = LocalDateTime.now().toString()
     )
 }

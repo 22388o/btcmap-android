@@ -10,7 +10,7 @@ import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.util.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
 class SettingsViewModel(
     private val placesRepository: PlacesRepository,
@@ -39,7 +39,7 @@ class SettingsViewModel(
     fun showSyncLogs() = viewModelScope.launch {
         val logs = logsRepository.getAll().first()
             .reversed()
-            .map { "Date: ${DateTime.parse(it.datetime)}, Message: ${it.message}" }
+            .map { "Date: ${LocalDateTime.parse(it.datetime)}, Message: ${it.message}" }
 
         if (isActive && logs.isNotEmpty()) {
             _syncLogs.value = logs

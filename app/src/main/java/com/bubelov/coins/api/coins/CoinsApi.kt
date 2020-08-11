@@ -3,8 +3,8 @@ package com.bubelov.coins.api.coins
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.User
 import com.bubelov.coins.util.Json
-import org.joda.time.DateTime
 import retrofit2.http.*
+import java.time.LocalDateTime
 
 interface CoinsApi {
 
@@ -26,7 +26,7 @@ interface CoinsApi {
 
     @GET("places")
     suspend fun getPlaces(
-        @Query("created_or_updated_since") createdOrUpdatedAfter: String
+        @Query("created_or_updated_since") createdOrUpdatedAfter: LocalDateTime
     ): List<Place>
 
     @POST("places")

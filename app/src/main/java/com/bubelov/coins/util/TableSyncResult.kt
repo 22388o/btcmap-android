@@ -1,10 +1,10 @@
 package com.bubelov.coins.util
 
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
 data class TableSyncResult(
-    val startDate: DateTime,
-    val endDate: DateTime,
+    val startDate: LocalDateTime,
+    val endDate: LocalDateTime,
     val success: Boolean,
     val affectedRecords: Int
 )

@@ -13,8 +13,8 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.joda.time.DateTime
 import java.lang.Exception
+import java.time.LocalDateTime
 import kotlin.time.measureTime
 
 class PlacesRepository(
@@ -62,14 +62,14 @@ class PlacesRepository(
     suspend fun sync() = withContext(Dispatchers.IO) {
         initBuiltInCache()
 
-        val syncStartDate = DateTime.now()
+        val syncStartDate = LocalDateTime.now()
 
         try {
             val maxUpdatedAt = db.selectMaxUpdatedAt().executeAsOneOrNull()?.MAX
-                ?: DateTime(0).toString()
+                ?: LocalDateTime.now().minusYears(50).toString()
 
             val response = api.getPlaces(
-                createdOrUpdatedAfter = DateTime.parse(maxUpdatedAt).toString().substringBefore(".") // TODO
+                createdOrUpdatedAfter = LocalDateTime.parse(maxUpdatedAt)
             )
 
             val newPlaces = response.filter {
@@ -84,7 +84,7 @@ class PlacesRepository(
 
             val tableSyncResult = TableSyncResult(
                 startDate = syncStartDate,
-                endDate = DateTime.now(),
+                endDate = LocalDateTime.now(),
                 success = true,
                 affectedRecords = response.size
             )
@@ -95,7 +95,7 @@ class PlacesRepository(
 
             val tableSyncResult = TableSyncResult(
                 startDate = syncStartDate,
-                endDate = DateTime.now(),
+                endDate = LocalDateTime.now(),
                 success = false,
                 affectedRecords = 0
             )

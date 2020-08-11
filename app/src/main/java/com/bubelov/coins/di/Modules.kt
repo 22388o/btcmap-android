@@ -44,12 +44,12 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.joda.time.DateTime
 import org.koin.android.experimental.dsl.viewModel
 import org.koin.dsl.module
 import org.koin.experimental.builder.single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 val mainModule = module {
@@ -98,7 +98,7 @@ val mainModule = module {
 
     single {
         GsonBuilder()
-            .registerTypeAdapter(DateTime::class.java, DateTimeAdapter())
+            .registerTypeAdapter(LocalDateTime::class.java, DateTimeAdapter())
             .create()
     }
 }

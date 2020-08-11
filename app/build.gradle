@@ -64,6 +64,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions_desugar"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions_coroutines"
     implementation "org.koin:koin-android:$plugin_versions_koin"
@@ -92,7 +94,6 @@ dependencies {
     implementation "org.osmdroid:osmdroid-android:$versions_osmdroid"
     implementation "com.google.code.gson:gson:$versions_gson"
     implementation "com.squareup.picasso:picasso:$versions_picasso"
-    implementation "joda-time:joda-time:$versions_joda_time"
 
     testImplementation "junit:junit:$versions_junit"
     testImplementation "androidx.arch.core:core-testing:$versions_arch_core_testing"
