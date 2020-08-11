@@ -58,7 +58,7 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_check_circle"
-                android:tint="@color/green_700" />
+                app:tint="@color/green_700" />
 
             <ImageView
                 android:id="@+id/warning"
@@ -66,7 +66,7 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_warning"
-                android:tint="@color/red_500" />
+                app:tint="@color/red_500" />
 
         </LinearLayout>
 
@@ -103,7 +103,7 @@
                 android:contentDescription="@null"
                 android:padding="24dp"
                 android:src="@drawable/ic_phone"
-                android:tint="@color/text_secondary"
+                app:tint="@color/text_secondary"
                 app:layout_constraintEnd_toStartOf="@id/phoneTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/description" />
@@ -144,7 +144,7 @@
                 android:contentDescription="@null"
                 android:padding="24dp"
                 android:src="@drawable/ic_globe"
-                android:tint="@color/text_secondary"
+                app:tint="@color/text_secondary"
                 app:layout_constraintEnd_toStartOf="@id/websiteTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/phoneIcon" />
@@ -185,7 +185,7 @@
                 android:contentDescription="@null"
                 android:padding="24dp"
                 android:src="@drawable/ic_access_time"
-                android:tint="@color/text_secondary"
+                app:tint="@color/text_secondary"
                 app:layout_constraintEnd_toStartOf="@id/openingHoursTitle"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +227,7 @@
                 android:contentDescription="@null"
                 android:padding="24dp"
                 android:src="@drawable/ic_dollar"
-                android:tint="@color/text_secondary"
+                app:tint="@color/text_secondary"
                 app:layout_constraintBottom_toBottomOf="@id/currencies"
                 app:layout_constraintEnd_toStartOf="@id/currenciesTitle"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"

@@ -62,7 +62,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_my_location"
-                android:tint="@color/primary_dark" />
+                app:tint="@color/primary_dark" />
 
         </FrameLayout>
 
@@ -84,7 +84,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_edit"
-                android:tint="@color/white" />
+                app:tint="@color/white" />
 
         </FrameLayout>
 

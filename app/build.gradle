@@ -59,6 +59,7 @@ android {
 
     lintOptions {
         disable 'VectorPath'
+        abortOnError false // TODO Unexpected failure during lint analysis of ModuleTests.kt (this is a bug in lint or one of the libraries it depends on)
     }
 }
 

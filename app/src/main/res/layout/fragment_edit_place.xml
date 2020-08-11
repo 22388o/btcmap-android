@@ -91,7 +91,7 @@
                         android:layout_gravity="center"
                         android:contentDescription="@null"
                         android:src="@drawable/ic_edit"
-                        android:tint="@color/primary_dark" />
+                        app:tint="@color/primary_dark" />
 
                 </FrameLayout>
 

@@ -41,7 +41,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/clear_search"
                 android:src="@drawable/ic_close"
-                android:tint="@color/text_secondary"
+                app:tint="@color/text_secondary"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
