@@ -29,7 +29,6 @@ class PreferencesRepository(
     fun getCount() = queries.selectCount().asFlow().map { it.executeAsOne() }
 
     companion object {
-        const val PERMISSIONS_EXPLAINED_KEY = "permissions_explained"
         const val NOTIFICATION_AREA_KEY = "notification_area"
         const val DISTANCE_UNITS_KEY = "distance_units"
     }

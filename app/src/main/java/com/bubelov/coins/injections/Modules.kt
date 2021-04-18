@@ -1,4 +1,4 @@
-package com.bubelov.coins.di
+package com.bubelov.coins.injections
 
 import android.content.Context
 import android.location.LocationManager
@@ -10,13 +10,11 @@ import com.bubelov.coins.api.coins.MockCoinsApi
 import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.auth.AuthViewModel
 import com.bubelov.coins.editplace.EditPlaceViewModel
-import com.bubelov.coins.launcher.LauncherViewModel
 import com.bubelov.coins.logs.LogsViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.notificationarea.NotificationAreaViewModel
 import com.bubelov.coins.notifications.PlaceNotificationManager
-import com.bubelov.coins.permissions.PermissionsViewModel
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import com.bubelov.coins.profile.ProfileViewModel
 import com.bubelov.coins.rates.ExchangeRatesViewModel
@@ -63,8 +61,6 @@ val mainModule = module {
     viewModel<AuthViewModel>()
     viewModel<AuthResultViewModel>()
     viewModel<PickLocationResultViewModel>()
-    viewModel<LauncherViewModel>()
-    viewModel<PermissionsViewModel>()
     viewModel<ProfileViewModel>()
     viewModel<LogsViewModel>()
 

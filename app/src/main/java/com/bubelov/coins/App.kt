@@ -1,10 +1,11 @@
 package com.bubelov.coins
 
 import android.app.Application
-import com.bubelov.coins.di.androidModule
-import com.bubelov.coins.di.apiModule
-import com.bubelov.coins.di.mainModule
+import com.bubelov.coins.injections.androidModule
+import com.bubelov.coins.injections.apiModule
+import com.bubelov.coins.injections.mainModule
 import com.bubelov.coins.repository.synclogs.LogsRepository
+import com.bubelov.coins.repository.synclogs.logEntry
 import com.bubelov.coins.sync.DatabaseSync
 import com.bubelov.coins.sync.DatabaseSyncScheduler
 import kotlinx.coroutines.GlobalScope
@@ -31,7 +32,7 @@ class App : Application() {
             modules(listOf(mainModule, androidModule, apiModule))
         }
 
-        log += "app.onCreate"
+        log += logEntry("onCreate")
 
         GlobalScope.launch {
             databaseSync.sync()

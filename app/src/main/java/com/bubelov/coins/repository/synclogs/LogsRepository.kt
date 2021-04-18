@@ -26,7 +26,17 @@ class LogsRepository(
         }
     }
 
+    operator fun plusAssign(entry: LogEntry) = runBlocking {
+        queries.insert(entry)
+    }
+
     operator fun plusAssign(message: String) {
         append("", message)
     }
 }
+
+fun Any.logEntry(message: String) = LogEntry(
+    datetime = LocalDateTime.now().toString(),
+    tag = this.javaClass.simpleName,
+    message = message
+)

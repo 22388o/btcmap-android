@@ -1,8 +1,8 @@
 package com.bubelov.coins
 
 import android.content.res.AssetManager
-import com.bubelov.coins.di.mainModule
-import com.bubelov.coins.di.mockApiModule
+import com.bubelov.coins.injections.mainModule
+import com.bubelov.coins.injections.mockApiModule
 import org.junit.Before
 import org.junit.Rule
 import org.koin.test.KoinTest

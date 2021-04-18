@@ -3,43 +3,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/launcherFragment">
-
-    <fragment
-        android:id="@+id/launcherFragment"
-        android:name="com.bubelov.coins.launcher.LauncherFragment"
-        android:label="LauncherFragment">
-        <action
-            android:id="@+id/action_launcherFragment_to_permissionsFragment"
-            app:destination="@id/permissionsFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/nav_graph" />
-        <action
-            android:id="@+id/action_launcherFragment_to_mapFragment"
-            app:destination="@id/mapFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/nav_graph" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/permissionsFragment"
-        android:name="com.bubelov.coins.permissions.PermissionsFragment"
-        android:label="PermissionsFragment">
-        <action
-            android:id="@+id/action_permissionsFragment_to_mapFragment"
-            app:destination="@id/mapFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/nav_graph" />
-    </fragment>
+    app:startDestination="@id/mapFragment">
 
     <fragment
         android:id="@+id/mapFragment"
