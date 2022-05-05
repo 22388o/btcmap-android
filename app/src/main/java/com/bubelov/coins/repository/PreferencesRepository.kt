@@ -21,7 +21,7 @@ class PreferencesRepository(
 
     fun get(key: String): Flow<String> {
         return queries.selectByKey(key).asFlow()
-            .map { it.executeAsOneOrNull()?.value ?: "" }
+            .map { it.executeAsOneOrNull()?.value_ ?: "" }
     }
 
     fun getAll() = queries.selectAll().asFlow().map { it.executeAsList() }

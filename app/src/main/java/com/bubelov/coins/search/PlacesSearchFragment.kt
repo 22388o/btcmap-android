@@ -17,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.util.*
 import kotlinx.android.synthetic.main.fragment_places_search.*
-import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlacesSearchFragment : Fragment() {
 

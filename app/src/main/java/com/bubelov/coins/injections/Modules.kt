@@ -42,53 +42,55 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.experimental.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import org.koin.experimental.builder.single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 val mainModule = module {
-    viewModel<EditPlaceViewModel>()
-    viewModel<ExchangeRatesViewModel>()
-    viewModel<MapViewModel>()
-    viewModel<NotificationAreaViewModel>()
-    viewModel<PlacesSearchViewModel>()
-    viewModel<PlacesSearchResultViewModel>()
-    viewModel<SettingsViewModel>()
-    viewModel<AuthViewModel>()
-    viewModel<AuthResultViewModel>()
-    viewModel<PickLocationResultViewModel>()
-    viewModel<ProfileViewModel>()
-    viewModel<LogsViewModel>()
 
-    single<PlacesRepository>()
-    single<ExchangeRatesRepository>()
-    single<UserRepository>()
-    single<LocationRepository>()
-    single<NotificationAreaRepository>()
-    single<PlaceIconsRepository>()
-    single<LogsRepository>()
-    single<PreferencesRepository>()
+    viewModelOf(::EditPlaceViewModel)
+    viewModelOf(::ExchangeRatesViewModel)
+    viewModelOf(::MapViewModel)
+    viewModelOf(::NotificationAreaViewModel)
+    viewModelOf(::PlacesSearchViewModel)
+    viewModelOf(::PlacesSearchResultViewModel)
+    viewModelOf(::SettingsViewModel)
+    viewModelOf(::AuthViewModel)
+    viewModelOf(::AuthResultViewModel)
+    viewModelOf(::PickLocationResultViewModel)
+    viewModelOf(::ProfileViewModel)
+    viewModelOf(::LogsViewModel)
+
+    singleOf(::PlacesRepository)
+    singleOf(::ExchangeRatesRepository)
+    singleOf(::UserRepository)
+    singleOf(::LocationRepository)
+    singleOf(::NotificationAreaRepository)
+    singleOf(::PlaceIconsRepository)
+    singleOf(::LogsRepository)
+    singleOf(::PreferencesRepository)
 
     single { Database(get()) }
     single { get<Database>().placeQueries }
     single { get<Database>().preferenceQueries }
     single { get<Database>().logEntryQueries }
 
-    single<PlaceNotificationManager>()
+    singleOf(::PlaceNotificationManager)
 
-    single<DatabaseSync>()
-    single<DatabaseSyncScheduler>()
+    singleOf(::DatabaseSync)
+    singleOf(::DatabaseSyncScheduler)
 
     single<BuiltInPlacesCache> {
         BuiltInPlacesCacheImpl(get(), get(), get())
     }
 
-    single<Bitstamp>()
-    single<Coinbase>()
+    singleOf(::Bitstamp)
+    singleOf(::Coinbase)
 
     single { Location(40.7141667, -74.0063889) } // TODO remove
 

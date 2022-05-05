@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.bubelov.coins.R
 import kotlinx.android.synthetic.main.fragment_pick_location.*
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class PickLocationFragment : Fragment() {
 

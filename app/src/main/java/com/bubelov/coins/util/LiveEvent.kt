@@ -33,17 +33,18 @@ class LiveEvent<T> : MediatorLiveData<T>() {
         super.removeObservers(owner)
     }
 
-    override fun removeObserver(observer: Observer<in T>) {
-        observers.forEach {
-            if (it.value.remove(observer)) {
-                if (it.value.isEmpty()) {
-                    observers.remove(it.key)
-                }
-                return@forEach
-            }
-        }
-        super.removeObserver(observer)
-    }
+// TODO
+//    override fun removeObserver(observer: Observer<in T>) {
+//        observers.forEach {
+//            if (it.value.remove(observer)) {
+//                if (it.value.isEmpty()) {
+//                    observers.remove(it.key)
+//                }
+//                return@forEach
+//            }
+//        }
+//        super.removeObserver(observer)
+//    }
 
     @MainThread
     override fun setValue(t: T?) {

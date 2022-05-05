@@ -18,8 +18,8 @@ import com.bubelov.coins.util.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_email_sign_in.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EmailSignInFragment : Fragment(), TextView.OnEditorActionListener {
 

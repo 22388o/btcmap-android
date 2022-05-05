@@ -14,7 +14,7 @@ import com.bubelov.coins.R
 import com.bubelov.coins.util.CircleTransformation
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 

@@ -12,8 +12,8 @@ import com.bubelov.coins.R
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
 import kotlinx.android.synthetic.main.fragment_edit_place.*
-import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditPlaceFragment : Fragment() {
 

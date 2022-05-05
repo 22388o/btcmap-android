@@ -13,7 +13,7 @@ import com.bubelov.coins.R
 import com.bubelov.coins.model.CurrencyPair
 import kotlinx.android.synthetic.main.fragment_exchange_rates.*
 import kotlinx.coroutines.flow.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExchangeRatesFragment : Fragment() {
 

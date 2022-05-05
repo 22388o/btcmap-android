@@ -8,10 +8,10 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:$plugin_versions_android")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$plugin_versions_kotlin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
         classpath "org.koin:koin-gradle-plugin:$plugin_versions_koin"
         classpath "com.squareup.sqldelight:gradle-plugin:$plugin_versions_sqldelight"
-        classpath("android.arch.navigation:navigation-safe-args-gradle-plugin:$plugin_versions_safe_args")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$plugin_versions_safe_args")
     }
 }
 
