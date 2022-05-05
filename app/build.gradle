@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "com.coinmap"
 
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 31
 
         versionCode 42
@@ -23,12 +23,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_11.toString()
         freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         freeCompilerArgs += "-Xopt-in=kotlin.time.ExperimentalTime"
     }
@@ -76,8 +76,6 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions_desugar"
-
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions_coroutines"
     implementation "io.insert-koin:koin-android:3.2.0-beta-1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions_lifecycle"
