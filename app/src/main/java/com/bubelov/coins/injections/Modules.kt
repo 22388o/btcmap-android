@@ -38,7 +38,6 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -47,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
-val mainModule = module {
+val module = module {
 
     viewModelOf(::EditPlaceViewModel)
     viewModelOf(::ExchangeRatesViewModel)
@@ -92,9 +91,7 @@ val mainModule = module {
             .registerTypeAdapter(LocalDateTime::class.java, DateTimeAdapter())
             .create()
     }
-}
 
-val androidModule = module {
     single { get<Context>().resources }
     single { get<Context>().assets }
     single { get<Context>().getSystemService(Context.LOCATION_SERVICE) as LocationManager }
@@ -106,9 +103,7 @@ val androidModule = module {
             name = "data.db"
         )
     }
-}
 
-val apiModule = module {
     single<CoinsApi> {
         val context: Context = get()
         val gson: Gson = get()

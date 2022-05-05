@@ -1,9 +1,7 @@
 package com.bubelov.coins
 
 import android.app.Application
-import com.bubelov.coins.injections.androidModule
-import com.bubelov.coins.injections.apiModule
-import com.bubelov.coins.injections.mainModule
+import com.bubelov.coins.injections.module
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.synclogs.logEntry
 import com.bubelov.coins.sync.DatabaseSync
@@ -29,7 +27,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(mainModule, androidModule, apiModule))
+            modules(listOf(module))
         }
 
         log += logEntry("onCreate")
