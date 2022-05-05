@@ -75,7 +75,7 @@ class PlaceDetailsFragment : Fragment() {
             if (TextUtils.isEmpty(place.website)) {
                 setText(R.string.not_provided)
                 setTextColor(ContextCompat.getColor(context, R.color.black))
-                paintFlags = binding.website!!.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+                paintFlags = binding.website.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
                 setOnClickListener(null)
             } else {
                 text = place.website

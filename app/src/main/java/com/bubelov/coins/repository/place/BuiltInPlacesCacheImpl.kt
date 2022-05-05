@@ -24,7 +24,7 @@ class BuiltInPlacesCacheImpl(
             result = gson.fromJson(InputStreamReader(input), typeToken.type)
         }
 
-        log += "Parsed $fileName in ${duration.inMilliseconds.toInt()} ms"
+        log += "Parsed $fileName in ${duration.inWholeMilliseconds.toInt()} ms"
 
         return result
     }

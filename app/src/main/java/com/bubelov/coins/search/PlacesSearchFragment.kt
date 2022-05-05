@@ -3,18 +3,15 @@ package com.bubelov.coins.search
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.text.Editable
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bubelov.coins.R
 import com.bubelov.coins.databinding.FragmentPlacesSearchBinding
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.util.*
@@ -84,26 +81,6 @@ class PlacesSearchFragment : Fragment() {
         }
 
         binding.clear.setOnClickListener { binding.query.setText("") }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        requireActivity().window.apply {
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = ContextCompat.getColor(requireContext(), R.color.search_status_bar)
-        }
-    }
-
-    override fun onPause() {
-        requireActivity().window.apply {
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = ContextCompat.getColor(requireContext(), R.color.primary_dark)
-        }
-
-        super.onPause()
     }
 
     override fun onDestroyView() {

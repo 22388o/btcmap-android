@@ -44,7 +44,7 @@ class PickLocationFragment : Fragment() {
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_done -> {
-                        val map = binding.map ?: return@setOnMenuItemClickListener true
+//                        val map = binding.map ?: return@setOnMenuItemClickListener true
 
 //                        resultModel.pickLocation(Location(
 //                            map.cameraPosition.target.latitude,

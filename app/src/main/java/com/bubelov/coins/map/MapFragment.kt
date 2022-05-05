@@ -21,10 +21,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.data.Place
 import com.bubelov.coins.databinding.FragmentMapBinding
-import com.bubelov.coins.model.Location
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
@@ -55,8 +53,6 @@ class MapFragment :
     private val log by lazy { model.log }
 
     private val placesSearchResultModel: PlacesSearchResultViewModel by sharedViewModel()
-
-    private val authResultModel: AuthResultViewModel by sharedViewModel()
 
     private val placeDetailsFragment by lazy {
         childFragmentManager.findFragmentById(R.id.placeDetailsFragment) as PlaceDetailsFragment
@@ -92,7 +88,7 @@ class MapFragment :
         bottomSheetBehavior = BottomSheetBehavior.from(binding.placeDetails).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
 
-            setBottomSheetCallback(object :
+            addBottomSheetCallback(object :
                 BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
 
@@ -189,39 +185,6 @@ class MapFragment :
         placesSearchResultModel.pickedPlaceId.observe(viewLifecycleOwner, Observer { id ->
             lifecycleScope.launch {
                 model.selectPlace(id ?: "")
-            }
-        })
-
-        authResultModel.authorized.observe(viewLifecycleOwner, Observer {
-            runBlocking {
-                updateDrawerHeader()
-            }
-
-            when (model.postAuthAction) {
-                PostAuthAction.ADD_PLACE -> {
-                    val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
-                        null,
-                        binding.map.boundingBox.centerLatitude.toString(),
-                        binding.map.boundingBox.centerLongitude.toString(),
-                    )
-
-                    findNavController().navigate(action)
-                }
-
-                PostAuthAction.EDIT_SELECTED_PLACE -> {
-                    lifecycleScope.launch {
-                        val selectedPlace =
-                            model.selectedPlaceFlow.toList().lastOrNull() ?: return@launch
-
-                        val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
-                            selectedPlace.id,
-                            binding.map.boundingBox.centerLatitude.toString(),
-                            binding.map.boundingBox.centerLongitude.toString(),
-                        )
-
-                        findNavController().navigate(action)
-                    }
-                }
             }
         })
     }

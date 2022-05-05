@@ -149,7 +149,7 @@ class PlacesRepository(
                 }
             }
 
-            log += "Inserted ${places.size} places in ${insertDuration.inMilliseconds.toInt()} ms"
+            log += "Inserted ${places.size} places in ${insertDuration.inWholeMilliseconds.toInt()} ms"
         }
     }
 

@@ -100,7 +100,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$versions_constraint_layout"
     implementation "androidx.core:core-ktx:$versions_ktx"
     implementation "androidx.browser:browser:$versions_browser"
-    implementation "org.osmdroid:osmdroid-android:$versions_osmdroid"
+    implementation "org.osmdroid:osmdroid-android:6.1.11"
     implementation "com.google.code.gson:gson:$versions_gson"
     implementation "com.squareup.picasso:picasso:$versions_picasso"
 

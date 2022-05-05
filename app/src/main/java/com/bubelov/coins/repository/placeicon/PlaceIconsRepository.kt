@@ -57,7 +57,7 @@ class PlaceIconsRepository(
     }
 
     private fun getIconResId(category: String): Int? {
-        return when (category.toLowerCase(Locale.ROOT)) {
+        return when (category.lowercase()) {
             "atm" -> R.drawable.ic_atm
             "restaurant" -> R.drawable.ic_restaurant
             "cafe" -> R.drawable.ic_cafe

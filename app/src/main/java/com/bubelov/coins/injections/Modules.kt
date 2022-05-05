@@ -6,11 +6,7 @@ import android.net.ConnectivityManager
 import com.bubelov.coins.Database
 import com.bubelov.coins.api.ConnectivityCheckingInterceptor
 import com.bubelov.coins.api.coins.CoinsApi
-import com.bubelov.coins.api.coins.MockCoinsApi
-import com.bubelov.coins.auth.AuthResultViewModel
-import com.bubelov.coins.auth.AuthViewModel
 import com.bubelov.coins.editplace.EditPlaceViewModel
-import com.bubelov.coins.logs.LogsViewModel
 import com.bubelov.coins.map.MapViewModel
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.notificationarea.NotificationAreaViewModel
@@ -60,11 +56,8 @@ val mainModule = module {
     viewModelOf(::PlacesSearchViewModel)
     viewModelOf(::PlacesSearchResultViewModel)
     viewModelOf(::SettingsViewModel)
-    viewModelOf(::AuthViewModel)
-    viewModelOf(::AuthResultViewModel)
     viewModelOf(::PickLocationResultViewModel)
     viewModelOf(::ProfileViewModel)
-    viewModelOf(::LogsViewModel)
 
     singleOf(::PlacesRepository)
     singleOf(::ExchangeRatesRepository)
@@ -138,17 +131,10 @@ val apiModule = module {
 
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addConverterFactory(JsonStringConverterFactory(GsonConverterFactory.create()))
             .baseUrl("https://api.coin-map.com/v1/")
             .client(client)
             .build()
 
         retrofit.create(CoinsApi::class.java)
-    }
-}
-
-val mockApiModule = module {
-    single<CoinsApi> {
-        MockCoinsApi(get(), get())
     }
 }
