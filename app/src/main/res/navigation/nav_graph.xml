@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.bubelov.coins.map.MapFragment"
+        android:name="map.MapFragment"
         android:label="MapFragment">
         <action
             android:id="@+id/action_mapFragment_to_supportProjectFragment"
@@ -69,12 +69,12 @@
 
     <fragment
         android:id="@+id/supportProjectFragment"
-        android:name="com.bubelov.coins.support.SupportProjectFragment"
+        android:name="support.SupportProjectFragment"
         android:label="SupportProjectFragment" />
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.bubelov.coins.settings.SettingsFragment"
+        android:name="settings.SettingsFragment"
         android:label="SettingsFragment">
         <action
             android:id="@+id/action_settingsFragment_to_logsFragment"
@@ -100,12 +100,12 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.bubelov.coins.profile.ProfileFragment"
+        android:name="profile.ProfileFragment"
         android:label="ProfileFragment" />
 
     <fragment
         android:id="@+id/editPlaceFragment"
-        android:name="com.bubelov.coins.editplace.EditPlaceFragment"
+        android:name="editplace.EditPlaceFragment"
         android:label="EditPlaceFragment">
         <argument
             android:name="placeId"
@@ -130,7 +130,7 @@
 
     <fragment
         android:id="@+id/pickLocationFragment"
-        android:name="com.bubelov.coins.picklocation.PickLocationFragment"
+        android:name="picklocation.PickLocationFragment"
         android:label="PickLocationFragment">
         <argument
             android:name="lat"
@@ -144,7 +144,7 @@
 
     <fragment
         android:id="@+id/placesSearchFragment"
-        android:name="com.bubelov.coins.search.PlacesSearchFragment"
+        android:name="search.PlacesSearchFragment"
         android:label="PlacesSearchFragment">
         <argument
             android:name="lat"
@@ -158,12 +158,12 @@
 
     <fragment
         android:id="@+id/exchangeRatesFragment"
-        android:name="com.bubelov.coins.rates.ExchangeRatesFragment"
+        android:name="rates.ExchangeRatesFragment"
         android:label="ExchangeRatesFragment" />
 
     <fragment
         android:id="@+id/notificationAreaFragment"
-        android:name="com.bubelov.coins.notificationarea.NotificationAreaFragment"
+        android:name="notificationarea.NotificationAreaFragment"
         android:label="NotificationAreaFragment" />
 
     <fragment

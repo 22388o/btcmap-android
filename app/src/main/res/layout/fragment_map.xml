@@ -38,7 +38,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/placeDetailsFragment"
-                android:name="com.bubelov.coins.placedetails.PlaceDetailsFragment"
+                android:name="placedetails.PlaceDetailsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

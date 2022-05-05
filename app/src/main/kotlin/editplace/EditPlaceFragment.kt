@@ -1,0 +1,218 @@
+package editplace
+
+import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.bubelov.coins.R
+import com.bubelov.coins.databinding.FragmentEditPlaceBinding
+import model.Location
+import picklocation.PickLocationResultViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class EditPlaceFragment : Fragment() {
+
+    private val model: EditPlaceViewModel by viewModel()
+
+    private val locationResultModel: PickLocationResultViewModel by sharedViewModel()
+
+    private val placeId by lazy {
+        EditPlaceFragmentArgs.fromBundle(requireArguments()).placeId
+    }
+
+    private val passedLocation by lazy {
+        Location(
+            latitude = EditPlaceFragmentArgs.fromBundle(requireArguments()).lat.toDouble(),
+            longitude = EditPlaceFragmentArgs.fromBundle(requireArguments()).lon.toDouble(),
+        )
+    }
+
+//    private var map: GoogleMap? = null
+//
+//    private var placeLocationMarker: Marker? = null
+
+    private var pickedLocation: Location? = null
+
+    private var _binding: FragmentEditPlaceBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentEditPlaceBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.toolbar.apply {
+            setNavigationOnClickListener { findNavController().popBackStack() }
+            inflateMenu(R.menu.edit_place)
+
+            setOnMenuItemClickListener { item ->
+                if (item.itemId == R.id.action_send) {
+                    submit()
+                }
+
+                true
+            }
+        }
+
+//        val place = place
+//
+//        if (place == null) {
+//            toolbar.setTitle(R.string.action_add_place)
+//            closedSwitch.isVisible = false
+//        } else {
+//            name.setText(place.name)
+//            phone.setText(place.phone)
+//            website.setText(place.website)
+//            description.setText(place.description)
+//            openingHours.setText(place.openingHours)
+//        }
+
+//        (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(this)
+
+        binding.closedSwitch.setOnCheckedChangeListener { _, checked ->
+            binding.name.isEnabled = !checked
+            binding.editLocationButton.isVisible = !checked
+            binding.phone.isEnabled = !checked
+            binding.website.isEnabled = !checked
+            binding.description.isEnabled = !checked
+            binding.openingHours.isEnabled = !checked
+        }
+
+//        editLocationButton.setOnClickListener {
+//            val action = EditPlaceFragmentDirections.actionEditPlaceFragmentToPickLocationFragment(
+//                map.getLocation()
+//            )
+//
+//            findNavController().navigate(action)
+//        }
+
+//        model.showProgress.observe(viewLifecycleOwner, Observer { showProgress ->
+//            content.isVisible = !showProgress
+//            progress.isVisible = showProgress
+//        })
+//
+//        model.changesSubmitted.observe(viewLifecycleOwner, Observer {
+//            findNavController().popBackStack()
+//        })
+//
+//        model.error.observe(viewLifecycleOwner, Observer {
+//            AlertDialog.Builder(requireContext())
+//                .setMessage(it)
+//                .setPositiveButton(android.R.string.ok, null)
+//                .show()
+//        })
+
+//        locationResultModel.pickedLocation.observe(viewLifecycleOwner, Observer {
+//            it.let { location ->
+//                pickedLocation = location
+//
+//                map?.moveCamera(
+//                    CameraUpdateFactory.newLatLngZoom(
+//                        LatLng(location.latitude, location.longitude),
+//                        MAP_ZOOM
+//                    )
+//                )
+//            }
+//        })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+//    override fun onMapReady(map: GoogleMap) {
+//        this.map = map
+//
+//        map.uiSettings.setAllGesturesEnabled(false)
+//
+//        val pickedLocation = pickedLocation
+//
+//        if (pickedLocation != null) {
+//            setMarker(map, pickedLocation)
+//
+//            map.moveCamera(
+//                CameraUpdateFactory.newLatLngZoom(
+//                    LatLng(pickedLocation.latitude, pickedLocation.longitude),
+//                    MAP_ZOOM
+//                )
+//            )
+//        } else {
+//            val place = place
+//
+//            val initialLocation = if (place == null) {
+//                passedLocation
+//            } else {
+//                LatLng(place.latitude, place.longitude).toLocation()
+//            }
+//
+//            setMarker(map, initialLocation)
+//
+//            map.moveCamera(
+//                CameraUpdateFactory.newLatLngZoom(
+//                    LatLng(initialLocation.latitude, initialLocation.longitude),
+//                    MAP_ZOOM
+//                )
+//            )
+//
+//            this.pickedLocation = initialLocation
+//        }
+//    }
+
+//    private fun setMarker(map: GoogleMap, location: Location) {
+//        placeLocationMarker?.remove()
+//
+//        placeLocationMarker = map.addMarker(
+//            MarkerOptions()
+//                .position(location.toLatLng())
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_empty))
+//                .anchor(BuildConfig.MAP_MARKER_ANCHOR_U, BuildConfig.MAP_MARKER_ANCHOR_V)
+//        )
+//    }
+
+    private fun submit() {
+        if (binding.name.length() == 0) {
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.name_is_not_specified)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+
+            return
+        }
+
+//        model.submitChanges(place, getUpdatedPlace())
+    }
+
+//    private fun getUpdatedPlace(): Place {
+//        val map = map ?: throw IllegalStateException("Map is not initialized")
+//
+//        return Place(
+//            id = place?.id ?: UUID.randomUUID().toString(),
+//            name = name.text.toString(),
+//            latitude = map.cameraPosition.target.latitude,
+//            longitude = map.cameraPosition.target.longitude,
+//            phone = phone.text.toString(),
+//            website = website.text.toString(),
+//            categoryId = place?.categoryId ?: "",
+//            description = description.text.toString(),
+//            openingHours = openingHours.text.toString(),
+//            visible = !closedSwitch.isChecked,
+//            createdAt = DateTime.now(),
+//            updatedAt = DateTime.now()
+//        )
+//    }
+
+    companion object {
+        const val MAP_ZOOM = 15f
+    }
+}
