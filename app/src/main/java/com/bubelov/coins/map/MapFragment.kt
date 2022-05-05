@@ -12,6 +12,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -21,13 +23,12 @@ import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.auth.AuthResultViewModel
 import com.bubelov.coins.data.Place
+import com.bubelov.coins.databinding.FragmentMapBinding
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_map.*
-import kotlinx.android.synthetic.main.navigation_drawer_header.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -69,22 +70,26 @@ class MapFragment :
 
     var locationOverlay: MyLocationNewOverlay? = null
 
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         org.osmdroid.config.Configuration.getInstance()
             .load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        drawerHeader = navigationView.getHeaderView(0)
+        drawerHeader = binding.navigationView.getHeaderView(0)
 
         initMap()
 
-        bottomSheetBehavior = BottomSheetBehavior.from(placeDetails).apply {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.placeDetails).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
 
             setBottomSheetCallback(object :
@@ -94,7 +99,7 @@ class MapFragment :
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    locationFab.isVisible = slideOffset < 0.5f
+                    binding.locationFab.isVisible = slideOffset < 0.5f
                     placeDetailsFragment.setScrollProgress(slideOffset)
                 }
             })
@@ -102,20 +107,20 @@ class MapFragment :
             peekHeight = resources.getDimensionPixelSize(R.dimen.map_header_height)
         }
 
-        editPlaceFab.setOnClickListener {
+        binding.editPlaceFab.setOnClickListener {
             lifecycleScope.launchWhenResumed {
                 model.onEditPlaceClick()
             }
         }
 
-        toolbar.apply {
-            setNavigationOnClickListener { drawerLayout.openDrawer(navigationView) }
+        binding.toolbar.apply {
+            setNavigationOnClickListener { binding.drawerLayout.openDrawer(binding.navigationView) }
             inflateMenu(R.menu.map)
             setOnMenuItemClickListener(this@MapFragment)
         }
 
-        navigationView.setNavigationItemSelectedListener { item ->
-            drawerLayout.closeDrawer(navigationView, false)
+        binding.navigationView.setNavigationItemSelectedListener { item ->
+            binding.drawerLayout.closeDrawer(binding.navigationView, false)
 
             when (item.itemId) {
                 R.id.action_exchange_rates -> {
@@ -142,19 +147,19 @@ class MapFragment :
 
         drawerToggle = ActionBarDrawerToggle(
             requireActivity(),
-            drawerLayout,
-            toolbar,
+            binding.drawerLayout,
+            binding.toolbar,
             R.string.open,
             R.string.close
         )
 
-        drawerLayout.addDrawerListener(drawerToggle)
+        binding.drawerLayout.addDrawerListener(drawerToggle)
 
         lifecycleScope.launchWhenResumed {
             updateDrawerHeader()
         }
 
-        placeDetails.setOnClickListener {
+        binding.placeDetails.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             } else {
@@ -173,9 +178,9 @@ class MapFragment :
             }
         }
 
-        locationFab.setOnClickListener {
+        binding.locationFab.setOnClickListener {
             val location = model.location.value
-            val mapController = map.controller
+            val mapController = binding.map.controller
             mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
             val startPoint = GeoPoint(location.latitude, location.longitude)
             mapController.setCenter(startPoint)
@@ -196,7 +201,8 @@ class MapFragment :
                 PostAuthAction.ADD_PLACE -> {
                     val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
                         null,
-                        Location(map.boundingBox.centerLatitude, map.boundingBox.centerLongitude)
+                        binding.map.boundingBox.centerLatitude.toString(),
+                        binding.map.boundingBox.centerLongitude.toString(),
                     )
 
                     findNavController().navigate(action)
@@ -209,10 +215,8 @@ class MapFragment :
 
                         val action = MapFragmentDirections.actionMapFragmentToEditPlaceFragment(
                             selectedPlace.id,
-                            Location(
-                                map.boundingBox.centerLatitude,
-                                map.boundingBox.centerLongitude
-                            )
+                            binding.map.boundingBox.centerLatitude.toString(),
+                            binding.map.boundingBox.centerLongitude.toString(),
                         )
 
                         findNavController().navigate(action)
@@ -224,7 +228,7 @@ class MapFragment :
 
     override fun onResume() {
         super.onResume()
-        map.onResume()
+        binding.map.onResume()
         drawerToggle.syncState()
 
         val placeId = arguments?.getString(PLACE_ID_ARG)
@@ -240,7 +244,12 @@ class MapFragment :
 
     override fun onPause() {
         super.onPause()
-        map.onPause()
+        binding.map.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     @SuppressLint("MissingPermission")
@@ -267,7 +276,8 @@ class MapFragment :
             R.id.action_search -> {
                 lifecycleScope.launch {
                     val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
-                        model.location.value
+                        model.location.value.latitude.toString(),
+                        model.location.value.longitude.toString(),
                     )
 
                     findNavController().navigate(action)
@@ -314,10 +324,10 @@ class MapFragment :
             PreferenceManager.getDefaultSharedPreferences(appContext)
         )
 
-        map.setTileSource(TileSourceFactory.MAPNIK)
+        binding.map.setTileSource(TileSourceFactory.MAPNIK)
 
-        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
-        map.setMultiTouchControls(true)
+        binding.map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        binding.map.setMultiTouchControls(true)
 
         //initClustering(map)
 
@@ -357,12 +367,12 @@ class MapFragment :
             model.location.collect {
                 if (locationOverlay == null) {
                     locationOverlay =
-                        MyLocationNewOverlay(GpsMyLocationProvider(context), map).apply {
+                        MyLocationNewOverlay(GpsMyLocationProvider(context), binding.map).apply {
                             enableMyLocation()
-                            map.overlays += this
+                            binding.map.overlays += this
                         }
 
-                    val mapController = map.controller
+                    val mapController = binding.map.controller
                     mapController.setZoom(DEFAULT_MAP_ZOOM.toDouble())
                     val startPoint = GeoPoint(it.latitude, it.longitude)
                     mapController.setCenter(startPoint)
@@ -372,9 +382,9 @@ class MapFragment :
 
         var showPlacesJob: Job? = null
 
-        map.addMapListener(object : MapListener {
+        binding.map.addMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
-                map.overlays.clear()
+                binding.map.overlays.clear()
 
                 showPlacesJob?.cancel()
 
@@ -384,10 +394,10 @@ class MapFragment :
                     val items = mutableListOf<OverlayItem>()
 
                     model.getMarkers(
-                        minLat = min(map.boundingBox.latNorth, map.boundingBox.latSouth),
-                        maxLat = max(map.boundingBox.latNorth, map.boundingBox.latSouth),
-                        minLon = min(map.boundingBox.lonEast, map.boundingBox.lonWest),
-                        maxLon = max(map.boundingBox.lonEast, map.boundingBox.lonWest)
+                        minLat = min(binding.map.boundingBox.latNorth, binding.map.boundingBox.latSouth),
+                        maxLat = max(binding.map.boundingBox.latNorth, binding.map.boundingBox.latSouth),
+                        minLon = min(binding.map.boundingBox.lonEast, binding.map.boundingBox.lonWest),
+                        maxLon = max(binding.map.boundingBox.lonEast, binding.map.boundingBox.lonWest)
                     ).collect {
                         log += "Loaded ${it.size} markers from cache"
 
@@ -404,8 +414,8 @@ class MapFragment :
                         val overlay = ItemizedIconOverlay(requireContext(), items, null)
 
                         if (isActive) {
-                            map.overlays.add(overlay)
-                            map.invalidate()
+                            binding.map.overlays.add(overlay)
+                            binding.map.invalidate()
                             log += "Added ${items.size} markers"
                         }
                     }
@@ -422,29 +432,32 @@ class MapFragment :
     private suspend fun updateDrawerHeader() {
         val user = model.userRepository.getUser()
 
+        val avatar = drawerHeader.findViewById<ImageView>(R.id.avatar)
+        val userName = drawerHeader.findViewById<TextView>(R.id.userName)
+
         if (user != null) {
             if (!TextUtils.isEmpty(user.avatarUrl)) {
                 Picasso.get()
                     .load(user.avatarUrl)
                     .transform(CircleTransformation())
-                    .into(drawerHeader.avatar)
+                    .into(avatar)
             } else {
-                drawerHeader.avatar.setImageResource(R.drawable.ic_no_avatar)
+                avatar.setImageResource(R.drawable.ic_no_avatar)
             }
 
             if (!TextUtils.isEmpty(user.firstName)) {
-                drawerHeader.userName.text = String.format("%s %s", user.firstName, user.lastName)
+                userName.text = String.format("%s %s", user.firstName, user.lastName)
             } else {
-                drawerHeader.userName.text = user.email
+                userName.text = user.email
             }
         } else {
-            drawerHeader.avatar.setImageResource(R.drawable.ic_no_avatar)
-            drawerHeader.userName.setText(R.string.guest)
+            avatar.setImageResource(R.drawable.ic_no_avatar)
+            userName.setText(R.string.guest)
         }
 
         drawerHeader.setOnClickListener {
             lifecycleScope.launchWhenResumed {
-                drawerLayout.closeDrawer(navigationView)
+                binding.drawerLayout.closeDrawer(binding.navigationView)
                 model.onDrawerHeaderClick()
             }
         }

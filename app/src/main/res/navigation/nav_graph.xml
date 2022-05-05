@@ -112,8 +112,12 @@
             app:argType="string"
             app:nullable="true" />
         <argument
-            android:name="mapLocation"
-            app:argType="com.bubelov.coins.model.Location"
+            android:name="lat"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="lon"
+            app:argType="string"
             app:nullable="false" />
         <action
             android:id="@+id/action_editPlaceFragment_to_pickLocationFragment"
@@ -129,8 +133,12 @@
         android:name="com.bubelov.coins.picklocation.PickLocationFragment"
         android:label="PickLocationFragment">
         <argument
-            android:name="initialLocation"
-            app:argType="com.bubelov.coins.model.Location"
+            android:name="lat"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="lon"
+            app:argType="string"
             app:nullable="false" />
     </fragment>
 
@@ -139,9 +147,13 @@
         android:name="com.bubelov.coins.search.PlacesSearchFragment"
         android:label="PlacesSearchFragment">
         <argument
-            android:name="location"
-            app:argType="com.bubelov.coins.model.Location"
-            app:nullable="true" />
+            android:name="lat"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="lon"
+            app:argType="string"
+            app:nullable="false" />
     </fragment>
 
     <fragment

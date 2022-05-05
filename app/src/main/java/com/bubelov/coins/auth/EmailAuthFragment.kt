@@ -10,22 +10,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import kotlinx.android.synthetic.main.fragment_email_auth.*
+import com.bubelov.coins.databinding.FragmentEmailAuthBinding
 
 class EmailAuthFragment : Fragment() {
+
+    private var _binding: FragmentEmailAuthBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_email_auth, container, false)
+    ): View {
+        _binding = FragmentEmailAuthBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        pager.adapter = TabsAdapter(childFragmentManager)
-        tabLayout.setupWithViewPager(pager)
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.pager.adapter = TabsAdapter(childFragmentManager)
+        binding.tabLayout.setupWithViewPager(binding.pager)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private inner class TabsAdapter internal constructor(fragmentManager: FragmentManager) :

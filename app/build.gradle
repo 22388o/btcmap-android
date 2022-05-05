@@ -1,10 +1,8 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    id "kotlin-android-extensions"
-    id "koin"
-    id "com.squareup.sqldelight"
     id "androidx.navigation.safeargs.kotlin"
+    id "com.squareup.sqldelight"
 }
 
 def signingPropertiesFile = rootProject.file("signing.properties")
@@ -66,9 +64,14 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     lintOptions {
         disable 'VectorPath'
-        abortOnError false // TODO Unexpected failure during lint analysis of ModuleTests.kt (this is a bug in lint or one of the libraries it depends on)
+        abortOnError false
+        // TODO Unexpected failure during lint analysis of ModuleTests.kt (this is a bug in lint or one of the libraries it depends on)
     }
 }
 

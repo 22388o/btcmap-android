@@ -15,8 +15,9 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
+import com.bubelov.coins.databinding.FragmentPlacesSearchBinding
+import com.bubelov.coins.model.Location
 import com.bubelov.coins.util.*
-import kotlinx.android.synthetic.main.fragment_places_search.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,28 +27,32 @@ class PlacesSearchFragment : Fragment() {
 
     private val resultModel: PlacesSearchResultViewModel by sharedViewModel()
 
+    private var _binding: FragmentPlacesSearchBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_places_search, container, false)
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentPlacesSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args = PlacesSearchFragmentArgs.fromBundle(requireArguments())
-        model.setUp(args.location)
+        model.setUp(Location(args.lat.toDouble(), args.lon.toDouble()))
 
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        list.layoutManager = LinearLayoutManager(requireContext())
+        binding.list.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = PlacesSearchResultsAdapter {
             resultModel.pickPlace(it.placeId)
             findNavController().popBackStack()
         }
 
-        list.adapter = adapter
+        binding.list.adapter = adapter
 
         model.rows.observe(viewLifecycleOwner, Observer { rows ->
             if (rows != null) {
@@ -55,7 +60,7 @@ class PlacesSearchFragment : Fragment() {
             }
         })
 
-        query.setOnFocusChangeListener { query, hasFocus ->
+        binding.query.setOnFocusChangeListener { query, hasFocus ->
             if (hasFocus) {
                 requireContext().showKeyboard(query)
             } else {
@@ -63,22 +68,22 @@ class PlacesSearchFragment : Fragment() {
             }
         }
 
-        query.addTextChangedListener(object : TextWatcherAdapter() {
+        binding.query.addTextChangedListener(object : TextWatcherAdapter() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 model.setQuery(s.toString())
-                clear.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
+                binding.clear.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
             }
         })
 
-        query.setOnEditorActionListener { _, actionId, _ ->
+        binding.query.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
-                EditorInfo.IME_ACTION_SEARCH -> requireContext().hideKeyboard(query)
+                EditorInfo.IME_ACTION_SEARCH -> requireContext().hideKeyboard(binding.query)
             }
 
             true
         }
 
-        clear.setOnClickListener { query.setText("") }
+        binding.clear.setOnClickListener { binding.query.setText("") }
     }
 
     override fun onResume() {
@@ -99,6 +104,11 @@ class PlacesSearchFragment : Fragment() {
         }
 
         super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     abstract class TextWatcherAdapter : TextWatcher {

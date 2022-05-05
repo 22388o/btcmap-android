@@ -12,10 +12,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bubelov.coins.R
+import com.bubelov.coins.databinding.FragmentEmailSignUpBinding
 import com.bubelov.coins.util.BasicTaskState
 import com.bubelov.coins.util.hideKeyboard
-import kotlinx.android.synthetic.main.fragment_email_sign_up.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -27,21 +26,30 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
 
     private val resultModel: AuthResultViewModel by sharedViewModel()
 
+    private var _binding: FragmentEmailSignUpBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_email_sign_up, container, false)
+    ): View {
+        _binding = FragmentEmailSignUpBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lastNameInput.setOnEditorActionListener(this)
+        binding.lastNameInput.setOnEditorActionListener(this)
 
-        signUpButton.setOnClickListener {
+        binding.signUpButton.setOnClickListener {
             requireContext().hideKeyboard(it)
             signUp()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
@@ -54,10 +62,10 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
     }
 
     private fun signUp() {
-        val email = emailInput.text.toString()
-        val password = passwordInput.text.toString()
-        val firstName = firstNameInput.text.toString()
-        val lastName = lastNameInput.text.toString()
+        val email = binding.emailInput.text.toString()
+        val password = binding.passwordInput.text.toString()
+        val firstName = binding.firstNameInput.text.toString()
+        val lastName = binding.lastNameInput.text.toString()
 
         model.signUp(email, password, firstName, lastName)
             .onEach { updateUI(it) }
@@ -67,8 +75,8 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
     private fun updateUI(state: BasicTaskState) {
         when (state) {
             is BasicTaskState.Progress -> {
-                progress.isVisible = true
-                signUpForm.isVisible = false
+                binding.progress.isVisible = true
+                binding.signUpForm.isVisible = false
             }
 
             is BasicTaskState.Success -> {
@@ -81,8 +89,8 @@ class EmailSignUpFragment : Fragment(), TextView.OnEditorActionListener {
             }
 
             is BasicTaskState.Error -> {
-                progress.isVisible = false
-                signUpForm.isVisible = true
+                binding.progress.isVisible = false
+                binding.signUpForm.isVisible = true
 
                 AlertDialog.Builder(requireContext())
                     .setMessage(state.message)

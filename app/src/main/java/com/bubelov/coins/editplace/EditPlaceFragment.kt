@@ -9,9 +9,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
+import com.bubelov.coins.databinding.FragmentEditPlaceBinding
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.picklocation.PickLocationResultViewModel
-import kotlinx.android.synthetic.main.fragment_edit_place.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,7 +26,10 @@ class EditPlaceFragment : Fragment() {
     }
 
     private val passedLocation by lazy {
-        EditPlaceFragmentArgs.fromBundle(requireArguments()).mapLocation
+        Location(
+            latitude = EditPlaceFragmentArgs.fromBundle(requireArguments()).lat.toDouble(),
+            longitude = EditPlaceFragmentArgs.fromBundle(requireArguments()).lon.toDouble(),
+        )
     }
 
 //    private var map: GoogleMap? = null
@@ -35,16 +38,20 @@ class EditPlaceFragment : Fragment() {
 
     private var pickedLocation: Location? = null
 
+    private var _binding: FragmentEditPlaceBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_edit_place, container, false)
+    ): View {
+        _binding = FragmentEditPlaceBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.apply {
+        binding.toolbar.apply {
             setNavigationOnClickListener { findNavController().popBackStack() }
             inflateMenu(R.menu.edit_place)
 
@@ -72,13 +79,13 @@ class EditPlaceFragment : Fragment() {
 
 //        (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(this)
 
-        closedSwitch.setOnCheckedChangeListener { _, checked ->
-            name.isEnabled = !checked
-            editLocationButton.isVisible = !checked
-            phone.isEnabled = !checked
-            website.isEnabled = !checked
-            description.isEnabled = !checked
-            openingHours.isEnabled = !checked
+        binding.closedSwitch.setOnCheckedChangeListener { _, checked ->
+            binding.name.isEnabled = !checked
+            binding.editLocationButton.isVisible = !checked
+            binding.phone.isEnabled = !checked
+            binding.website.isEnabled = !checked
+            binding.description.isEnabled = !checked
+            binding.openingHours.isEnabled = !checked
         }
 
 //        editLocationButton.setOnClickListener {
@@ -117,6 +124,11 @@ class EditPlaceFragment : Fragment() {
 //                )
 //            }
 //        })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 //    override fun onMapReady(map: GoogleMap) {
@@ -169,7 +181,7 @@ class EditPlaceFragment : Fragment() {
 //    }
 
     private fun submit() {
-        if (name.length() == 0) {
+        if (binding.name.length() == 0) {
             AlertDialog.Builder(requireContext())
                 .setMessage(R.string.name_is_not_specified)
                 .setPositiveButton(android.R.string.ok, null)

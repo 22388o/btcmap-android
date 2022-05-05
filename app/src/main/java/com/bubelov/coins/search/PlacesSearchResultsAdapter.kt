@@ -4,10 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.bubelov.coins.R
-
-import kotlinx.android.synthetic.main.row_places_search_result.view.*
+import com.bubelov.coins.databinding.RowPlacesSearchResultBinding
 
 class PlacesSearchResultsAdapter(
     private val itemClick: (PlacesSearchRow) -> Unit
@@ -16,24 +13,24 @@ class PlacesSearchResultsAdapter(
     private val items = mutableListOf<PlacesSearchRow>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.row_places_search_result,
-                parent,
-                false
-            )
+        val binding = RowPlacesSearchResultBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
         )
+
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
 
-        holder.itemView.apply {
+        holder.binding.apply {
             icon.setImageBitmap(item.icon)
             name.text = item.name
             distance.visibility = if (item.distance.isNotEmpty()) View.VISIBLE else View.GONE
             distance.text = item.distance
-            setOnClickListener { itemClick(item) }
+            root.setOnClickListener { itemClick(item) }
         }
     }
 
@@ -45,5 +42,5 @@ class PlacesSearchResultsAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
+    class ViewHolder(val binding: RowPlacesSearchResultBinding) : RecyclerView.ViewHolder(binding.root)
 }

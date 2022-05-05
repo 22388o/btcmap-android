@@ -11,24 +11,33 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
+import com.bubelov.coins.databinding.FragmentSupportProjectBinding
 import com.bubelov.coins.util.openUrl
-import kotlinx.android.synthetic.main.fragment_support_project.*
 
 class SupportProjectFragment : Fragment() {
+
+    private var _binding: FragmentSupportProjectBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_support_project, container, false)
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentSupportProjectBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        openGitHub.setOnClickListener { requireContext().openUrl(getString(R.string.repository_url)) }
-        address.setOnClickListener { copyDonationAddressToClipboard() }
-        copy.setOnClickListener { copyDonationAddressToClipboard() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.openGitHub.setOnClickListener { requireContext().openUrl(getString(R.string.repository_url)) }
+        binding.address.setOnClickListener { copyDonationAddressToClipboard() }
+        binding.copy.setOnClickListener { copyDonationAddressToClipboard() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun copyDonationAddressToClipboard() {

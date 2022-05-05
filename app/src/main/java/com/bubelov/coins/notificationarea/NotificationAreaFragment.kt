@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
+import com.bubelov.coins.databinding.FragmentNotificationAreaBinding
 import com.bubelov.coins.model.NotificationArea
-import kotlinx.android.synthetic.main.fragment_notification_area.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.osmdroid.util.GeoPoint
@@ -24,6 +24,9 @@ class NotificationAreaFragment : Fragment() {
 
     private val model: NotificationAreaViewModel by viewModel()
 
+    private var _binding: FragmentNotificationAreaBinding? = null
+    private val binding get() = _binding!!
+
     private var marker: Marker? = null
     private var areaCircle: Polygon? = null
 
@@ -31,18 +34,19 @@ class NotificationAreaFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_notification_area, container, false)
+    ): View {
+        _binding = FragmentNotificationAreaBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             saveArea()
             findNavController().popBackStack()
         }
 
-        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
-        map.setMultiTouchControls(true)
+        binding.map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        binding.map.setMultiTouchControls(true)
 
 //        map.setOnMarkerDragListener(OnMarkerDragListener())
 
@@ -59,17 +63,22 @@ class NotificationAreaFragment : Fragment() {
         }
     }
 
-    private fun showArea(area: NotificationArea) {
-        marker?.remove(map)
-        map.overlays.remove(areaCircle)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        marker = Marker(map).apply {
+    private fun showArea(area: NotificationArea) {
+        marker?.remove(binding.map)
+        binding.map.overlays.remove(areaCircle)
+
+        marker = Marker(binding.map).apply {
             position = GeoPoint(area.latitude, area.longitude)
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             icon = model.getPinIcon().toDrawable(resources)
             setInfoWindow(null)
             isDraggable = true
-            map.overlays += this
+            binding.map.overlays += this
         }
 
         val circlePoints = mutableListOf<GeoPoint>()
@@ -79,13 +88,13 @@ class NotificationAreaFragment : Fragment() {
                 .destinationPoint(area.radius, it.toDouble())
         }
 
-        areaCircle = Polygon(map).apply {
+        areaCircle = Polygon(binding.map).apply {
             points = circlePoints
             fillPaint.color = ContextCompat.getColor(requireContext(), R.color.notification_area)
             outlinePaint.color =
                 ContextCompat.getColor(requireContext(), R.color.notification_area_border)
             outlinePaint.strokeWidth = 4f
-            map.overlays.add(0, this)
+            binding.map.overlays.add(0, this)
         }
 
         updateRadiusLabel(area)
@@ -102,13 +111,13 @@ class NotificationAreaFragment : Fragment() {
 
         val areaCenter = GeoPoint(area.latitude, area.longitude)
 
-        val mapController = map.controller
+        val mapController = binding.map.controller
         mapController.setZoom(model.getZoomLevel(area.radius).toDouble())
         mapController.setCenter(areaCenter)
     }
 
     private fun updateRadiusLabel(area: NotificationArea) {
-        radius.text = getString(R.string.d_km, area.radius.toInt() / 1000)
+        binding.radius.text = getString(R.string.d_km, area.radius.toInt() / 1000)
     }
 
     private fun saveArea() {

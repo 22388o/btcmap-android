@@ -14,29 +14,38 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bubelov.coins.R
 import com.bubelov.coins.data.Place
+import com.bubelov.coins.databinding.FragmentPlaceDetailsBinding
 import com.bubelov.coins.util.openUrl
-import kotlinx.android.synthetic.main.fragment_place_details.*
 
 class PlaceDetailsFragment : Fragment() {
+
+    private var _binding: FragmentPlaceDetailsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_place_details, container, false)
+    ): View {
+        _binding = FragmentPlaceDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     fun setScrollProgress(progress: Float) {
-        headerShadow.alpha = 1 - progress
-        headerShadow.isVisible = progress <= 0.9
+        binding.headerShadow.alpha = 1 - progress
+        binding.headerShadow.isVisible = progress <= 0.9
 
-        activeHeaderColor.alpha = 1 - (1 - progress)
+        binding.activeHeaderColor.alpha = 1 - (1 - progress)
 
         val darkColor = ContextCompat.getColor(requireContext(), R.color.text_primary)
         val lightColor = ContextCompat.getColor(requireContext(), R.color.white)
         val color = ArgbEvaluator().evaluate(1 - progress, lightColor, darkColor) as Int
-        name.setTextColor(color)
+        binding.name.setTextColor(color)
     }
 
     fun setPlace(place: Place) {
@@ -44,34 +53,34 @@ class PlaceDetailsFragment : Fragment() {
         //warning.isVisible = place.closedClaims > 0
 
         if (TextUtils.isEmpty(place.name)) {
-            name.setText(R.string.name_unknown)
+            binding.name.setText(R.string.name_unknown)
         } else {
-            name.text = place.name
+            binding.name.text = place.name
         }
 
         if (TextUtils.isEmpty(place.description)) {
-            description.isVisible = false
+            binding.description.isVisible = false
         } else {
-            description.isVisible = true
-            description.text = place.description
+            binding.description.isVisible = true
+            binding.description.text = place.description
         }
 
         if (TextUtils.isEmpty(place.phone)) {
-            phone.setText(R.string.not_provided)
+            binding.phone.setText(R.string.not_provided)
         } else {
-            phone.text = place.phone
+            binding.phone.text = place.phone
         }
 
-        website.apply {
+        binding.website.apply {
             if (TextUtils.isEmpty(place.website)) {
                 setText(R.string.not_provided)
                 setTextColor(ContextCompat.getColor(context, R.color.black))
-                paintFlags = website!!.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+                paintFlags = binding.website!!.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
                 setOnClickListener(null)
             } else {
                 text = place.website
                 setTextColor(ContextCompat.getColor(context, R.color.primary_dark))
-                paintFlags = website.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                paintFlags = binding.website.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 setOnClickListener {
                     if (!context.openUrl(place.website)) {
                         val text = "Can't open url: ${place.website}"
@@ -82,9 +91,9 @@ class PlaceDetailsFragment : Fragment() {
         }
 
         if (TextUtils.isEmpty(place.opening_hours)) {
-            openingHours.setText(R.string.not_provided)
+            binding.openingHours.setText(R.string.not_provided)
         } else {
-            openingHours.text = place.opening_hours
+            binding.openingHours.text = place.opening_hours
         }
     }
 

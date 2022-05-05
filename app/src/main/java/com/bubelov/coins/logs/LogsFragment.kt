@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bubelov.coins.R
-import kotlinx.android.synthetic.main.fragment_logs.*
+import com.bubelov.coins.databinding.FragmentLogsBinding
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,22 +19,26 @@ class LogsFragment : Fragment() {
 
     private val model: LogsViewModel by viewModel()
 
+    private var _binding: FragmentLogsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_logs, container, false)
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentLogsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        list.layoutManager = LinearLayoutManager(requireContext())
+        binding.list.layoutManager = LinearLayoutManager(requireContext())
         val adapter = LogsAdapter()
-        list.adapter = adapter
+        binding.list.adapter = adapter
 
         lifecycleScope.launchWhenResumed {
             model.getAll().collect {
@@ -61,5 +65,10 @@ class LogsFragment : Fragment() {
         }
 
         super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
