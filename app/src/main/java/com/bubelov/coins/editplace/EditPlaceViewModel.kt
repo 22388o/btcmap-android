@@ -1,9 +1,9 @@
 package com.bubelov.coins.editplace
 
 import androidx.lifecycle.ViewModel
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.util.BasicTaskState
+import db.Place
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

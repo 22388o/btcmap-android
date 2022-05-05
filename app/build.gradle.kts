@@ -1,60 +1,59 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "androidx.navigation.safeargs.kotlin"
-    id "com.squareup.sqldelight"
+    id("com.android.application")
+    kotlin("android")
+    id("androidx.navigation.safeargs.kotlin")
+    id("com.squareup.sqldelight")
 }
 
-def signingPropertiesFile = rootProject.file("signing.properties")
+val signingPropertiesFile = rootProject.file("signing.properties")
 
 android {
-    compileSdkVersion 31
+    compileSdk = 31
 
     defaultConfig {
-        applicationId "org.btcmap"
-        minSdkVersion 26
-        targetSdkVersion 31
-        versionCode 42
-        versionName "3.0.0"
+        applicationId = "org.btcmap"
+        minSdk = 26
+        targetSdk = 31
+        versionCode = 1
+        versionName = "0.1.0"
         setProperty("archivesBaseName", "btcmap-$versionName")
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
-    packagingOptions {
-        exclude 'META-INF/kotlinx-coroutines-core.kotlin_module'
+        jvmTarget = "11"
     }
 
     signingConfigs {
         if (signingPropertiesFile.exists()) {
-            play {
-                def signingProperties = new Properties()
-                signingProperties.load(new FileInputStream(signingPropertiesFile))
-                storeFile file(signingProperties['playKeystoreFile'])
-                storePassword signingProperties['playKeystorePassword']
-                keyAlias signingProperties['playKeyAlias']
-                keyPassword signingProperties['playKeyPassword']
+            create("release") {
+                val signingProperties = Properties()
+                signingProperties.load(FileInputStream(signingPropertiesFile))
+                storeFile = File(signingProperties["playKeystoreFile"] as String)
+                storePassword = signingProperties["playKeystorePassword"] as String
+                keyAlias = signingProperties["playKeyAlias"] as String
+                keyPassword = signingProperties["playKeyPassword"] as String
             }
         }
     }
 
     buildTypes {
         debug {
-            applicationIdSuffix ".dev"
+            applicationIdSuffix = ".debug"
         }
 
         if (signingPropertiesFile.exists()) {
-            play {
-                def signingProperties = new Properties()
-                signingProperties.load(new FileInputStream(signingPropertiesFile))
-                signingConfig signingConfigs.play
+            release {
+                val signingProperties = Properties()
+                signingProperties.load(FileInputStream(signingPropertiesFile))
+                signingConfig = signingConfigs.getByName("release")
             }
         }
     }
@@ -62,11 +61,13 @@ android {
     buildFeatures {
         viewBinding = true
     }
+}
 
-    lintOptions {
-        disable 'VectorPath'
-        abortOnError false
-        // TODO Unexpected failure during lint analysis of ModuleTests.kt (this is a bug in lint or one of the libraries it depends on)
+sqldelight {
+    database("Database") {
+        sourceFolders = listOf("sqldelight")
+        packageName = "db"
+        deriveSchemaFromMigrations = true
     }
 }
 
@@ -78,7 +79,7 @@ dependencies {
     // Android extensions
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    def navVer = "2.4.2"
+    val navVer = "2.4.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVer")
     implementation("androidx.navigation:navigation-ui-ktx:$navVer")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
@@ -87,7 +88,7 @@ dependencies {
 
     // Retrofit turns HTTP APIs into Java interfaces
     // Used to communicate with remote backends
-    def retrofitVer = "2.9.0"
+    val retrofitVer = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofitVer")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVer")
 
@@ -97,7 +98,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor")
 
     // SQLDelight generates typesafe kotlin APIs from SQL statements
-    def sqlDelightVer = "1.5.3"
+    val sqlDelightVer = "1.5.3"
     implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVer")
     implementation("com.squareup.sqldelight:android-driver:$sqlDelightVer")
 

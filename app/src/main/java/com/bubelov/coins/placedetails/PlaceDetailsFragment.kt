@@ -13,9 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bubelov.coins.R
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.databinding.FragmentPlaceDetailsBinding
 import com.bubelov.coins.util.openUrl
+import db.Place
 
 class PlaceDetailsFragment : Fragment() {
 

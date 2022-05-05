@@ -1,9 +1,9 @@
 package com.bubelov.coins.api.coins
 
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.User
 import com.bubelov.coins.repository.place.BuiltInPlacesCache
 import com.bubelov.coins.repository.synclogs.LogsRepository
+import db.Place
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import java.util.*

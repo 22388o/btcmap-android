@@ -1,8 +1,8 @@
 package com.bubelov.coins.repository.synclogs
 
-import com.bubelov.coins.data.LogEntry
-import com.bubelov.coins.data.LogEntryQueries
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import db.LogEntry
+import db.LogEntryQueries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -27,6 +27,7 @@ class LogsRepository(
     }
 
     operator fun plusAssign(entry: LogEntry) = runBlocking {
+
         queries.insert(entry)
     }
 

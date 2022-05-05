@@ -1,8 +1,8 @@
 package com.bubelov.coins.api.coins
 
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.User
 import com.bubelov.coins.util.Json
+import db.Place
 import retrofit2.http.*
 import java.time.LocalDateTime
 

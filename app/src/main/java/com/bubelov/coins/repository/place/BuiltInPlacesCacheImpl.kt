@@ -1,9 +1,9 @@
 package com.bubelov.coins.repository.place
 
 import android.content.res.AssetManager
-import com.bubelov.coins.data.Place
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import db.Place
 import java.io.InputStreamReader
 
 class BuiltInPlacesCacheImpl(

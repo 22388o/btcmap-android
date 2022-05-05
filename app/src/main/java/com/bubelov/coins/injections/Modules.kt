@@ -3,7 +3,7 @@ package com.bubelov.coins.injections
 import android.content.Context
 import android.location.LocationManager
 import android.net.ConnectivityManager
-import com.bubelov.coins.Database
+import db.Database
 import com.bubelov.coins.api.ConnectivityCheckingInterceptor
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.editplace.EditPlaceViewModel

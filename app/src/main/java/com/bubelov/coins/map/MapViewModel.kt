@@ -1,12 +1,12 @@
 package com.bubelov.coins.map
 
 import androidx.lifecycle.ViewModel
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.repository.LocationRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
+import db.Place
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 

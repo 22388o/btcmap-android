@@ -1,15 +1,15 @@
 package com.bubelov.coins.repository
 
-import com.bubelov.coins.data.Preference
-import com.bubelov.coins.data.PreferenceQueries
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import db.Preference
+import db.PreferenceQueries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class PreferencesRepository(
-    private val queries: PreferenceQueries
+    private val queries: PreferenceQueries,
 ) {
     suspend fun put(key: String, value: String) {
         withContext(Dispatchers.IO) {

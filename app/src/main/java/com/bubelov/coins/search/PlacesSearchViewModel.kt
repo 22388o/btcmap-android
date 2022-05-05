@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import android.content.res.Resources
 import androidx.lifecycle.viewModelScope
 import com.bubelov.coins.R
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.model.Location
 import com.bubelov.coins.repository.PreferencesRepository
 import com.bubelov.coins.repository.place.PlacesRepository
 import com.bubelov.coins.repository.placeicon.PlaceIconsRepository
 import com.bubelov.coins.util.DistanceUnits
 import com.bubelov.coins.util.DistanceUtils
+import db.Place
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive

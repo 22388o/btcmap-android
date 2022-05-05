@@ -7,11 +7,11 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.bubelov.coins.R
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.map.MapFragment
 import com.bubelov.coins.model.NotificationArea
 import com.bubelov.coins.repository.area.NotificationAreaRepository
 import com.bubelov.coins.util.DistanceUtils
+import db.Place
 import kotlinx.coroutines.flow.first
 
 class PlaceNotificationManager(

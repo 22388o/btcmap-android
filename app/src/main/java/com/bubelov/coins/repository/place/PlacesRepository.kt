@@ -4,12 +4,12 @@ import android.util.Log
 import com.bubelov.coins.api.coins.CoinsApi
 import com.bubelov.coins.api.coins.CreatePlaceArgs
 import com.bubelov.coins.api.coins.UpdatePlaceArgs
-import com.bubelov.coins.data.Place
-import com.bubelov.coins.data.PlaceQueries
 import com.bubelov.coins.repository.synclogs.LogsRepository
 import com.bubelov.coins.repository.user.UserRepository
 import com.bubelov.coins.util.TableSyncResult
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import db.Place
+import db.PlaceQueries
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

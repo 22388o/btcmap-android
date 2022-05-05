@@ -21,11 +21,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
-import com.bubelov.coins.data.Place
 import com.bubelov.coins.databinding.FragmentMapBinding
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
+import db.Place
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel

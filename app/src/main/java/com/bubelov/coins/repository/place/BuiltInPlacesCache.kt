@@ -1,6 +1,6 @@
 package com.bubelov.coins.repository.place
 
-import com.bubelov.coins.data.Place
+import db.Place
 
 interface BuiltInPlacesCache {
 

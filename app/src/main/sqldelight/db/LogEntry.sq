@@ -1,9 +1,3 @@
-CREATE TABLE LogEntry (
-    datetime TEXT NOT NULL,
-    tag TEXT NOT NULL,
-    message TEXT NOT NULL
-);
-
 CREATE INDEX log_entry_datetime_idx
 ON LogEntry(datetime);
 
