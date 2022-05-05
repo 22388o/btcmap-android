@@ -1,28 +1,21 @@
 buildscript {
-    try { apply from: ".credentials.gradle"} catch (ignored) {}
-
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:$plugin_versions_android")
+        classpath("com.android.tools.build:gradle:7.0.4")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
-        classpath "org.koin:koin-gradle-plugin:$plugin_versions_koin"
-        classpath "com.squareup.sqldelight:gradle-plugin:$plugin_versions_sqldelight"
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$plugin_versions_safe_args")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.4.2")
+        classpath("com.squareup.sqldelight:gradle-plugin:1.5.3")
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
-
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
     }
 }
 

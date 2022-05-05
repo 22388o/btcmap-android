@@ -11,7 +11,7 @@ CREATE TABLE Place (
     phone TEXT NOT NULL,
     website TEXT NOT NULL,
     opening_hours TEXT NOT NULL,
-    valid INTEGER as Boolean NOT NULL,
+    valid INTEGER AS Boolean NOT NULL,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
 );

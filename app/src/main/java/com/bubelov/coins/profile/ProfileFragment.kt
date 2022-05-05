@@ -12,8 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bubelov.coins.R
 import com.bubelov.coins.databinding.FragmentProfileBinding
-import com.bubelov.coins.util.CircleTransformation
-import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
@@ -48,10 +46,10 @@ class ProfileFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
 
             if (!TextUtils.isEmpty(user.avatarUrl)) {
-                Picasso.get()
-                    .load(user.avatarUrl)
-                    .transform(CircleTransformation())
-                    .into(binding.avatar)
+//                Picasso.get()
+//                    .load(user.avatarUrl)
+//                    .transform(CircleTransformation())
+//                    .into(binding.avatar)
             } else {
                 binding.avatar.setImageResource(R.drawable.ic_no_avatar)
             }

@@ -26,9 +26,7 @@ import com.bubelov.coins.databinding.FragmentMapBinding
 import com.bubelov.coins.placedetails.PlaceDetailsFragment
 import com.bubelov.coins.search.PlacesSearchResultViewModel
 import com.bubelov.coins.util.*
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.osmdroid.events.MapListener
@@ -400,10 +398,10 @@ class MapFragment :
 
         if (user != null) {
             if (!TextUtils.isEmpty(user.avatarUrl)) {
-                Picasso.get()
-                    .load(user.avatarUrl)
-                    .transform(CircleTransformation())
-                    .into(avatar)
+//                Picasso.get()
+//                    .load(user.avatarUrl)
+//                    .transform(CircleTransformation())
+//                    .into(avatar)
             } else {
                 avatar.setImageResource(R.drawable.ic_no_avatar)
             }
