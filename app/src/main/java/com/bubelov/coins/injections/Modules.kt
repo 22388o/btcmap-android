@@ -78,7 +78,7 @@ val module = module {
     singleOf(::DatabaseSyncScheduler)
 
     single<BuiltInPlacesCache> {
-        BuiltInPlacesCacheImpl(get(), get(), get())
+        BuiltInPlacesCacheImpl(get(), get())
     }
 
     singleOf(::Bitstamp)

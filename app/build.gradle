@@ -11,15 +11,12 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        applicationId "com.coinmap"
-
+        applicationId "org.btcmap"
         minSdkVersion 26
         targetSdkVersion 31
-
         versionCode 42
         versionName "3.0.0"
-
-        setProperty("archivesBaseName", "coin-map-$versionName")
+        setProperty("archivesBaseName", "btcmap-$versionName")
     }
 
     compileOptions {
@@ -29,8 +26,6 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
-        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
-        freeCompilerArgs += "-Xopt-in=kotlin.time.ExperimentalTime"
     }
 
     packagingOptions {
@@ -76,7 +71,10 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions_coroutines"
+    // Kotlin extensions
+    // Simplifies non-blocking programming
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+
     implementation "io.insert-koin:koin-android:3.2.0-beta-1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions_lifecycle"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions_lifecycle"

@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.lang.Exception
 import java.time.LocalDateTime
-import kotlin.time.measureTime
 
 class PlacesRepository(
     private val api: CoinsApi,
@@ -141,15 +140,11 @@ class PlacesRepository(
 
             val places = builtInCache.loadPlaces()
 
-            val insertDuration = measureTime {
-                db.transaction {
-                    places.forEach {
-                        db.insertOrReplace(it)
-                    }
+            db.transaction {
+                places.forEach {
+                    db.insertOrReplace(it)
                 }
             }
-
-            log += "Inserted ${places.size} places in ${insertDuration.inWholeMilliseconds.toInt()} ms"
         }
     }
 
