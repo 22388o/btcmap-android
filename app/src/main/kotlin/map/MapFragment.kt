@@ -1,6 +1,5 @@
 package map
 
-import android.Manifest
 import android.annotation.SuppressLint
 import androidx.lifecycle.Observer
 import android.content.pm.PackageManager
@@ -181,9 +180,7 @@ class MapFragment :
             }
 
             R.id.action_add -> {
-                lifecycleScope.launchWhenResumed {
-                    model.onAddPlaceClick()
-                }
+                TODO()
             }
 
             R.id.action_settings -> {
@@ -196,19 +193,15 @@ class MapFragment :
         return true
     }
 
-    fun showUserProfile() {
-        findNavController().navigate(R.id.action_mapFragment_to_profileFragment)
-    }
-
-    private fun requestLocationPermissions() {
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ),
-            REQUEST_ACCESS_LOCATION
-        )
-    }
+//    private fun requestLocationPermissions() {
+//        requestPermissions(
+//            arrayOf(
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ),
+//            REQUEST_ACCESS_LOCATION
+//        )
+//    }
 
     @SuppressLint("MissingPermission")
     private fun initMap() {

@@ -1,4 +1,4 @@
-package model
+package notificationarea
 
 data class NotificationArea(
     val latitude: Double,

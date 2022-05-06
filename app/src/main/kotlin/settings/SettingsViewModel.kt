@@ -1,9 +1,8 @@
 package settings
 
 import androidx.lifecycle.ViewModel
-import notifications.PlaceNotificationManager
-import repository.PreferencesRepository
-import repository.place.PlacesRepository
+import etc.PlaceNotificationManager
+import map.PlacesRepository
 import sync.DatabaseSync
 
 class SettingsViewModel(

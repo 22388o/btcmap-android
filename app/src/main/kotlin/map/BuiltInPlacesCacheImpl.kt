@@ -1,4 +1,4 @@
-package repository.place
+package map
 
 import android.content.res.AssetManager
 import com.google.gson.Gson

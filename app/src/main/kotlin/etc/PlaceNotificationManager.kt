@@ -1,4 +1,4 @@
-package notifications
+package etc
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,9 +8,8 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.bubelov.coins.R
 import map.MapFragment
-import model.NotificationArea
-import repository.area.NotificationAreaRepository
-import etc.DistanceUtils
+import notificationarea.NotificationArea
+import notificationarea.NotificationAreaRepository
 import db.Place
 import kotlinx.coroutines.flow.first
 

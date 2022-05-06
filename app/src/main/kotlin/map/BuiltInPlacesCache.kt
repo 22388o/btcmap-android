@@ -1,4 +1,4 @@
-package repository.place
+package map
 
 import db.Place
 

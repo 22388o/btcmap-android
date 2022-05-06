@@ -1,4 +1,4 @@
-package repository
+package settings
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import db.Preference

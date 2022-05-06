@@ -1,8 +1,7 @@
-package repository.area
+package notificationarea
 
-import model.NotificationArea
-import repository.PreferencesRepository
-import repository.PreferencesRepository.Companion.NOTIFICATION_AREA_KEY
+import settings.PreferencesRepository
+import settings.PreferencesRepository.Companion.NOTIFICATION_AREA_KEY
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

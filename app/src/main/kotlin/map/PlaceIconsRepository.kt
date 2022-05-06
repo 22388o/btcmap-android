@@ -1,4 +1,4 @@
-package repository.placeicon
+package map
 
 import android.content.Context
 import android.graphics.*

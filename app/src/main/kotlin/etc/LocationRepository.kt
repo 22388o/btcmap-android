@@ -1,4 +1,4 @@
-package repository
+package etc
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -8,7 +8,6 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
-import model.Location
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -16,8 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 class LocationRepository(
     private val context: Context,
     private val locationManager: LocationManager,
-    private val defaultLocation: Location,
 ) {
+    private val defaultLocation: Location = Location(40.7141667, -74.0063889)
+
     private val _location by lazy { MutableStateFlow(getDefaultOrLastKnownLocation()) }
     val location: StateFlow<Location> get() = _location
 

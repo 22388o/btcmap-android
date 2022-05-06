@@ -1,7 +1,6 @@
 package etc
 
 import android.app.Application
-import injections.module
 import sync.DatabaseSync
 import sync.DatabaseSyncScheduler
 import kotlinx.coroutines.GlobalScope
@@ -23,7 +22,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(module))
+            modules(listOf(koinModule))
         }
 
         GlobalScope.launch {

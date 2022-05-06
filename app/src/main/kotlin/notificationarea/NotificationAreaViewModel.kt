@@ -3,10 +3,8 @@ package notificationarea
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import com.bubelov.coins.R
-import model.Location
-import model.NotificationArea
-import repository.area.NotificationAreaRepository
-import repository.placeicon.PlaceIconsRepository
+import etc.Location
+import map.PlaceIconsRepository
 import kotlinx.coroutines.flow.first
 import kotlin.math.ln
 

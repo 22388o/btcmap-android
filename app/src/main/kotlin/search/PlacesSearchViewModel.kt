@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import android.content.res.Resources
 import androidx.lifecycle.viewModelScope
 import com.bubelov.coins.R
-import model.Location
-import repository.PreferencesRepository
-import repository.place.PlacesRepository
-import repository.placeicon.PlaceIconsRepository
+import etc.Location
+import settings.PreferencesRepository
+import map.PlacesRepository
+import map.PlaceIconsRepository
 import etc.DistanceUnits
 import etc.DistanceUtils
 import db.Place

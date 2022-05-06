@@ -1,7 +1,7 @@
 package sync
 
-import repository.place.PlacesRepository
-import notifications.PlaceNotificationManager
+import map.PlacesRepository
+import etc.PlaceNotificationManager
 
 class DatabaseSync(
     private val placesRepository: PlacesRepository,
@@ -9,7 +9,7 @@ class DatabaseSync(
 ) {
 
     suspend fun sync() {
-        val placesSyncResult = placesRepository.sync()
-        placeNotificationManager.issueNotificationsIfInArea(placesSyncResult.newPlaces)
+        placesRepository.sync()
+        //placeNotificationManager.issueNotificationsIfInArea(placesSyncResult.newPlaces)
     }
 }
