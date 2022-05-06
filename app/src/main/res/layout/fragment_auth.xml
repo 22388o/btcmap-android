@@ -38,14 +38,12 @@
             android:id="@+id/signUp"
             style="@style/Button.SignIn"
             android:layout_marginTop="8dp"
-            android:background="@drawable/btn_email_sign_in"
             android:text="@string/sign_up" />
 
         <TextView
             android:id="@+id/signIn"
             style="@style/Button.SignIn"
             android:layout_marginTop="8dp"
-            android:background="@drawable/btn_email_sign_in"
             android:text="@string/i_have_an_account" />
 
     </LinearLayout>
