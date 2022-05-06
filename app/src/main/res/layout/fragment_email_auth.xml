@@ -11,17 +11,15 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:navigationIcon="?homeAsUpIndicator"
             app:title="@string/email" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/tab_indicator"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextAppearance="@style/Tab">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabItem android:text="@string/sign_in" />
 

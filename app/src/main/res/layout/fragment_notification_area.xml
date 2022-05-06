@@ -7,7 +7,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +26,6 @@
         android:id="@+id/bottomPanel"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/primary"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
@@ -36,7 +36,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="50 000 m"
-        android:textColor="@color/white"
         android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="@id/bottomPanel"
         app:layout_constraintEnd_toEndOf="parent"

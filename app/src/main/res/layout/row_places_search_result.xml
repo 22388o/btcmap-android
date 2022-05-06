@@ -30,7 +30,6 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:contentDescription="@string/icon"
-                app:tint="@color/white"
                 tools:src="@drawable/ic_place" />
 
         </FrameLayout>
@@ -45,7 +44,6 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 tools:text="Place Name" />
 
@@ -53,7 +51,6 @@
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 tools:text="1.2 mi" />
 

@@ -42,8 +42,8 @@ class PlaceDetailsFragment : Fragment() {
 
         binding.activeHeaderColor.alpha = 1 - (1 - progress)
 
-        val darkColor = ContextCompat.getColor(requireContext(), R.color.text_primary)
-        val lightColor = ContextCompat.getColor(requireContext(), R.color.white)
+        val darkColor = ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark)
+        val lightColor = ContextCompat.getColor(requireContext(), android.R.color.holo_red_light)
         val color = ArgbEvaluator().evaluate(1 - progress, lightColor, darkColor) as Int
         binding.name.setTextColor(color)
     }
@@ -74,12 +74,12 @@ class PlaceDetailsFragment : Fragment() {
         binding.website.apply {
             if (TextUtils.isEmpty(place.website)) {
                 setText(R.string.not_provided)
-                setTextColor(ContextCompat.getColor(context, R.color.black))
+                setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
                 paintFlags = binding.website.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
                 setOnClickListener(null)
             } else {
                 text = place.website
-                setTextColor(ContextCompat.getColor(context, R.color.primary_dark))
+                setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
                 paintFlags = binding.website.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 setOnClickListener {
                     if (!context.openUrl(place.website)) {

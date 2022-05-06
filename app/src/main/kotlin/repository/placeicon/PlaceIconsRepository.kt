@@ -33,7 +33,7 @@ class PlaceIconsRepository(
 
     private val pinIconPaint = Paint().apply {
         colorFilter = PorterDuff.Mode.SRC_IN.toColorFilter(
-            ContextCompat.getColor(context, R.color.primary_dark)
+            ContextCompat.getColor(context, android.R.color.holo_red_dark)
         )
 
         isAntiAlias = true

@@ -17,8 +17,9 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/toolbar"
-                style="@style/Toolbar"
                 app:title="@string/places" />
 
             <org.osmdroid.views.MapView
@@ -61,8 +62,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_my_location"
-                app:tint="@color/primary_dark" />
+                android:src="@drawable/ic_my_location" />
 
         </FrameLayout>
 
@@ -83,8 +83,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_edit"
-                app:tint="@color/white" />
+                android:src="@drawable/ic_edit" />
 
         </FrameLayout>
 

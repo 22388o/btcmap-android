@@ -8,7 +8,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -70,8 +71,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:alpha="0.25"
-                    android:background="@color/black" />
+                    android:alpha="0.25" />
 
                 <FrameLayout
                     android:id="@+id/editLocationButton"
@@ -90,8 +90,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_edit"
-                        app:tint="@color/primary_dark" />
+                        android:src="@drawable/ic_edit" />
 
                 </FrameLayout>
 

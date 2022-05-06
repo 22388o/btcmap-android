@@ -8,7 +8,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/Toolbar.Search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,9 +28,7 @@
                 android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_secondary" />
+                android:maxLines="1" />
 
             <ImageView
                 android:id="@+id/clear"
@@ -41,7 +40,6 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/clear_search"
                 android:src="@drawable/ic_close"
-                app:tint="@color/text_secondary"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
@@ -53,14 +51,12 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@id/divider" />
 

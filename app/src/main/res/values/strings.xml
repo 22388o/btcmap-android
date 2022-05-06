@@ -86,6 +86,29 @@
     <string name="permissions">Permissions</string>
     <string name="continue_to_map">Continue</string>
 
+    <string name="pref_currency_key" translatable="false">pref_currency</string>
+    <string name="pref_currency_btc" translatable="false">BTC</string>
+    <string name="pref_distance_units_automatic" translatable="false">AUTOMATIC</string>
+    <string name="pref_sync_database_key" translatable="false">pref_sync_database</string>
+    <string name="pref_show_sync_log_key" translatable="false">pref_show_sync_log</string>
+    <string name="pref_test_notification_key" translatable="false">pref_test_notification</string>
+
+    <string name="distance_format" translatable="false">%1$s %2$s</string>
+
+    <string-array name="distance_units_values">
+        <item>@string/pref_distance_units_automatic</item>
+        <item>KILOMETERS</item>
+        <item>MILES</item>
+    </string-array>
+
+    <string name="developer_tools">Developer tools</string>
+    <string name="sync_database">Sync database</string>
+    <string name="show_sync_log">Show sync log</string>
+    <string name="test_notification">Test notification</string>
+
+    <string name="repository_url" translatable="false">https://github.com/bubelov/coins-android</string>
+    <string name="donation_wallet" translatable="false">3D1cNWum54cvBtgVGudy8cLmm8ZYxQbUyz</string>
+
     <string-array name="distance_units">
         <item>Automatic</item>
         <item>Kilometers</item>

@@ -90,9 +90,9 @@ class NotificationAreaFragment : Fragment() {
 
         areaCircle = Polygon(binding.map).apply {
             points = circlePoints
-            fillPaint.color = ContextCompat.getColor(requireContext(), R.color.notification_area)
+            fillPaint.color = ContextCompat.getColor(requireContext(), android.R.color.holo_red_light)
             outlinePaint.color =
-                ContextCompat.getColor(requireContext(), R.color.notification_area_border)
+                ContextCompat.getColor(requireContext(), android.R.color.holo_blue_dark)
             outlinePaint.strokeWidth = 4f
             binding.map.overlays.add(0, this)
         }
