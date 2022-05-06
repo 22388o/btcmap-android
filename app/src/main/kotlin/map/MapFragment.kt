@@ -93,12 +93,6 @@ class MapFragment :
             peekHeight = resources.getDimensionPixelSize(R.dimen.map_header_height)
         }
 
-        binding.editPlaceFab.setOnClickListener {
-            lifecycleScope.launchWhenResumed {
-                model.onEditPlaceClick()
-            }
-        }
-
         binding.toolbar.apply {
             inflateMenu(R.menu.map)
             setOnMenuItemClickListener(this@MapFragment)

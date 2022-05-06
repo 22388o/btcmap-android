@@ -3,8 +3,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,45 +40,13 @@
 
     </FrameLayout>
 
-    <FrameLayout
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/locationFab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:background="@drawable/shape_oval_white"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        app:layout_dodgeInsetEdges="bottom">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_my_location" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/editPlaceFab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:background="@drawable/shape_oval_primary"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        android:visibility="gone"
-        tools:targetApi="lollipop">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_edit" />
-
-    </FrameLayout>
+        app:srcCompat="@drawable/ic_my_location"
+        app:layout_dodgeInsetEdges="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
