@@ -4,16 +4,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import androidx.lifecycle.Observer
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Bundle
 import android.preference.PreferenceManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
-import android.text.TextUtils
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -56,10 +51,6 @@ class MapFragment :
         childFragmentManager.findFragmentById(R.id.placeDetailsFragment) as PlaceDetailsFragment
     }
 
-    private lateinit var drawerHeader: View
-
-    private lateinit var drawerToggle: ActionBarDrawerToggle
-
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
 
     var locationOverlay: MyLocationNewOverlay? = null
@@ -79,8 +70,6 @@ class MapFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        drawerHeader = binding.navigationView.getHeaderView(0)
-
         initMap()
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.placeDetails).apply {
@@ -108,51 +97,10 @@ class MapFragment :
         }
 
         binding.toolbar.apply {
-            setNavigationOnClickListener { binding.drawerLayout.openDrawer(binding.navigationView) }
             inflateMenu(R.menu.map)
             setOnMenuItemClickListener(this@MapFragment)
         }
-
-        binding.navigationView.setNavigationItemSelectedListener { item ->
-            binding.drawerLayout.closeDrawer(binding.navigationView, false)
-
-            when (item.itemId) {
-                R.id.action_exchange_rates -> {
-                    findNavController().navigate(R.id.action_mapFragment_to_exchangeRatesFragment)
-                }
-
-                R.id.action_notification_area -> {
-                    findNavController().navigate(R.id.action_mapFragment_to_notificationAreaFragment)
-                }
-
-                R.id.action_chat -> openSupportChat()
-
-                R.id.action_support_project -> {
-                    findNavController().navigate(R.id.action_mapFragment_to_supportProjectFragment)
-                }
-
-                R.id.action_settings -> {
-                    findNavController().navigate(R.id.action_mapFragment_to_settingsFragment)
-                }
-            }
-
-            true
-        }
-
-        drawerToggle = ActionBarDrawerToggle(
-            requireActivity(),
-            binding.drawerLayout,
-            binding.toolbar,
-            R.string.open,
-            R.string.close
-        )
-
-        binding.drawerLayout.addDrawerListener(drawerToggle)
-
-        lifecycleScope.launchWhenResumed {
-            updateDrawerHeader()
-        }
-
+        
         binding.placeDetails.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -190,7 +138,6 @@ class MapFragment :
     override fun onResume() {
         super.onResume()
         binding.map.onResume()
-        drawerToggle.syncState()
 
         val placeId = arguments?.getString(PLACE_ID_ARG)
 
@@ -228,12 +175,6 @@ class MapFragment :
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_add -> {
-                lifecycleScope.launchWhenResumed {
-                    model.onAddPlaceClick()
-                }
-            }
-
             R.id.action_search -> {
                 lifecycleScope.launch {
                     val action = MapFragmentDirections.actionMapFragmentToPlacesSearchFragment(
@@ -245,15 +186,20 @@ class MapFragment :
                 }
             }
 
+            R.id.action_add -> {
+                lifecycleScope.launchWhenResumed {
+                    model.onAddPlaceClick()
+                }
+            }
+
+            R.id.action_settings -> {
+                findNavController().navigate(R.id.action_mapFragment_to_settingsFragment)
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
 
         return true
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        drawerToggle.onConfigurationChanged(newConfig)
-        super.onConfigurationChanged(newConfig)
     }
 
     fun showUserProfile() {
@@ -388,40 +334,6 @@ class MapFragment :
             override fun onZoom(event: ZoomEvent?) = false
         })
 
-    }
-
-    private suspend fun updateDrawerHeader() {
-        val user = model.userRepository.getUser()
-
-        val avatar = drawerHeader.findViewById<ImageView>(R.id.avatar)
-        val userName = drawerHeader.findViewById<TextView>(R.id.userName)
-
-        if (user != null) {
-            if (!TextUtils.isEmpty(user.avatarUrl)) {
-//                Picasso.get()
-//                    .load(user.avatarUrl)
-//                    .transform(CircleTransformation())
-//                    .into(avatar)
-            } else {
-                avatar.setImageResource(R.drawable.ic_no_avatar)
-            }
-
-            if (!TextUtils.isEmpty(user.firstName)) {
-                userName.text = String.format("%s %s", user.firstName, user.lastName)
-            } else {
-                userName.text = user.email
-            }
-        } else {
-            avatar.setImageResource(R.drawable.ic_no_avatar)
-            userName.setText(R.string.guest)
-        }
-
-        drawerHeader.setOnClickListener {
-            lifecycleScope.launchWhenResumed {
-                binding.drawerLayout.closeDrawer(binding.navigationView)
-                model.onDrawerHeaderClick()
-            }
-        }
     }
 
     private fun openSupportChat() {
