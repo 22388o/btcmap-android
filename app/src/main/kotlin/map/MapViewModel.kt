@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import repository.LocationRepository
 import repository.place.PlacesRepository
 import repository.placeicon.PlaceIconsRepository
-import repository.synclogs.LogsRepository
 import repository.user.UserRepository
 import db.Place
 import kotlinx.coroutines.flow.*
@@ -14,7 +13,6 @@ class MapViewModel(
     private val placeIconsRepository: PlaceIconsRepository,
     val userRepository: UserRepository,
     locationRepository: LocationRepository,
-    val log: LogsRepository
 ) : ViewModel() {
 
     val selectedPlaceFlow: MutableStateFlow<Place?> = MutableStateFlow(null)

@@ -6,14 +6,10 @@ import android.net.ConnectivityManager
 import db.Database
 import api.ConnectivityCheckingInterceptor
 import api.coins.CoinsApi
-import editplace.EditPlaceViewModel
 import map.MapViewModel
 import model.Location
 import notificationarea.NotificationAreaViewModel
 import notifications.PlaceNotificationManager
-import picklocation.PickLocationResultViewModel
-import profile.ProfileViewModel
-import rates.ExchangeRatesViewModel
 import repository.LocationRepository
 import repository.PreferencesRepository
 import repository.area.NotificationAreaRepository
@@ -21,10 +17,6 @@ import repository.place.BuiltInPlacesCache
 import repository.place.BuiltInPlacesCacheImpl
 import repository.place.PlacesRepository
 import repository.placeicon.PlaceIconsRepository
-import repository.rate.Bitstamp
-import repository.rate.Coinbase
-import repository.rate.ExchangeRatesRepository
-import repository.synclogs.LogsRepository
 import repository.user.UserRepository
 import search.PlacesSearchResultViewModel
 import search.PlacesSearchViewModel
@@ -48,29 +40,21 @@ import java.util.concurrent.TimeUnit
 
 val module = module {
 
-    viewModelOf(::EditPlaceViewModel)
-    viewModelOf(::ExchangeRatesViewModel)
     viewModelOf(::MapViewModel)
-    viewModelOf(::NotificationAreaViewModel)
     viewModelOf(::PlacesSearchViewModel)
     viewModelOf(::PlacesSearchResultViewModel)
     viewModelOf(::SettingsViewModel)
-    viewModelOf(::PickLocationResultViewModel)
-    viewModelOf(::ProfileViewModel)
+    viewModelOf(::NotificationAreaViewModel)
 
     singleOf(::PlacesRepository)
-    singleOf(::ExchangeRatesRepository)
-    singleOf(::UserRepository)
-    singleOf(::LocationRepository)
-    singleOf(::NotificationAreaRepository)
     singleOf(::PlaceIconsRepository)
-    singleOf(::LogsRepository)
+    singleOf(::LocationRepository)
     singleOf(::PreferencesRepository)
+    singleOf(::NotificationAreaRepository)
 
     single { Database(get()) }
     single { get<Database>().placeQueries }
     single { get<Database>().preferenceQueries }
-    single { get<Database>().logEntryQueries }
 
     singleOf(::PlaceNotificationManager)
 
@@ -80,9 +64,6 @@ val module = module {
     single<BuiltInPlacesCache> {
         BuiltInPlacesCacheImpl(get(), get())
     }
-
-    singleOf(::Bitstamp)
-    singleOf(::Coinbase)
 
     single { Location(40.7141667, -74.0063889) } // TODO remove
 

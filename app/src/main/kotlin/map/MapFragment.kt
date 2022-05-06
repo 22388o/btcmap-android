@@ -19,7 +19,6 @@ import com.bubelov.coins.R
 import com.bubelov.coins.databinding.FragmentMapBinding
 import placedetails.PlaceDetailsFragment
 import search.PlacesSearchResultViewModel
-import etc.*
 import db.Place
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -45,8 +44,6 @@ class MapFragment :
     Toolbar.OnMenuItemClickListener {
 
     private val model: MapViewModel by viewModel()
-
-    private val log by lazy { model.log }
 
     private val placesSearchResultModel: PlacesSearchResultViewModel by sharedViewModel()
 
@@ -215,8 +212,6 @@ class MapFragment :
 
     @SuppressLint("MissingPermission")
     private fun initMap() {
-        log += "initMap()"
-
         if (view == null) {
             return
         }
@@ -314,8 +309,6 @@ class MapFragment :
                         minLon = min(binding.map.boundingBox.lonEast, binding.map.boundingBox.lonWest),
                         maxLon = max(binding.map.boundingBox.lonEast, binding.map.boundingBox.lonWest)
                     ).collect {
-                        log += "Loaded ${it.size} markers from cache"
-
                         val itemsToPlaces = mutableMapOf<OverlayItem, PlaceMarker>()
 
                         it.forEach { place ->
@@ -346,7 +339,6 @@ class MapFragment :
                         if (isActive) {
                             binding.map.overlays.add(overlay)
                             binding.map.invalidate()
-                            log += "Added ${items.size} markers"
                         }
                     }
                 }
@@ -356,10 +348,6 @@ class MapFragment :
 
             override fun onZoom(event: ZoomEvent?) = false
         })
-    }
-
-    private fun openSupportChat() {
-        requireContext().openUrl("https://t.me/joinchat/AAAAAAwVT4aVBdFzcKKbsw")
     }
 
 //    private fun initClustering(map: GoogleMap) {

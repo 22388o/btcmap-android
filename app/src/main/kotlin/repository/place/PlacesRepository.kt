@@ -4,7 +4,6 @@ import android.util.Log
 import api.coins.CoinsApi
 import api.coins.CreatePlaceArgs
 import api.coins.UpdatePlaceArgs
-import repository.synclogs.LogsRepository
 import repository.user.UserRepository
 import etc.TableSyncResult
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -21,7 +20,6 @@ class PlacesRepository(
     private val db: PlaceQueries,
     private val builtInCache: BuiltInPlacesCache,
     private val userRepository: UserRepository,
-    private val log: LogsRepository
 ) {
 
     suspend fun find(id: String): Place? {
@@ -135,8 +133,6 @@ class PlacesRepository(
             if (!empty) {
                 return@withContext
             }
-
-            log += "Initializing built-in places cache"
 
             val places = builtInCache.loadPlaces()
 
