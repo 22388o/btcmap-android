@@ -1,6 +1,5 @@
 package placedetails
 
-import android.animation.ArgbEvaluator
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
@@ -41,11 +40,6 @@ class PlaceDetailsFragment : Fragment() {
         binding.headerShadow.isVisible = progress <= 0.9
 
         binding.activeHeaderColor.alpha = 1 - (1 - progress)
-
-        val darkColor = ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark)
-        val lightColor = ContextCompat.getColor(requireContext(), android.R.color.holo_red_light)
-        val color = ArgbEvaluator().evaluate(1 - progress, lightColor, darkColor) as Int
-        binding.name.setTextColor(color)
     }
 
     fun setPlace(place: Place) {

@@ -24,6 +24,7 @@ import db.Place
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
@@ -31,6 +32,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
+import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
@@ -100,7 +103,7 @@ class MapFragment :
             inflateMenu(R.menu.map)
             setOnMenuItemClickListener(this@MapFragment)
         }
-        
+
         binding.placeDetails.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -293,6 +296,17 @@ class MapFragment :
             override fun onScroll(event: ScrollEvent?): Boolean {
                 binding.map.overlays.clear()
 
+                binding.map.overlays.add(MapEventsOverlay(object : MapEventsReceiver {
+                    override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                        viewLifecycleOwner.lifecycleScope.launch { model.selectPlace("") }
+                        return true
+                    }
+
+                    override fun longPressHelper(p: GeoPoint?): Boolean {
+                        return false
+                    }
+                }))
+
                 showPlacesJob?.cancel()
 
                 showPlacesJob = lifecycleScope.launch {
@@ -308,17 +322,32 @@ class MapFragment :
                     ).collect {
                         log += "Loaded ${it.size} markers from cache"
 
+                        val itemsToPlaces = mutableMapOf<OverlayItem, PlaceMarker>()
+
                         it.forEach { place ->
-                            items += OverlayItem(
+                            val item = OverlayItem(
                                 "Title",
                                 "Description",
                                 GeoPoint(place.latitude, place.longitude)
                             ).apply {
                                 setMarker(place.icon.toDrawable(resources))
                             }
+
+                            items += item
+                            itemsToPlaces.put(item, place)
                         }
 
-                        val overlay = ItemizedIconOverlay(requireContext(), items, null)
+                        val overlay =
+                            ItemizedIconOverlay(requireContext(), items, object : OnItemGestureListener<OverlayItem> {
+                                override fun onItemSingleTapUp(index: Int, item: OverlayItem?): Boolean {
+                                    viewLifecycleOwner.lifecycleScope.launch { model.selectPlace(itemsToPlaces[item]!!.placeId) }
+                                    return true
+                                }
+
+                                override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
+                                    return false
+                                }
+                            })
 
                         if (isActive) {
                             binding.map.overlays.add(overlay)
@@ -333,7 +362,6 @@ class MapFragment :
 
             override fun onZoom(event: ZoomEvent?) = false
         })
-
     }
 
     private fun openSupportChat() {

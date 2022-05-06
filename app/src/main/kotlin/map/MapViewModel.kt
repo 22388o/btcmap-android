@@ -7,7 +7,6 @@ import repository.placeicon.PlaceIconsRepository
 import repository.synclogs.LogsRepository
 import repository.user.UserRepository
 import db.Place
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class MapViewModel(
@@ -18,12 +17,7 @@ class MapViewModel(
     val log: LogsRepository
 ) : ViewModel() {
 
-    val selectedPlaceFlow = flow {
-        while (true) {
-            emit(selectedPlace)
-            delay(100)
-        }
-    }
+    val selectedPlaceFlow: MutableStateFlow<Place?> = MutableStateFlow(null)
 
     private var selectedPlace: Place? = null
 
@@ -69,6 +63,7 @@ class MapViewModel(
 
     suspend fun selectPlace(id: String) {
         selectedPlace = placesRepository.find(id)
+        selectedPlaceFlow.update { selectedPlace }
     }
 
     suspend fun onAddPlaceClick(): AddPlaceClickResult {
